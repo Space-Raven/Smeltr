@@ -17,7 +17,7 @@ import { getStripe, getStripePriceId, getOrCreateCustomer } from "../../../../li
  * checkout route itself does not update the DB.
  */
 export async function POST(req: Request) {
-  const walletAddress = await getSessionWallet(req);
+  const walletAddress = await getSessionWallet();
   if (!walletAddress) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   }

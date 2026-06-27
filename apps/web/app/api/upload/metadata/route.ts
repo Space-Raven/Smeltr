@@ -76,7 +76,7 @@ async function getPlatformUploader() {
 
 export async function POST(req: Request) {
   // --- Auth: SIWS session required ------------------------------------------
-  const walletAddress = await getSessionWallet(req);
+  const walletAddress = await getSessionWallet();
   if (!walletAddress) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   }

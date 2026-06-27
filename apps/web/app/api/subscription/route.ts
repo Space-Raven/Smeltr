@@ -12,7 +12,7 @@ import { isPremium, getSubscription } from "../../../lib/subscription";
  * "status" and "currentPeriodEnd" are exposed for the dashboard UI.
  */
 export async function GET(req: Request) {
-  const walletAddress = await getSessionWallet(req);
+  const walletAddress = await getSessionWallet();
   if (!walletAddress) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   }
