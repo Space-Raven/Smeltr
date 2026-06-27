@@ -4,7 +4,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import { WalletProviders } from "@/components/WalletProviders";
 import { WalletButton } from "@/components/WalletButton";
 
-const SITE_URL = "https://smeltr.app";
+const SITE_URL = "https://smeltr.org";
 const SITE_NAME = "Smeltr";
 const SITE_DESCRIPTION =
   "Deploy Solana Token-2022 tokens without writing code. Transfer fees, soul-bound locks, permanent delegate — composable, non-custodial, two wallet clicks.";
@@ -203,9 +203,4 @@ function SiteFooter() {
         </div>
         <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
           <span>© 2026 Smeltr. Non-custodial infrastructure. Built on Solana Token-2022.</span>
-          <span>Not financial advice. Always verify transaction details before signing.</span>
-        </div>
-      </div>
-    </footer>
-  );
-}
+          <span>Not financial advice. Always verify transaction details before signing.</sp
