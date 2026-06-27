@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="60%" r="70%">
+      <stop offset="0%" stop-color="#0C4A6E"/>
+      <stop offset="100%" stop-color="#042334"/>
+    </radialGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Bubble decorations -->
+  <circle cx="45" cy="65" r="5" fill="#7DD3FC" opacity="0.3"/>
+  <circle cx="60" cy="45" r="3" fill="#BAE6FD" opacity="0.4"/>
+  <circle cx="155" cy="70" r="4" fill="#7DD3FC" opacity="0.3"/>
+  <circle cx="165" cy="50" r="2.5" fill="#BAE6FD" opacity="0.4"/>
+  <!-- Coral shapes -->
+  <path d="M60 140 Q60 110 55 100 Q65 110 65 90 Q72 105 70 125 Q80 110 82 95 Q87 110 85 140z" fill="#FB7185" opacity="0.8"/>
+  <path d="M130 145 Q128 118 125 105 Q133 118 135 100 Q141 115 138 130 Q147 115 150 102 Q154 118 150 145z" fill="#34D399" opacity="0.7"/>
+  <!-- Wave -->
+  <path d="M30 105 Q55 90 80 105 Q105 120 130 105 Q155 90 175 105 L175 140 Q155 130 130 140 Q105 150 80 140 Q55 150 30 140z" fill="url(#wave)" opacity="0.7"/>
+  <!-- Fish -->
+  <ellipse cx="105" cy="95" rx="14" ry="9" fill="#38BDF8"/>
+  <path d="M119 95 L128 88 L128 102z" fill="#38BDF8"/>
+  <circle cx="99" cy="93" r="2" fill="#042334"/>
+  <text x="100" y="178" font-family="system-ui" font-size="18" font-weight="700" fill="#38BDF8" text-anchor="middle" letter-spacing="2">REEF</text>
+</svg>

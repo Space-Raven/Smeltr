@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/*  Design tokens                                                       */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Brand */
+  --color-brand-50:  #EEF2FF;
+  --color-brand-100: #E0E7FF;
+  --color-brand-200: #C7D2FE;
+  --color-brand-300: #A5B4FC;
+  --color-brand-400: #818CF8;
+  --color-brand-500: #6366F1;
+  --color-brand-600: #4F46E5;
+  --color-brand-700: #4338CA;
+  --color-brand-900: #312E81;
+  --color-brand-950: #1E1B4B;
+
+  /* Surface */
+  --surface-0: #FFFFFF;
+  --surface-1: #F9FAFB;
+  --surface-2: #F3F4F6;
+
+  /* Text */
+  --text-primary:   #111827;
+  --text-secondary: #6B7280;
+  --text-muted:     #9CA3AF;
+
+  /* Borders */
+  --border-default: #E5E7EB;
+  --border-strong:  #D1D5DB;
+
+  /* Status */
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-error:   #DC2626;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base resets & typography                                            */
+/* ------------------------------------------------------------------ */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 2;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold leading-tight tracking-tight;
+  }
+
+  code, kbd, pre, samp {
+    font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+    font-size: 0.875em;
+  }
+
+  a {
+    @apply text-indigo-600 hover:text-indigo-700 transition-colors;
+  }
+
+  ::selection {
+    @apply bg-indigo-100 text-indigo-900;
+  }
+
+  /* Smooth scroll */
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Component layer                                                     */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* Cards */
+  .card {
+    @apply rounded-xl border border-gray-200 bg-white shadow-sm;
+  }
+
+  .card-inner {
+    @apply p-5 sm:p-6;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
+           transition-all duration-150 focus-visible:outline-none focus-visible:ring-2
+           focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:pointer-events-none
+           disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-gray-700 border border-gray-300 shadow-sm
+           hover:bg-gray-50 active:bg-gray-100;
+  }
+
+  .btn-ghost {
+    @apply btn text-gray-600 hover:bg-gray-100 hover:text-gray-900;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600 text-white shadow-sm hover:bg-red-700 active:bg-red-800;
+  }
+
+  /* Form controls */
+  .input {
+    @apply w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-900
+           shadow-sm placeholder:text-gray-400
+           focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20
+           disabled:bg-gray-50 disabled:text-gray-500;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+  }
+
+  /* Alerts / banners */
+  .alert {
+    @apply flex gap-3 rounded-lg p-4 text-sm;
+  }
+
+  .alert-info {
+    @apply alert bg-indigo-50 text-indigo-800 border border-indigo-200;
+  }
+
+  .alert-warn {
+    @apply alert bg-amber-50 text-amber-800 border border-amber-200;
+  }
+
+  .alert-error {
+    @apply alert bg-red-50 text-red-800 border border-red-200;
+  }
+
+  .alert-success {
+    @apply alert bg-emerald-50 text-emerald-800 border border-emerald-200;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-indigo {
+    @apply badge bg-indigo-100 text-indigo-700;
+  }
+
+  .badge-green {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+
+  .badge-amber {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+
+  .badge-red {
+    @apply badge bg-red-100 text-red-700;
+  }
+
+  /* Code / address display */
+  .address {
+    @apply font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded break-all;
+  }
+
+  /* Section divider */
+  .divider {
+    @apply border-t border-gray-200 my-6;
+  }
+
+  /* Module card */
+  .module-card {
+    @apply card cursor-pointer transition-all duration-150
+           hover:border-indigo-300 hover:shadow-md;
+  }
+
+  .module-card-selected {
+    @apply border-indigo-500 ring-2 ring-indigo-500/20 shadow-md;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities                                                           */
+/* ------------------------------------------------------------------ */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+  .animate-slide-up { animation: slideUp 0.3s ease-out; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Wallet adapter overrides                                            */
+/* ------------------------------------------------------------------ */
+.wallet-adapter-button {
+  border-radius: 8px !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  height: 40px !important;
+  padding: 0 16px !important;
+  background-color: #4F46E5 !important;
+}
+
+.wallet-adapter-button:hover {
+  background-color: #4338CA !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  border-radius: 16px !important;
+  font-family: inherit !important;
+}
+
+.wallet-adapter-modal-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}

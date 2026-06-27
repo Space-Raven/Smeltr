@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1B4B"/>
+      <stop offset="100%" stop-color="#312E81"/>
+    </linearGradient>
+    <radialGradient id="coinGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="50%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <pattern id="grid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" stroke-width="0.3" opacity="0.1"/>
+  </pattern>
+  <rect width="1080" height="1080" fill="url(#grid)"/>
+
+  <!-- Top: Minty logo -->
+  <circle cx="95" cy="70" r="38" fill="url(#coinGrad)"/>
+  <circle cx="95" cy="70" r="38" fill="none" stroke="#A5B4FC" stroke-width="1" opacity="0.5"/>
+  <path d="M95 48 C95 48 93 58 92 64" stroke="#34D399" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M92 64 C86 57 77 50 79 42 C81 34 89 31 93 39 C93 39 92 50 92 64" fill="#10B981"/>
+  <path d="M92 64 C99 55 109 47 106 39 C103 31 93 30 92 40 C92 40 92 50 92 64" fill="#059669"/>
+
+  <text x="145" y="78" font-family="'Segoe UI', Arial, sans-serif" font-size="36" font-weight="800" fill="white">minty</text>
+  <circle cx="267" cy="63" r="4" fill="#6366F1"/>
+
+  <!-- Headline -->
+  <text x="540" y="180" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="56" font-weight="800" fill="white">Three Powerful</text>
+  <text x="540" y="248" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="56" font-weight="800" fill="#818CF8">Token Extensions</text>
+
+  <text x="540" y="300" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="24" fill="#94A3B8">Deploy on Solana Token-2022. No code required.</text>
+
+  <!-- Card 1: Transfer Fee -->
+  <rect x="60" y="340" width="300" height="380" rx="20" fill="#1a1740" stroke="#6366F1" stroke-width="2"/>
+  <rect x="60" y="340" width="300" height="6" rx="3" fill="#6366F1"/>
+  <!-- Icon -->
+  <circle cx="210" cy="430" r="55" fill="#312E81"/>
+  <text x="210" y="448" text-anchor="middle" font-family="serif" font-size="52" fill="#818CF8">%</text>
+  <!-- Arrow suggest direction -->
+  <line x1="175" y1="455" x2="245" y2="455" stroke="#6366F1" stroke-width="2" opacity="0.4"/>
+  <polygon points="245,450 255,455 245,460" fill="#6366F1" opacity="0.4"/>
+
+  <text x="210" y="520" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white">Transfer Fee</text>
+  <text x="210" y="550" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#94A3B8">Charge basis points on</text>
+  <text x="210" y="570" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#94A3B8">every token transfer</text>
+
+  <rect x="100" y="610" width="220" height="44" rx="8" fill="#312E81"/>
+  <text x="210" y="627" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#6366F1" letter-spacing="1">CONFIGURABLE</text>
+  <text x="210" y="646" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" font-weight="700" fill="white">0 – 100% fee rate</text>
+
+  <!-- Card 2: Non-Transferable -->
+  <rect x="390" y="340" width="300" height="380" rx="20" fill="#1a1740" stroke="#F97316" stroke-width="2"/>
+  <rect x="390" y="340" width="300" height="6" rx="3" fill="#F97316"/>
+  <circle cx="540" cy="430" r="55" fill="#312E81"/>
+  <!-- Shield -->
+  <path d="M540 400 L563 410 L563 428 C563 442 553 453 540 458 C527 453 517 442 517 428 L517 410 Z" fill="#F97316" opacity="0.7"/>
+  <rect x="535" y="420" width="10" height="14" rx="3" fill="white"/>
+  <circle cx="540" cy="419" r="5" fill="none" stroke="white" stroke-width="2.5"/>
+
+  <text x="540" y="520" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white">Non-Transferable</text>
+  <text x="540" y="550" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#94A3B8">Soul-bound tokens tied to</text>
+  <text x="540" y="570" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#94A3B8">one wallet forever</text>
+
+  <rect x="430" y="610" width="220" height="44" rx="8" fill="#312E81"/>
+  <text x="540" y="627" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#F97316" letter-spacing="1">PERFECT FOR</text>
+  <text x="540" y="646" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" font-weight="700" fill="white">Badges &amp; Certs</text>
+
+  <!-- Card 3: Permanent Delegate -->
+  <rect x="720" y="340" width="300" height="380" rx="20" fill="#1a1740" stroke="#EF4444" stroke-width="2"/>
+  <rect x="720" y="340" width="300" height="6" rx="3" fill="#EF4444"/>
+  <circle cx="870" cy="430" r="55" fill="#312E81"/>
+  <!-- Crown -->
+  <path d="M848 445 L854 418 L866 434 L870 410 L874 434 L886 418 L892 445 Z" fill="#EF4444" opacity="0.8"/>
+  <rect x="848" y="445" width="44" height="10" rx="3" fill="#EF4444" opacity="0.6"/>
+
+  <text x="870" y="520" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white">Perm. Delegate</text>
+  <text x="870" y="550" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#94A3B8">Retain authority to transfer</text>
+  <text x="870" y="570" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#94A3B8">or burn any holder's tokens</text>
+
+  <rect x="760" y="610" width="220" height="44" rx="8" fill="#312E81"/>
+  <text x="870" y="627" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#EF4444" letter-spacing="1">USE WITH CARE</text>
+  <text x="870" y="646" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" font-weight="700" fill="white">Full override</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="780" width="1080" height="300" fill="#0F0D2E"/>
+
+  <!-- CTA -->
+  <text x="540" y="860" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="32" font-weight="700" fill="white">Deploy your token in minutes.</text>
+  <text x="540" y="905" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" fill="#94A3B8">No code. No custody. No compromises.</text>
+
+  <!-- CTA button outline -->
+  <rect x="340" y="930" width="400" height="64" rx="32" fill="#6366F1"/>
+  <text x="540" y="970" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="700" fill="white">Launch at minty.app</text>
+
+  <!-- URL -->
+  <text x="540" y="1048" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="16" fill="#4338CA" letter-spacing="2">@mintyapp  •  #Solana  #Token2022  #Web3</text>
+</svg>

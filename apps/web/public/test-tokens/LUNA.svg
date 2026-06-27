@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#1E1B4B"/>
+      <stop offset="100%" stop-color="#0F0E2A"/>
+    </radialGradient>
+    <radialGradient id="moon" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Stars -->
+  <circle cx="30" cy="40" r="1.5" fill="#E0E7FF" opacity="0.8"/>
+  <circle cx="160" cy="55" r="1" fill="#E0E7FF" opacity="0.6"/>
+  <circle cx="170" cy="30" r="2" fill="#E0E7FF" opacity="0.9"/>
+  <circle cx="50" cy="160" r="1.5" fill="#E0E7FF" opacity="0.7"/>
+  <circle cx="145" cy="155" r="1" fill="#E0E7FF" opacity="0.5"/>
+  <circle cx="80" cy="25" r="1" fill="#E0E7FF" opacity="0.8"/>
+  <!-- Moon crescent -->
+  <circle cx="105" cy="95" r="52" fill="url(#moon)"/>
+  <circle cx="128" cy="80" r="44" fill="#0F0E2A"/>
+  <!-- Glow -->
+  <circle cx="105" cy="95" r="52" fill="none" stroke="#FDE68A" stroke-width="2" opacity="0.3"/>
+  <!-- Text -->
+  <text x="100" y="178" font-family="system-ui" font-size="20" font-weight="700" fill="#FDE68A" text-anchor="middle" letter-spacing="2">LUNA</text>
+</svg>

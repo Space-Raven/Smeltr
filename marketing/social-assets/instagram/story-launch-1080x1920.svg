@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="20%" y2="100%">
+      <stop offset="0%" stop-color="#0F0D2E"/>
+      <stop offset="40%" stop-color="#1E1B4B"/>
+      <stop offset="100%" stop-color="#312E81"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#4F46E5" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="coinGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="50%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#centerGlow)"/>
+
+  <!-- Decorative rings -->
+  <circle cx="540" cy="700" r="480" fill="none" stroke="#6366F1" stroke-width="1" opacity="0.1"/>
+  <circle cx="540" cy="700" r="380" fill="none" stroke="#818CF8" stroke-width="1" opacity="0.12"/>
+  <circle cx="540" cy="700" r="280" fill="none" stroke="#A5B4FC" stroke-width="1" opacity="0.1"/>
+
+  <!-- TOP: "We're live" badge -->
+  <rect x="340" y="140" width="400" height="54" rx="27" fill="#059669" opacity="0.9"/>
+  <circle cx="372" cy="167" r="8" fill="white" opacity="0.9"/>
+  <circle cx="372" cy="167" r="5" fill="#059669"/>
+  <text x="540" y="174" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white" letter-spacing="2">WE'RE LIVE 🚀</text>
+
+  <!-- Large coin logo -->
+  <ellipse cx="540" cy="535" rx="195" ry="25" fill="#312E81" opacity="0.5"/>
+  <circle cx="540" cy="510" r="200" fill="url(#coinGrad)"/>
+  <circle cx="540" cy="510" r="200" fill="none" stroke="#A5B4FC" stroke-width="3" opacity="0.5"/>
+  <circle cx="540" cy="510" r="165" fill="none" stroke="#A5B4FC" stroke-width="1" opacity="0.3"/>
+  <!-- Dollar watermark -->
+  <text x="540" y="555" text-anchor="middle" font-family="Georgia, serif" font-size="160" font-weight="bold" fill="white" opacity="0.08">$</text>
+  <!-- Leaf -->
+  <path d="M540 340 C540 340 535 370 532 392" stroke="#34D399" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M532 392 C514 372 488 350 492 325 C496 300 518 292 530 313 C530 313 527 350 532 392" fill="#10B981"/>
+  <path d="M532 392 C550 368 575 342 568 317 C561 292 538 288 534 312 C534 312 532 350 532 392" fill="#059669"/>
+  <path d="M536 342 C524 326 505 319 501 330 C497 341 512 350 536 342" fill="#34D399" opacity="0.9"/>
+  <path d="M540 336 C552 320 571 314 574 326 C577 338 562 346 540 336" fill="#10B981" opacity="0.9"/>
+
+  <!-- Wordmark -->
+  <text x="540" y="710" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="120" font-weight="900" fill="white" letter-spacing="8">minty</text>
+  <circle cx="842" cy="680" r="12" fill="#6366F1"/>
+
+  <!-- Tagline -->
+  <text x="540" y="790" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="34" fill="#A5B4FC">Non-Custodial Token-2022</text>
+  <text x="540" y="836" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="34" fill="#A5B4FC">Launcher on Solana</text>
+
+  <!-- Divider -->
+  <line x1="200" y1="880" x2="880" y2="880" stroke="#4338CA" stroke-width="1.5"/>
+
+  <!-- 3 key points -->
+  <text x="540" y="940" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="30" font-weight="700" fill="white">✦  No wallet custody</text>
+  <text x="540" y="1000" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="30" font-weight="700" fill="white">✦  No sign-up required</text>
+  <text x="540" y="1060" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="30" font-weight="700" fill="white">✦  Deploy in 2 minutes</text>
+
+  <!-- Module cards -->
+  <rect x="80" y="1120" width="280" height="120" rx="16" fill="#1E1B4B" stroke="#6366F1" stroke-width="1.5"/>
+  <rect x="80" y="1120" width="280" height="5" rx="2" fill="#6366F1"/>
+  <text x="220" y="1168" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#A5B4FC">TRANSFER FEE</text>
+  <text x="220" y="1198" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white">Earn on txns</text>
+
+  <rect x="400" y="1120" width="280" height="120" rx="16" fill="#1E1B4B" stroke="#F97316" stroke-width="1.5"/>
+  <rect x="400" y="1120" width="280" height="5" rx="2" fill="#F97316"/>
+  <text x="540" y="1168" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#A5B4FC">NON-TRANSFERABLE</text>
+  <text x="540" y="1198" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white">Soul-bound</text>
+
+  <rect x="720" y="1120" width="280" height="120" rx="16" fill="#1E1B4B" stroke="#EF4444" stroke-width="1.5"/>
+  <rect x="720" y="1120" width="280" height="5" rx="2" fill="#EF4444"/>
+  <text x="860" y="1168" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#A5B4FC">PERM. DELEGATE</text>
+  <text x="860" y="1198" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" fill="white">Full control</text>
+
+  <!-- Bottom CTA area -->
+  <rect x="0" y="1310" width="1080" height="610" fill="#0A0825"/>
+  <line x1="0" y1="1310" x2="1080" y2="1310" stroke="#4338CA" stroke-width="2"/>
+
+  <text x="540" y="1420" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="42" font-weight="800" fill="white">Deploy your</text>
+  <text x="540" y="1478" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="42" font-weight="800" fill="#818CF8">Solana token</text>
+  <text x="540" y="1536" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="42" font-weight="800" fill="white">today.</text>
+
+  <!-- Swipe up indicator -->
+  <rect x="240" y="1600" width="600" height="80" rx="40" fill="#6366F1"/>
+  <text x="540" y="1648" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="white">👆  Visit minty.app</text>
+
+  <!-- Social proof -->
+  <text x="540" y="1740" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="24" fill="#6366F1">@mintyapp</text>
+  <text x="540" y="1790" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" fill="#4338CA" letter-spacing="2">#Solana  #Web3  #Token2022  #DeFi</text>
+
+  <!-- Bottom gradient overlay -->
+  <rect x="0" y="1840" width="1080" height="80" fill="#0A0825"/>
+</svg>

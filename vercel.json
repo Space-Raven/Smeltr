@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build --workspace=packages/module-registry && npm run build --workspace=packages/tx-builder && cd apps/web && npx prisma generate && npm run build",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "rootDirectory": null,
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/web packages",
+  "regions": ["iad1"],
+  "env": {
+    "NEXT_PUBLIC_APP_DOMAIN": "@smeltr_app_domain",
+    "NEXT_PUBLIC_SOLANA_RPC_URL": "@smeltr_solana_rpc_url"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@smeltr_database_url",
+      "SESSION_JWT_SECRET": "@smeltr_session_jwt_secret",
+      "NEXT_PUBLIC_APP_DOMAIN": "@smeltr_app_domain",
+      "NEXT_PUBLIC_SOLANA_RPC_URL": "@smeltr_solana_rpc_url"
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-DNS-Prefetch-Control", "value": "on" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+  ],
+  "crons": []
+}

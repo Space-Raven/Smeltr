@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2E1065"/>
+      <stop offset="100%" stop-color="#0D0520"/>
+    </radialGradient>
+    <radialGradient id="star" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FEFCE8"/>
+      <stop offset="30%" stop-color="#FDE68A"/>
+      <stop offset="70%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Starburst rays -->
+  <line x1="100" y1="20" x2="100" y2="180" stroke="#FDE68A" stroke-width="1" opacity="0.15"/>
+  <line x1="20" y1="100" x2="180" y2="100" stroke="#FDE68A" stroke-width="1" opacity="0.15"/>
+  <line x1="36" y1="36" x2="164" y2="164" stroke="#FDE68A" stroke-width="1" opacity="0.15"/>
+  <line x1="164" y1="36" x2="36" y2="164" stroke="#FDE68A" stroke-width="1" opacity="0.15"/>
+  <line x1="100" y1="20" x2="164" y2="164" stroke="#FDE68A" stroke-width="0.5" opacity="0.08"/>
+  <line x1="20" y1="100" x2="164" y2="36" stroke="#FDE68A" stroke-width="0.5" opacity="0.08"/>
+  <!-- Glow layers -->
+  <circle cx="100" cy="100" r="55" fill="#F59E0B" opacity="0.08"/>
+  <circle cx="100" cy="100" r="40" fill="#FCD34D" opacity="0.12"/>
+  <circle cx="100" cy="100" r="28" fill="#FDE68A" opacity="0.2"/>
+  <!-- Core nova -->
+  <circle cx="100" cy="100" r="18" fill="url(#star)"/>
+  <!-- Sparkle points -->
+  <path d="M100 68 L103 95 L100 100 L97 95z" fill="#FEFCE8" opacity="0.9"/>
+  <path d="M100 132 L103 105 L100 100 L97 105z" fill="#FEFCE8" opacity="0.9"/>
+  <path d="M68 100 L95 97 L100 100 L95 103z" fill="#FEFCE8" opacity="0.9"/>
+  <path d="M132 100 L105 97 L100 100 L105 103z" fill="#FEFCE8" opacity="0.9"/>
+  <text x="100" y="178" font-family="system-ui" font-size="18" font-weight="700" fill="#FDE68A" text-anchor="middle" letter-spacing="2">NOVA</text>
+</svg>

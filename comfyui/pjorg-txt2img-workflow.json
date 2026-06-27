@@ -1,0 +1,96 @@
+{
+  "last_node_id": 7,
+  "last_link_id": 8,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "CheckpointLoaderSimple",
+      "pos": [50, 300],
+      "size": [315, 98],
+      "outputs": [
+        {"name": "MODEL", "type": "MODEL", "links": [1]},
+        {"name": "CLIP",  "type": "CLIP",  "links": [2, 3]},
+        {"name": "VAE",   "type": "VAE",   "links": [7]}
+      ],
+      "widgets_values": ["counterfeitV30_v30.safetensors"]
+    },
+    {
+      "id": 2,
+      "type": "EmptyLatentImage",
+      "pos": [50, 500],
+      "size": [315, 106],
+      "outputs": [
+        {"name": "LATENT", "type": "LATENT", "links": [4]}
+      ],
+      "widgets_values": [512, 512, 1]
+    },
+    {
+      "id": 3,
+      "type": "CLIPTextEncode",
+      "title": "Positive Prompt",
+      "pos": [420, 160],
+      "size": [500, 170],
+      "inputs": [{"name": "clip", "type": "CLIP", "link": 2}],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [5]}],
+      "widgets_values": ["pjorg cat, tortoiseshell cat, dark grey fur with orange and black patches, teal green eyes, white chin patch, bipedal cat person, steampunk brass goggles pushed up on forehead, hand-drawn anime style, studio ghibli, cel shading, dark outlines, chibi proportions, cute expression, warm lighting, white background, solo character, full body, character sheet"]
+    },
+    {
+      "id": 4,
+      "type": "CLIPTextEncode",
+      "title": "Negative Prompt",
+      "pos": [420, 360],
+      "size": [500, 140],
+      "inputs": [{"name": "clip", "type": "CLIP", "link": 3}],
+      "outputs": [{"name": "CONDITIONING", "type": "CONDITIONING", "links": [6]}],
+      "widgets_values": ["human, girl, boy, person, second character, multiple characters, duo, realistic, photorealistic, 3d render, furry art nsfw, modern equipment, laptop, phone, blocky, flat shading, bad anatomy, extra limbs, missing limbs, deformed hands, watermark, text, signature, blurry, low quality, jpeg artifacts"]
+    },
+    {
+      "id": 5,
+      "type": "KSampler",
+      "pos": [960, 300],
+      "size": [315, 262],
+      "inputs": [
+        {"name": "model",         "type": "MODEL",        "link": 1},
+        {"name": "positive",      "type": "CONDITIONING", "link": 5},
+        {"name": "negative",      "type": "CONDITIONING", "link": 6},
+        {"name": "latent_image",  "type": "LATENT",       "link": 4}
+      ],
+      "outputs": [{"name": "LATENT", "type": "LATENT", "links": [8]}],
+      "widgets_values": [42, "randomize", 28, 7.5, "dpmpp_2m", "karras", 1.0]
+    },
+    {
+      "id": 6,
+      "type": "VAEDecode",
+      "pos": [1330, 300],
+      "size": [210, 46],
+      "inputs": [
+        {"name": "samples", "type": "LATENT", "link": 8},
+        {"name": "vae",     "type": "VAE",    "link": 7}
+      ],
+      "outputs": [{"name": "IMAGE", "type": "IMAGE", "links": [9]}]
+    },
+    {
+      "id": 7,
+      "type": "SaveImage",
+      "pos": [1330, 400],
+      "size": [315, 270],
+      "inputs": [{"name": "images", "type": "IMAGE", "link": 9}],
+      "widgets_values": ["pjorg-training/pjorg"]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 5, 0, "MODEL"],
+    [2, 1, 1, 3, 0, "CLIP"],
+    [3, 1, 1, 4, 0, "CLIP"],
+    [4, 2, 0, 5, 3, "LATENT"],
+    [5, 3, 0, 5, 1, "CONDITIONING"],
+    [6, 4, 0, 5, 2, "CONDITIONING"],
+    [7, 1, 2, 6, 1, "VAE"],
+    [8, 5, 0, 6, 0, "LATENT"],
+    [9, 6, 0, 7, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {"ds": {"scale": 0.8, "offset": [0, 0]}},
+  "version": 0.4
+}

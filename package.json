@@ -1,0 +1,23 @@
+{
+  "name": "token-deployment-platform",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && npm run build:apps",
+    "build:apps": "cd apps/web && npm run build",
+    "dev": "cd apps/web && npm run dev",
+    "test": "npm run test:registry && npm run test:web",
+    "test:registry": "cd packages/tx-builder && npm test",
+    "test:web": "cd apps/web && npm test"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

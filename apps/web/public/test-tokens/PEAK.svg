@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#BFDBFE"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1E40AF"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#sky)"/>
+  <!-- Sun -->
+  <circle cx="155" cy="55" r="18" fill="#FCD34D" opacity="0.9"/>
+  <!-- Back mountain -->
+  <polygon points="140,145 175,145 155,70" fill="#93C5FD" opacity="0.6"/>
+  <!-- Main mountain -->
+  <polygon points="30,148 170,148 100,45" fill="url(#mountain)"/>
+  <!-- Snow cap -->
+  <polygon points="100,45 82,85 118,85" fill="white" opacity="0.95"/>
+  <!-- Snow detail -->
+  <polygon points="100,45 90,72 110,72" fill="white"/>
+  <!-- Ground -->
+  <ellipse cx="100" cy="148" rx="80" ry="8" fill="#1E40AF" opacity="0.3"/>
+  <text x="100" y="178" font-family="system-ui" font-size="18" font-weight="700" fill="#1E40AF" text-anchor="middle" letter-spacing="2">PEAK</text>
+</svg>

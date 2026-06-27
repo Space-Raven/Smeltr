@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "packages",
+    "baseUrl": ".",
+    "paths": {
+      "@platform/core-schemas": ["packages/core-schemas/src"],
+      "@platform/module-registry": ["packages/module-registry/src"],
+      "@platform/tx-builder": ["packages/tx-builder/src"]
+    }
+  },
+  "include": ["packages/**/src/**/*.ts"],
+  "exclude": ["node_modules", "apps", "**/*.test.ts"]
+}

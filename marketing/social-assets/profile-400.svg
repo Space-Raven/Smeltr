@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#4338CA"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </radialGradient>
+    <radialGradient id="coinGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="50%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </radialGradient>
+    <radialGradient id="coinEdge" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="#312E81" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="leafShadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.06">
+    <line x1="0" y1="80" x2="400" y2="80" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="160" x2="400" y2="160" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="240" x2="400" y2="240" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="320" x2="400" y2="320" stroke="white" stroke-width="1"/>
+    <line x1="80" y1="0" x2="80" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="160" y1="0" x2="160" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="240" y1="0" x2="240" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="320" y1="0" x2="320" y2="400" stroke="white" stroke-width="1"/>
+  </g>
+
+  <!-- Glow halo behind coin -->
+  <circle cx="200" cy="185" r="120" fill="#6366F1" opacity="0.15" filter="url(#glow)"/>
+
+  <!-- Coin body -->
+  <ellipse cx="200" cy="195" rx="108" ry="12" fill="#312E81" opacity="0.5"/>
+  <circle cx="200" cy="183" r="110" fill="url(#coinGrad)"/>
+  <!-- Coin edge highlight -->
+  <circle cx="200" cy="183" r="110" fill="none" stroke="#A5B4FC" stroke-width="2.5" opacity="0.5"/>
+  <!-- Inner ring -->
+  <circle cx="200" cy="183" r="90" fill="none" stroke="#A5B4FC" stroke-width="1" opacity="0.3"/>
+
+  <!-- Dollar/token symbol -->
+  <text x="200" y="205" text-anchor="middle" font-family="Georgia, serif" font-size="88" font-weight="bold" fill="white" opacity="0.15">$</text>
+
+  <!-- Mint leaf - stem -->
+  <path d="M200 100 C200 100 198 130 196 148" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#leafShadow)"/>
+
+  <!-- Mint leaf - left leaf -->
+  <path d="M196 148 C185 138 170 125 172 110 C174 96 188 92 196 103 C196 103 194 118 196 148" fill="#10B981" filter="url(#leafShadow)"/>
+  <!-- Left leaf vein -->
+  <path d="M196 148 C190 132 178 118 180 108" stroke="#34D399" stroke-width="1" fill="none" opacity="0.5"/>
+
+  <!-- Mint leaf - right leaf -->
+  <path d="M196 148 C207 135 225 120 221 105 C217 91 202 89 197 101 C197 101 197 118 196 148" fill="#059669" filter="url(#leafShadow)"/>
+  <!-- Right leaf vein -->
+  <path d="M196 148 C204 130 218 117 215 107" stroke="#34D399" stroke-width="1" fill="none" opacity="0.5"/>
+
+  <!-- Top small leaves -->
+  <path d="M198 100 C192 90 182 85 180 92 C178 99 188 104 198 100" fill="#34D399" opacity="0.8"/>
+  <path d="M200 97 C206 87 216 83 217 91 C218 98 208 102 200 97" fill="#10B981" opacity="0.8"/>
+
+  <!-- Wordmark: Minty -->
+  <text x="200" y="325" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="4" fill="white">minty</text>
+  <!-- Dot accent -->
+  <circle cx="310" cy="313" r="5" fill="#6366F1"/>
+
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F5F3FF"/>
+      <stop offset="100%" stop-color="#EDE9FE"/>
+    </linearGradient>
+    <linearGradient id="cloud1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#white"/>
+      <stop offset="100%" stop-color="#DDD6FE"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Drifting geometric shapes -->
+  <!-- Large soft circle 1 -->
+  <circle cx="75" cy="85" r="42" fill="#DDD6FE" opacity="0.6"/>
+  <!-- Large soft circle 2 -->
+  <circle cx="125" cy="110" r="38" fill="#C4B5FD" opacity="0.5"/>
+  <!-- Small accent -->
+  <circle cx="90" cy="115" r="22" fill="#A78BFA" opacity="0.5"/>
+  <circle cx="118" cy="82" r="18" fill="#8B5CF6" opacity="0.4"/>
+  <!-- Foreground detail -->
+  <circle cx="100" cy="98" r="15" fill="#7C3AED" opacity="0.7"/>
+  <circle cx="100" cy="98" r="8" fill="#EDE9FE" opacity="0.9"/>
+  <!-- Wind lines -->
+  <path d="M35 60 Q55 55 70 62" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <path d="M30 70 Q50 65 60 72" stroke="#A78BFA" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.4"/>
+  <path d="M145 48 Q162 43 175 52" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <text x="100" y="178" font-family="system-ui" font-size="17" font-weight="700" fill="#7C3AED" text-anchor="middle" letter-spacing="2">DRIFT</text>
+</svg>

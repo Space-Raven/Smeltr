@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#431407"/>
+      <stop offset="100%" stop-color="#1C0A03"/>
+    </radialGradient>
+    <radialGradient id="fire" cx="50%" cy="80%" r="60%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="40%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Flame shape -->
+  <path d="M100 40 C80 60 60 75 65 100 C68 115 78 125 100 130 C122 125 132 115 135 100 C140 75 120 60 100 40z" fill="url(#fire)"/>
+  <!-- Inner flame -->
+  <path d="M100 65 C88 78 82 90 85 103 C87 112 93 118 100 120 C107 118 113 112 115 103 C118 90 112 78 100 65z" fill="#FEF08A" opacity="0.7"/>
+  <!-- Core -->
+  <ellipse cx="100" cy="108" rx="12" ry="10" fill="#FFF9C4" opacity="0.9"/>
+  <text x="100" y="170" font-family="system-ui" font-size="18" font-weight="700" fill="#FCD34D" text-anchor="middle" letter-spacing="2">EMBER</text>
+</svg>

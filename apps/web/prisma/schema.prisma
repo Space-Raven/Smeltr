@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- SIWS (Sign-In with Solana) -------------------------------------------
+
+model AuthNonce {
+  nonce     String    @id
+  domain    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([expiresAt])
+}
+
+// --- Subscriptions (PAUSED — Stripe checkout/webhook not yet built) -------
+// See CLAUDE.md "PAUSED: subscription / premium tier". This model exists so
+// the schema is ready, but is currently unpopulated.
+
+model Subscription {
+  walletAddress        String    @id
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  status               String    @default("inactive") // "active" | "past_due" | "canceled" | "inactive"
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+// --- Deployment index (dashboard / resumability) ---------------------------
+
+model Deployment {
+  mintAddress       String    @id
+  walletAddress     String
+  decimals          Int
+  hasMetadata       Boolean   @default(false)
+  metadataAttached  Boolean   @default(false)
+  name              String?
+  symbol            String?
+  uri               String?
+  signature         String
+  metadataSignature String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([walletAddress])
+}

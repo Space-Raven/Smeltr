@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Your Minty token was deployed</title>
+<style>
+  body { margin:0; padding:0; background:#F9FAFB; font-family:Inter,system-ui,sans-serif; }
+  .wrapper { max-width:600px; margin:0 auto; padding:32px 16px; }
+  .card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+  .hero { background:linear-gradient(135deg,#059669,#0D9488); padding:36px 40px; }
+  .hero h1 { color:white; font-size:22px; font-weight:700; margin:0 0 6px; }
+  .hero p { color:#D1FAE5; font-size:14px; margin:0; }
+  .body { padding:36px 40px; }
+  .body p { color:#374151; font-size:15px; line-height:1.7; margin:0 0 14px; }
+  .mint-box { background:#F3F4F6; border-radius:10px; padding:16px; margin:20px 0; }
+  .mint-box .label { color:#6B7280; font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .mint-box .value { font-family:monospace; font-size:13px; color:#111827; word-break:break-all; }
+  .step { display:flex; gap:14px; margin-bottom:14px; }
+  .step-num { background:#4F46E5; color:white; font-weight:700; font-size:13px; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-text { font-size:14px; color:#374151; line-height:1.6; }
+  .cta { text-align:center; margin:28px 0; }
+  .cta a { display:inline-block; background:#4F46E5; color:white; text-decoration:none; padding:13px 32px; border-radius:10px; font-weight:700; font-size:14px; }
+  .footer { padding:20px 40px; background:#F9FAFB; text-align:center; }
+  .footer p { color:#9CA3AF; font-size:12px; margin:0 0 4px; }
+  .footer a { color:#6B7280; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="wrapper"><div class="card">
+  <div class="hero">
+    <h1>✅ Your token is live on Solana</h1>
+    <p>Transaction confirmed. Here's what you need to know next.</p>
+  </div>
+  <div class="body">
+    <p>Your token has been deployed to Solana mainnet. Here are your details:</p>
+    <div class="mint-box">
+      <div class="label">Mint Address</div>
+      <div class="value">{{MINT_ADDRESS}}</div>
+    </div>
+    <div class="mint-box">
+      <div class="label">Transaction</div>
+      <div class="value">{{TX_SIGNATURE}}</div>
+    </div>
+    <p><strong>What to do next:</strong></p>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Attach metadata</strong> if you haven't already. Without metadata, wallets show your token as "Unknown Token". Visit your <a href="https://minty.app/dashboard" style="color:#4F46E5;">dashboard</a> and click "Add Metadata".</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Verify on Solana Explorer</strong> — search your mint address at <a href="https://explorer.solana.com" style="color:#4F46E5;">explorer.solana.com</a> to confirm everything looks correct.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Share your token</strong> in the Minty Discord #showcase channel — we'd love to see what you built.</div></div>
+    <div class="cta"><a href="https://minty.app/dashboard">View your dashboard →</a></div>
+  </div>
+  <div class="footer">
+    <p><a href="https://minty.app">minty.app</a> · <a href="https://discord.gg/minty">Discord</a> · <a href="https://twitter.com/mintyapp">@mintyapp</a></p>
+    <p><a href="{{unsubscribe_url}}">Unsubscribe</a></p>
+  </div>
+</div></div>
+</body>
+</html>

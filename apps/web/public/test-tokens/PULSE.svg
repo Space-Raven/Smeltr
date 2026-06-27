@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F7"/>
+      <stop offset="100%" stop-color="#FCE7F3"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- EKG / heartbeat line -->
+  <polyline points="25,100 55,100 65,70 75,130 90,85 100,115 112,60 122,140 135,100 175,100"
+    stroke="#EC4899" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Heart at peak -->
+  <path d="M100 52 C100 52 86 42 86 55 C86 62 100 72 100 72 C100 72 114 62 114 55 C114 42 100 52 100 52z" fill="#F9A8D4" opacity="0.4"/>
+  <!-- Pulse rings -->
+  <circle cx="100" cy="100" r="75" stroke="#F472B6" stroke-width="1" opacity="0.25" fill="none"/>
+  <circle cx="100" cy="100" r="85" stroke="#F472B6" stroke-width="0.5" opacity="0.15" fill="none"/>
+  <text x="100" y="178" font-family="system-ui" font-size="17" font-weight="700" fill="#DB2777" text-anchor="middle" letter-spacing="2">PULSE</text>
+</svg>

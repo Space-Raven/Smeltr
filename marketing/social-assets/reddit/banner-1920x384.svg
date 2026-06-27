@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="384" viewBox="0 0 1920 384">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1B4B"/>
+      <stop offset="40%" stop-color="#312E81"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <radialGradient id="coinGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="50%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </radialGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="30%">
+      <stop offset="0%" stop-color="#4F46E5" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="384" fill="url(#bg)"/>
+  <rect width="1920" height="384" fill="url(#centerGlow)"/>
+
+  <!-- Horizontal line accents -->
+  <line x1="0" y1="1" x2="1920" y2="1" stroke="#4338CA" stroke-width="2" opacity="0.5"/>
+  <line x1="0" y1="383" x2="1920" y2="383" stroke="#4338CA" stroke-width="2" opacity="0.5"/>
+
+  <!-- Decorative rings left -->
+  <circle cx="200" cy="192" r="180" fill="none" stroke="#6366F1" stroke-width="1" opacity="0.1"/>
+  <circle cx="200" cy="192" r="140" fill="none" stroke="#6366F1" stroke-width="1" opacity="0.1"/>
+
+  <!-- Decorative rings right -->
+  <circle cx="1720" cy="192" r="180" fill="none" stroke="#6366F1" stroke-width="1" opacity="0.1"/>
+  <circle cx="1720" cy="192" r="140" fill="none" stroke="#6366F1" stroke-width="1" opacity="0.1"/>
+
+  <!-- CENTER: Logo + tagline -->
+  <!-- Coin -->
+  <ellipse cx="810" cy="213" rx="60" ry="8" fill="#312E81" opacity="0.5"/>
+  <circle cx="810" cy="205" r="62" fill="url(#coinGrad)"/>
+  <circle cx="810" cy="205" r="62" fill="none" stroke="#A5B4FC" stroke-width="1.5" opacity="0.5"/>
+  <!-- Leaf -->
+  <path d="M810 162 C810 162 808 178 807 189" stroke="#34D399" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M807 189 C799 180 786 169 788 157 C790 145 801 141 807 151 C807 151 806 168 807 189" fill="#10B981"/>
+  <path d="M807 189 C816 177 829 165 826 153 C823 141 810 139 808 151 C808 151 807 168 807 189" fill="#059669"/>
+  <path d="M809 162 C803 153 795 150 793 156 C791 162 800 166 809 162" fill="#34D399" opacity="0.9"/>
+  <path d="M810 159 C816 150 824 148 825 155 C826 162 818 165 810 159" fill="#10B981" opacity="0.9"/>
+
+  <!-- Wordmark -->
+  <text x="892" y="196" font-family="'Segoe UI', Arial, sans-serif" font-size="80" font-weight="800" fill="white" letter-spacing="3">minty</text>
+  <circle cx="1175" cy="177" r="7" fill="#6366F1"/>
+
+  <!-- Tagline -->
+  <text x="892" y="245" font-family="'Segoe UI', Arial, sans-serif" font-size="24" fill="#A5B4FC" letter-spacing="1">Non-Custodial Token-2022 Launcher on Solana</text>
+
+  <!-- Module badges bottom -->
+  <rect x="892" y="268" width="148" height="36" rx="18" fill="#312E81" stroke="#6366F1" stroke-width="1"/>
+  <text x="966" y="291" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#C7D2FE">⚡ Transfer Fee</text>
+
+  <rect x="1052" y="268" width="172" height="36" rx="18" fill="#312E81" stroke="#F97316" stroke-width="1"/>
+  <text x="1138" y="291" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#FED7AA">🔒 Non-Transferable</text>
+
+  <rect x="1236" y="268" width="170" height="36" rx="18" fill="#312E81" stroke="#EF4444" stroke-width="1"/>
+  <text x="1321" y="291" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#FECACA">👑 Perm. Delegate</text>
+
+  <!-- minty.app text -->
+  <text x="960" y="350" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="16" fill="#6366F1" letter-spacing="3">minty.app</text>
+</svg>

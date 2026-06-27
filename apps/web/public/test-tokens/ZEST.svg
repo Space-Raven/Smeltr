@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFBEB"/>
+      <stop offset="100%" stop-color="#FEF3C7"/>
+    </radialGradient>
+    <radialGradient id="citrus" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="60%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Citrus slice -->
+  <circle cx="100" cy="97" r="58" fill="url(#citrus)"/>
+  <circle cx="100" cy="97" r="48" fill="#FEF08A"/>
+  <!-- Segment lines -->
+  <line x1="100" y1="49" x2="100" y2="97" stroke="#F59E0B" stroke-width="1.5" opacity="0.6"/>
+  <line x1="100" y1="97" x2="141" y2="122" stroke="#F59E0B" stroke-width="1.5" opacity="0.6"/>
+  <line x1="100" y1="97" x2="59" y2="122" stroke="#F59E0B" stroke-width="1.5" opacity="0.6"/>
+  <line x1="100" y1="97" x2="152" y2="74" stroke="#F59E0B" stroke-width="1" opacity="0.4"/>
+  <line x1="100" y1="97" x2="48" y2="74" stroke="#F59E0B" stroke-width="1" opacity="0.4"/>
+  <line x1="100" y1="97" x2="141" y2="72" stroke="#F59E0B" stroke-width="1" opacity="0.4"/>
+  <line x1="100" y1="97" x2="59" y2="72" stroke="#F59E0B" stroke-width="1" opacity="0.4"/>
+  <!-- Center -->
+  <circle cx="100" cy="97" r="10" fill="#F59E0B"/>
+  <circle cx="100" cy="97" r="6" fill="#FEF3C7"/>
+  <!-- Outer peel -->
+  <circle cx="100" cy="97" r="58" fill="none" stroke="#F59E0B" stroke-width="4" opacity="0.8"/>
+  <text x="100" y="178" font-family="system-ui" font-size="18" font-weight="700" fill="#B45309" text-anchor="middle" letter-spacing="2">ZEST</text>
+</svg>

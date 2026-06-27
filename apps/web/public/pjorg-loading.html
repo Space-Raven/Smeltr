@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>Pjorg Loading Animations v2 — Smeltr</title>
+<style>
+/* Style: hand-drawn anime/comic book, Studio Ghibli color palette, dark cel outlines.
+   Range: modern anime ↔ American comic book. Never blocky/MS-Paint, never AI-slop.
+   Usage: copy individual <svg> + its @keyframes into your React loading component. */
+body{background:#0F0906;display:flex;align-items:center;justify-content:center;
+     min-height:100vh;margin:0;gap:16px;flex-wrap:wrap;padding:2rem;}
+.ft{background:#0F0906;border-radius:12px;border:1px solid rgba(200,152,20,.28);
+    display:flex;flex-direction:column;align-items:center;overflow:hidden;}
+.fl{font-size:11px;color:rgba(200,152,20,.7);padding:5px 0 3px;letter-spacing:.07em;font-family:monospace;}
+.fs{font-size:10px;color:rgba(255,255,255,.2);padding:0 0 9px;font-family:monospace;}
+
+/* ── Animation 1: Coin Toss (3s) ── */
+@keyframes c1{0%,7%{transform:translate(0,0) rotate(0deg);opacity:1}
+  46%{transform:translate(-26px,-96px) rotate(380deg);opacity:1}
+  80%,86%{transform:translate(-53px,2px) rotate(670deg);opacity:1}
+  88%,94%{opacity:0}96%,100%{transform:translate(0,0) rotate(0deg);opacity:1}}
+@keyframes ra{0%,5%{transform:rotate(0deg)}19%{transform:rotate(-50deg)}34%,100%{transform:rotate(0deg)}}
+@keyframes la{0%,70%{transform:rotate(0deg)}85%{transform:rotate(26deg)}95%,100%{transform:rotate(0deg)}}
+@keyframes hd{0%,8%{transform:rotate(0deg)}33%,52%{transform:rotate(-6deg)}75%,100%{transform:rotate(0deg)}}
+@keyframes bl{0%,87%,100%{transform:scaleY(1)}91%,94%{transform:scaleY(.07)}}
+
+/* ── Animation 2: Bellows Pump (1.8s) ── */
+@keyframes bp{0%,100%{transform:translateX(0)}40%,54%{transform:translateX(6px)}}
+@keyframes bw{0%,100%{transform:scaleX(1)}40%,54%{transform:scaleX(.52)}}
+@keyframes bg2{0%,100%{opacity:.12}40%,54%{opacity:.52}}
+@keyframes bf{0%,100%{transform:scaleY(.85) translateY(2px);opacity:.5}
+  40%,54%{transform:scaleY(1.55) translateY(-6px);opacity:.95}}
+@keyframes bb{0%,100%{transform:translateY(0)}40%,54%{transform:translateY(2px)}}
+
+/* ── Animation 3: Tome Reading (3.2s) ── */
+@keyframes tt{0%,100%{transform:rotate(0deg)}34%,64%{transform:rotate(4deg)}}
+@keyframes tp{0%,24%{transform:skewX(0deg) scaleX(1)}
+  41%,51%{transform:skewX(-7deg) scaleX(.88)}67%,100%{transform:skewX(0deg) scaleX(1)}}
+@keyframes te{0%,16%{transform:translateX(0)}29%{transform:translateX(3px)}
+  51%{transform:translateX(-3px)}67%,100%{transform:translateX(0)}}
+@keyframes tb{0%,81%,100%{transform:scaleY(1)}85%,89%{transform:scaleY(.07)}}
+</style></head><body>
+
+<!-- ══════════════════════════════════════════════════════════
+     TILE 1 — COIN TOSS  (primary loader, 3s loop)
+     Use: transaction preparation, standard RPC waits
+     ══════════════════════════════════════════════════════════ -->
+<div class="ft">
+<svg viewBox="0 0 100 155" width="160" xmlns="http://www.w3.org/2000/svg">
+<rect width="100" height="155" fill="#0F0906"/>
+<ellipse cx="50" cy="152" rx="54" ry="16" fill="#C04010" opacity=".09"/>
+<!-- tail (multi-stroke = volume) -->
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#201208" stroke-width="9.5" stroke-linecap="round"/>
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#3A2210" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M 64,124 C 72,119 79,110 78,97" fill="none" stroke="#4A2A16" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+<!-- body + cel shadow -->
+<ellipse cx="50" cy="109" rx="19.5" ry="21.5" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+<ellipse cx="56" cy="104" rx="12" ry="10" fill="#140C06" opacity=".48"/>
+<path d="M 38,112 C 44,120 58,120 64,110 C 60,116 54,118 50,118 C 46,118 40,116 38,112 Z" fill="#1A0C04" opacity=".3"/>
+<path d="M 58,109 C 66,106 69,115 62,122 C 57,121 55,113 58,109 Z" fill="#C05818" opacity=".5"/>
+<!-- cream chest -->
+<ellipse cx="49.5" cy="97" rx="11.5" ry="8.5" fill="#ECD8A8" stroke="#C8B070" stroke-width=".7" opacity=".82"/>
+<!-- leather apron -->
+<path d="M 33.5,91 C 32,94 30,118 32,123 L 68,123 C 70,118 68,94 66.5,91 Z" fill="#5A2E08" stroke="#1A0C04" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M 33.5,91 C 32,96 31,116 33,123 L 43,123 C 41,116 38,96 38,91 Z" fill="#3A1A04" opacity=".55"/>
+<path d="M 44,85 C 44,89 56,89 56,85 C 56,81 53,79 50,79 C 47,79 44,81 44,85 Z" fill="#5A2E08" stroke="#1A0C04" stroke-width="1.2"/>
+<rect x="46" y="80" width="8" height="6" rx="1.5" fill="#3A1A04" stroke="#D4980C" stroke-width="1.2"/>
+<rect x="47.5" y="81" width="5" height="3.5" rx=".5" fill="#D4980C"/>
+<circle cx="37.5" cy="99" r="2" fill="#D4980C" stroke="#8A5808" stroke-width=".5"/>
+<circle cx="63" cy="99" r="2" fill="#D4980C" stroke="#8A5808" stroke-width=".5"/>
+<rect x="39" y="109" width="12" height="9.5" rx="2" fill="#3A1A04" stroke="#D4980C" stroke-width=".8"/>
+<!-- legs -->
+<rect x="37" y="121" width="8.5" height="17" rx="4" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<rect x="54.5" y="121" width="8.5" height="17" rx="4" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<!-- feet (organic paw paths) -->
+<path d="M 31,137 C 29,139 30,143 35.5,144 C 40,145 48.5,143 49.5,141 C 50.5,139 47,136 42,136 C 38,136 33,135 31,137 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<circle cx="34" cy="137" r="2.5" fill="#1A0C04"/><circle cx="38.5" cy="135.5" r="2.5" fill="#1A0C04"/><circle cx="43" cy="137" r="2.5" fill="#1A0C04"/>
+<path d="M 51,137 C 49,139 50,143 55.5,144 C 60,145 68.5,143 69.5,141 C 70.5,139 67,136 62,136 C 58,136 53,135 51,137 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<circle cx="54" cy="137" r="2.5" fill="#1A0C04"/><circle cx="58.5" cy="135.5" r="2.5" fill="#1A0C04"/><circle cx="63" cy="137" r="2.5" fill="#1A0C04"/>
+<!-- left arm (catch — animated) -->
+<g style="transform-box:fill-box;transform-origin:100% 0%;animation:la 3s ease-in-out infinite;">
+  <path d="M 33.5,93 Q 25,103 21.5,115" fill="none" stroke="#241408" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 33.5,93 Q 25,103 21.5,115" fill="none" stroke="#3A2010" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M 33.5,93 Q 25,103 21.5,115" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M 13,117 C 12,119 13,122 18,123 C 22,124 28,122 29,120 C 30,118 27,116 23,116 C 20,116 15,115 13,117 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  <circle cx="16" cy="117" r="2.3" fill="#1A0C04"/><circle cx="21" cy="116" r="2.3" fill="#1A0C04"/><circle cx="25.5" cy="117.5" r="2.3" fill="#1A0C04"/>
+</g>
+<!-- right arm (toss — animated) -->
+<g style="transform-box:fill-box;transform-origin:0% 0%;animation:ra 3s ease-in-out infinite;">
+  <path d="M 66.5,93 Q 75,103 78.5,115" fill="none" stroke="#241408" stroke-width="10" stroke-linecap="round"/>
+  <path d="M 66.5,93 Q 75,103 78.5,115" fill="none" stroke="#3A2010" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M 66.5,93 Q 75,103 78.5,115" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M 71,117 C 70,119 71,122 76,123 C 80,124 86,122 87,120 C 88,118 85,116 81,116 C 78,116 73,115 71,117 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  <circle cx="74" cy="117" r="2.3" fill="#1A0C04"/><circle cx="79" cy="116" r="2.3" fill="#1A0C04"/><circle cx="83.5" cy="117.5" r="2.3" fill="#1A0C04"/>
+</g>
+<!-- head group (watch coin arc — animated) -->
+<g style="transform-box:fill-box;transform-origin:50% 100%;animation:hd 3s ease-in-out infinite;">
+  <path d="M 50,17 C 72,17 81,28 81,46.5 C 81,65 68.5,79 50,79 C 31.5,79 19,65 19,46.5 C 19,28 28,17 50,17 Z" fill="#241408" stroke="#1A0C04" stroke-width="2"/>
+  <path d="M 19,42 C 19,30 26,21 36,19 C 30,24 27,31 27,40 C 27,52 31,62 38,70 C 28,64 19,54 19,42 Z" fill="#140C06" opacity=".42"/>
+  <!-- left ear (inner salmon) -->
+  <path d="M 22,28 C 17,18 16.5,4 24.5,2.5 C 30,4.5 36.5,18 36,24 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+  <path d="M 24.5,26.5 C 20.5,18 20,8.5 24.5,6.5 C 28,8.5 32.5,19 32,23.5 Z" fill="#9A3828" opacity=".8"/>
+  <!-- right ear (inner warm/blaze tint) -->
+  <path d="M 78,28 C 83,18 83.5,4 75.5,2.5 C 70,4.5 63.5,18 64,24 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+  <path d="M 75.5,26.5 C 79.5,18 80,8.5 75.5,6.5 C 72,8.5 67.5,19 68,23.5 Z" fill="#C8A048" opacity=".65"/>
+  <!-- tan lightning blaze (her left face = viewer's right) -->
+  <path d="M 62,21 C 66,25.5 70.5,33 69.5,42.5 C 68.5,51.5 65,57.5 63,63 C 60,68 58,72 56,74 C 54,69 53,63 54,58.5 C 56,51 60.5,43.5 63.5,34.5 C 65,27 63,22 62,21 Z" fill="#C8A048" opacity=".9"/>
+  <path d="M 64,23 C 67.5,27.5 72,35 71,44 C 70,53 66.5,59 64.5,64 C 62,68.5 60,72.5 58,74.5 C 57,70.5 56,64.5 57,60.5 C 59,53.5 63.5,46 66,37 C 67.5,30 65,24 64,23 Z" fill="#D4B060" opacity=".28"/>
+  <!-- steampunk goggles (forehead, pushed up) -->
+  <path d="M 19,33 C 21,27 30,25 50,25 C 70,25 79,27 81,33 C 79,37 70,39.5 50,39.5 C 30,39.5 21,37 19,33 Z" fill="#5A3008" stroke="#3A1A04" stroke-width=".8"/>
+  <!-- left goggle: circular brass frame with gear marks -->
+  <circle cx="34.5" cy="33" r="8.5" fill="#161010"/>
+  <circle cx="34.5" cy="33" r="11" fill="none" stroke="#D4980C" stroke-width="3"/>
+  <line x1="34.5" y1="22" x2="34.5" y2="24.5" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="34.5" y1="41.5" x2="34.5" y2="44" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="23.5" y1="33" x2="26" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="43" y1="33" x2="45.5" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <circle cx="34.5" cy="33" r="8.5" fill="none" stroke="#A06808" stroke-width=".8"/>
+  <path d="M 27.5,24 C 30,22 39,22 42,24" stroke="#F0C838" stroke-width="1.5" fill="none" opacity=".55"/>
+  <!-- right goggle -->
+  <circle cx="65.5" cy="33" r="8.5" fill="#161010"/>
+  <circle cx="65.5" cy="33" r="11" fill="none" stroke="#D4980C" stroke-width="3"/>
+  <line x1="65.5" y1="22" x2="65.5" y2="24.5" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="65.5" y1="41.5" x2="65.5" y2="44" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="54.5" y1="33" x2="57" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="74" y1="33" x2="76.5" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <circle cx="65.5" cy="33" r="6" fill="#C89820" opacity=".1"/>
+  <path d="M 58.5,24 C 61,22 70,22 73,24" stroke="#F0C838" stroke-width="1.5" fill="none" opacity=".55"/>
+  <!-- bridge + gear -->
+  <path d="M 44.5,29.5 C 46,26.5 54,26.5 55.5,29.5 C 54,33 46,33 44.5,29.5 Z" fill="#5A3008" stroke="#3A1A04" stroke-width=".8"/>
+  <circle cx="50" cy="31" r="3.5" fill="none" stroke="#D4980C" stroke-width=".9"/>
+  <line x1="46.5" y1="31" x2="53.5" y2="31" stroke="#D4980C" stroke-width=".7"/>
+  <line x1="50" y1="27.5" x2="50" y2="34.5" stroke="#D4980C" stroke-width=".7"/>
+  <!-- anime eyes (blink animated) -->
+  <g style="transform-box:fill-box;transform-origin:center;animation:bl 3s ease-in-out infinite;">
+    <ellipse cx="37" cy="53" rx="9.5" ry="11" fill="#F4EED8" stroke="#1A0C04" stroke-width="1.2"/>
+    <ellipse cx="37" cy="54" rx="8.5" ry="9.5" fill="#B8CC12"/>
+    <path d="M 28,47.5 C 28,45 33,43 37,43 C 41,43 46,45 46,47.5 C 44,51 40.5,53 37,53 C 33.5,53 30,51 28,47.5 Z" fill="#1A0C04" opacity=".4"/>
+    <ellipse cx="37" cy="55" rx="3" ry="8.5" fill="#1A0C04"/>
+    <ellipse cx="33" cy="48" rx="3" ry="3.5" fill="white" opacity=".9"/>
+    <circle cx="41.5" cy="58" r="1.3" fill="white" opacity=".6"/>
+    <path d="M 27.5,49.5 C 28.5,43 33,41 37,41 C 41,41 45.5,43 46.5,49.5" stroke="#1A0C04" stroke-width="1.5" fill="none"/>
+    <ellipse cx="63" cy="53" rx="9.5" ry="11" fill="#F4EED8" stroke="#1A0C04" stroke-width="1.2"/>
+    <ellipse cx="63" cy="54" rx="8.5" ry="9.5" fill="#C4D418"/>
+    <ellipse cx="63" cy="54" rx="8.5" ry="9.5" fill="#D4A020" opacity=".14"/>
+    <path d="M 54,47.5 C 54,45 59,43 63,43 C 67,43 72,45 72,47.5 C 70,51 66.5,53 63,53 C 59.5,53 56,51 54,47.5 Z" fill="#1A0C04" opacity=".4"/>
+    <ellipse cx="63" cy="55" rx="3" ry="8.5" fill="#1A0C04"/>
+    <ellipse cx="59" cy="48" rx="3" ry="3.5" fill="white" opacity=".9"/>
+    <circle cx="67.5" cy="58" r="1.3" fill="white" opacity=".6"/>
+    <path d="M 53.5,49.5 C 54.5,43 59,41 63,41 C 67,41 71.5,43 72.5,49.5" stroke="#1A0C04" stroke-width="1.5" fill="none"/>
+  </g>
+  <!-- nose + mouth -->
+  <path d="M 50,60 C 47,59 45.5,57 47,56 L 50,57.5 L 53,56 C 54.5,57 53,59 50,60 Z" fill="#C07878" stroke="#8A4858" stroke-width=".8"/>
+  <path d="M 46.5,61.5 Q 48.5,66 50,64 Q 51.5,66 53.5,61.5" stroke="#9A5060" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- cream chin -->
+  <path d="M 40,65 C 38,70 38.5,77 44,79.5 C 47,80.5 53,80.5 56,79.5 C 61.5,77 62,70 60,65 C 56.5,68 53,70 50,70 C 47,70 43.5,68 40,65 Z" fill="#ECD8A8" opacity=".8"/>
+  <!-- whiskers -->
+  <path d="M 56,63 C 63,61 73,58 79,56" stroke="#8A7040" stroke-width=".9" fill="none" opacity=".65"/>
+  <path d="M 56,65.5 C 63,65.5 73,65.5 79,65.5" stroke="#8A7040" stroke-width=".9" fill="none" opacity=".6"/>
+  <path d="M 44,63 C 37,61 27,58 21,56" stroke="#5A4828" stroke-width=".9" fill="none" opacity=".6"/>
+  <path d="M 44,65.5 C 37,65.5 27,65.5 21,65.5" stroke="#5A4828" stroke-width=".9" fill="none" opacity=".55"/>
+</g>
+<!-- coin (arc animated) -->
+<g style="transform-box:fill-box;transform-origin:center;animation:c1 3s ease-in-out infinite;">
+  <circle cx="79" cy="117" r="8" fill="#9A6808" stroke="#1A0C04" stroke-width="1.2"/>
+  <circle cx="79" cy="117" r="6.5" fill="#E0A018"/>
+  <circle cx="79" cy="117" r="5" fill="#F0BC30"/>
+  <text x="79" y="120.5" text-anchor="middle" font-size="5.5" fill="#6A4008" font-family="serif" font-weight="bold">&#x25C8;</text>
+  <path d="M 72,112 C 73,110 79,110 85,112" stroke="white" stroke-width=".7" fill="none" opacity=".3"/>
+</g>
+</svg>
+<p class="fl">preparing transaction</p><p class="fs">primary · 3s loop</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TILE 2 — BELLOWS PUMP  (long operation, 1.8s loop)
+     Use: instruction build, Irys upload, RPC simulation
+     ══════════════════════════════════════════════════════════ -->
+<div class="ft">
+<svg viewBox="0 0 100 155" width="160" xmlns="http://www.w3.org/2000/svg">
+<rect width="100" height="155" fill="#0F0906"/>
+<!-- forge glow + flame (animated) -->
+<ellipse cx="50" cy="152" rx="52" ry="17" style="animation:bg2 1.8s ease-in-out infinite;" fill="#E05010" opacity=".12"/>
+<g style="transform-box:fill-box;transform-origin:center bottom;animation:bf 1.8s ease-in-out infinite;">
+  <path d="M 36,152 Q 40,141 44.5,152 Q 49,138 53,152 Q 57,141 61.5,152 Q 65,141 69,152" fill="#C04010" opacity=".6"/>
+  <path d="M 40,152 Q 44,142 48,152 Q 52,142 56,152 Q 60,142 64,152" fill="#F08020" opacity=".65"/>
+</g>
+<!-- tail -->
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#201208" stroke-width="9.5" stroke-linecap="round"/>
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#3A2210" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+<!-- body bobs on pump -->
+<g style="transform-box:fill-box;transform-origin:center center;animation:bb 1.8s ease-in-out infinite;">
+  <ellipse cx="50" cy="109" rx="19.5" ry="21.5" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+  <ellipse cx="56" cy="104" rx="12" ry="10" fill="#140C06" opacity=".48"/>
+  <ellipse cx="49.5" cy="97" rx="11.5" ry="8.5" fill="#ECD8A8" stroke="#C8B070" stroke-width=".7" opacity=".82"/>
+  <path d="M 33.5,91 C 32,94 30,118 32,123 L 68,123 C 70,118 68,94 66.5,91 Z" fill="#5A2E08" stroke="#1A0C04" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M 33.5,91 C 32,96 31,116 33,123 L 43,123 C 41,116 38,96 38,91 Z" fill="#3A1A04" opacity=".55"/>
+  <path d="M 44,85 C 44,89 56,89 56,85 C 56,81 53,79 50,79 C 47,79 44,81 44,85 Z" fill="#5A2E08" stroke="#1A0C04" stroke-width="1.2"/>
+  <rect x="46" y="80" width="8" height="6" rx="1.5" fill="#3A1A04" stroke="#D4980C" stroke-width="1.2"/>
+  <rect x="47.5" y="81" width="5" height="3.5" rx=".5" fill="#D4980C"/>
+  <circle cx="37.5" cy="99" r="2" fill="#D4980C" stroke="#8A5808" stroke-width=".5"/>
+  <circle cx="63" cy="99" r="2" fill="#D4980C" stroke="#8A5808" stroke-width=".5"/>
+  <rect x="37" y="121" width="8.5" height="17" rx="4" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  <rect x="54.5" y="121" width="8.5" height="17" rx="4" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  <path d="M 31,137 C 29,139 30,143 35.5,144 C 40,145 48.5,143 49.5,141 C 50.5,139 47,136 42,136 C 38,136 33,135 31,137 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  <circle cx="34" cy="137" r="2.5" fill="#1A0C04"/><circle cx="38.5" cy="135.5" r="2.5" fill="#1A0C04"/><circle cx="43" cy="137" r="2.5" fill="#1A0C04"/>
+  <path d="M 51,137 C 49,139 50,143 55.5,144 C 60,145 68.5,143 69.5,141 C 70.5,139 67,136 62,136 C 58,136 53,135 51,137 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  <circle cx="54" cy="137" r="2.5" fill="#1A0C04"/><circle cx="58.5" cy="135.5" r="2.5" fill="#1A0C04"/><circle cx="63" cy="137" r="2.5" fill="#1A0C04"/>
+  <!-- arms push bellows -->
+  <g style="transform-box:fill-box;transform-origin:100% 0%;animation:bp 1.8s ease-in-out infinite;">
+    <path d="M 33.5,93 Q 22,102 17.5,115" fill="none" stroke="#241408" stroke-width="10" stroke-linecap="round"/>
+    <path d="M 33.5,93 Q 22,102 17.5,115" fill="none" stroke="#3A2010" stroke-width="5.5" stroke-linecap="round"/>
+    <path d="M 33.5,93 Q 22,102 17.5,115" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 10,117 C 8,119 9,122 14,123 C 18.5,124 26,122 27,120 C 28,118 25,116 20,116 C 16,116 12,115 10,117 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  </g>
+  <g style="transform-box:fill-box;transform-origin:0% 0%;animation:bp 1.8s ease-in-out infinite;">
+    <path d="M 66.5,93 Q 78,102 82.5,115" fill="none" stroke="#241408" stroke-width="10" stroke-linecap="round"/>
+    <path d="M 66.5,93 Q 78,102 82.5,115" fill="none" stroke="#3A2010" stroke-width="5.5" stroke-linecap="round"/>
+    <path d="M 66.5,93 Q 78,102 82.5,115" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 73,117 C 71,119 72,122 77,123 C 81.5,124 89,122 90,120 C 91,118 88,116 83,116 C 79,116 75,115 73,117 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+  </g>
+  <!-- ancient brass bellows (animates scaleX) -->
+  <g style="transform-box:fill-box;transform-origin:center right;animation:bw 1.8s ease-in-out infinite;">
+    <rect x="16" y="111" width="68" height="22" rx="5" fill="#5A2E08" stroke="#1A0C04" stroke-width="1.5"/>
+    <rect x="19" y="114" width="62" height="16" rx="3" fill="#3A1A04"/>
+    <line x1="23" y1="119" x2="77" y2="119" stroke="#C88818" stroke-width=".8" opacity=".5"/>
+    <line x1="23" y1="122" x2="77" y2="122" stroke="#C88818" stroke-width=".5" opacity=".35"/>
+    <line x1="23" y1="125" x2="77" y2="125" stroke="#C88818" stroke-width=".5" opacity=".3"/>
+    <circle cx="29" cy="122" r="3.5" fill="#C88818" opacity=".6"/>
+    <path d="M 43,118 C 47,116 53,116 57,118 C 53,122 47,122 43,118 Z" fill="#6A3808" opacity=".8"/>
+    <text x="50" y="125" text-anchor="middle" font-size="7" fill="#D4A020" opacity=".6" font-family="serif">&#x169B;&#x160F;&#x169C;</text>
+    <circle cx="84" cy="122" r="5.5" fill="#4A2A08"/>
+    <circle cx="84" cy="122" r="5.5" fill="none" stroke="#C88818" stroke-width="1.5"/>
+    <line x1="80.5" y1="122" x2="87.5" y2="122" stroke="#C88818" stroke-width="1.2"/>
+    <line x1="84" y1="118.5" x2="84" y2="125.5" stroke="#C88818" stroke-width="1.2"/>
+    <circle cx="84" cy="122" r="1.5" fill="#D4980C"/>
+  </g>
+  <!-- head (static during bellows) -->
+  <path d="M 50,17 C 72,17 81,28 81,46.5 C 81,65 68.5,79 50,79 C 31.5,79 19,65 19,46.5 C 19,28 28,17 50,17 Z" fill="#241408" stroke="#1A0C04" stroke-width="2"/>
+  <path d="M 19,42 C 19,30 26,21 36,19 C 30,24 27,31 27,40 C 27,52 31,62 38,70 C 28,64 19,54 19,42 Z" fill="#140C06" opacity=".42"/>
+  <path d="M 22,28 C 17,18 16.5,4 24.5,2.5 C 30,4.5 36.5,18 36,24 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+  <path d="M 24.5,26.5 C 20.5,18 20,8.5 24.5,6.5 C 28,8.5 32.5,19 32,23.5 Z" fill="#9A3828" opacity=".8"/>
+  <path d="M 78,28 C 83,18 83.5,4 75.5,2.5 C 70,4.5 63.5,18 64,24 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+  <path d="M 75.5,26.5 C 79.5,18 80,8.5 75.5,6.5 C 72,8.5 67.5,19 68,23.5 Z" fill="#C8A048" opacity=".65"/>
+  <path d="M 62,21 C 66,25.5 70.5,33 69.5,42.5 C 68.5,51.5 65,57.5 63,63 C 60,68 58,72 56,74 C 54,69 53,63 54,58.5 C 56,51 60.5,43.5 63.5,34.5 C 65,27 63,22 62,21 Z" fill="#C8A048" opacity=".9"/>
+  <path d="M 19,33 C 21,27 30,25 50,25 C 70,25 79,27 81,33 C 79,37 70,39.5 50,39.5 C 30,39.5 21,37 19,33 Z" fill="#5A3008" stroke="#3A1A04" stroke-width=".8"/>
+  <circle cx="34.5" cy="33" r="8.5" fill="#161010"/>
+  <circle cx="34.5" cy="33" r="11" fill="none" stroke="#D4980C" stroke-width="3"/>
+  <line x1="34.5" y1="22" x2="34.5" y2="24.5" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="34.5" y1="41.5" x2="34.5" y2="44" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="23.5" y1="33" x2="26" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="43" y1="33" x2="45.5" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <path d="M 27.5,24 C 30,22 39,22 42,24" stroke="#F0C838" stroke-width="1.5" fill="none" opacity=".55"/>
+  <circle cx="65.5" cy="33" r="8.5" fill="#161010"/>
+  <circle cx="65.5" cy="33" r="11" fill="none" stroke="#D4980C" stroke-width="3"/>
+  <line x1="65.5" y1="22" x2="65.5" y2="24.5" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="65.5" y1="41.5" x2="65.5" y2="44" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="54.5" y1="33" x2="57" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="74" y1="33" x2="76.5" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <circle cx="65.5" cy="33" r="6" fill="#C89820" opacity=".1"/>
+  <path d="M 58.5,24 C 61,22 70,22 73,24" stroke="#F0C838" stroke-width="1.5" fill="none" opacity=".55"/>
+  <path d="M 44.5,29.5 C 46,26.5 54,26.5 55.5,29.5 C 54,33 46,33 44.5,29.5 Z" fill="#5A3008" stroke="#3A1A04" stroke-width=".8"/>
+  <circle cx="50" cy="31" r="3.5" fill="none" stroke="#D4980C" stroke-width=".9"/>
+  <line x1="46.5" y1="31" x2="53.5" y2="31" stroke="#D4980C" stroke-width=".7"/>
+  <line x1="50" y1="27.5" x2="50" y2="34.5" stroke="#D4980C" stroke-width=".7"/>
+  <ellipse cx="37" cy="53" rx="9.5" ry="11" fill="#F4EED8" stroke="#1A0C04" stroke-width="1.2"/>
+  <ellipse cx="37" cy="54" rx="8.5" ry="9.5" fill="#B8CC12"/>
+  <path d="M 28,47.5 C 28,45 33,43 37,43 C 41,43 46,45 46,47.5 C 44,51 40.5,53 37,53 C 33.5,53 30,51 28,47.5 Z" fill="#1A0C04" opacity=".4"/>
+  <ellipse cx="37" cy="55" rx="3" ry="8.5" fill="#1A0C04"/>
+  <ellipse cx="33" cy="48" rx="3" ry="3.5" fill="white" opacity=".9"/>
+  <circle cx="41.5" cy="58" r="1.3" fill="white" opacity=".6"/>
+  <path d="M 27.5,49.5 C 28.5,43 33,41 37,41 C 41,41 45.5,43 46.5,49.5" stroke="#1A0C04" stroke-width="1.5" fill="none"/>
+  <ellipse cx="63" cy="53" rx="9.5" ry="11" fill="#F4EED8" stroke="#1A0C04" stroke-width="1.2"/>
+  <ellipse cx="63" cy="54" rx="8.5" ry="9.5" fill="#C4D418"/>
+  <ellipse cx="63" cy="54" rx="8.5" ry="9.5" fill="#D4A020" opacity=".14"/>
+  <path d="M 54,47.5 C 54,45 59,43 63,43 C 67,43 72,45 72,47.5 C 70,51 66.5,53 63,53 C 59.5,53 56,51 54,47.5 Z" fill="#1A0C04" opacity=".4"/>
+  <ellipse cx="63" cy="55" rx="3" ry="8.5" fill="#1A0C04"/>
+  <ellipse cx="59" cy="48" rx="3" ry="3.5" fill="white" opacity=".9"/>
+  <circle cx="67.5" cy="58" r="1.3" fill="white" opacity=".6"/>
+  <path d="M 53.5,49.5 C 54.5,43 59,41 63,41 C 67,41 71.5,43 72.5,49.5" stroke="#1A0C04" stroke-width="1.5" fill="none"/>
+  <path d="M 50,60 C 47,59 45.5,57 47,56 L 50,57.5 L 53,56 C 54.5,57 53,59 50,60 Z" fill="#C07878" stroke="#8A4858" stroke-width=".8"/>
+  <path d="M 46.5,61.5 Q 48.5,66 50,64 Q 51.5,66 53.5,61.5" stroke="#9A5060" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 40,65 C 38,70 38.5,77 44,79.5 C 47,80.5 53,80.5 56,79.5 C 61.5,77 62,70 60,65 C 56.5,68 53,70 50,70 C 47,70 43.5,68 40,65 Z" fill="#ECD8A8" opacity=".8"/>
+</g>
+</svg>
+<p class="fl">building instructions</p><p class="fs">long op · 1.8s loop</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TILE 3 — TOME READING  (data lookup, 3.2s loop)
+     Use: dashboard fetch, archive lookups, validation
+     ══════════════════════════════════════════════════════════ -->
+<div class="ft">
+<svg viewBox="0 0 100 155" width="160" xmlns="http://www.w3.org/2000/svg">
+<rect width="100" height="155" fill="#0F0906"/>
+<ellipse cx="50" cy="152" rx="46" ry="14" fill="#C04010" opacity=".07"/>
+<!-- tail -->
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#201208" stroke-width="9.5" stroke-linecap="round"/>
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#3A2210" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M 63,124 C 71,119 80,110 79,95 C 78,81 70,77 66,82" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+<!-- body -->
+<ellipse cx="50" cy="109" rx="19.5" ry="21.5" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+<ellipse cx="56" cy="104" rx="12" ry="10" fill="#140C06" opacity=".48"/>
+<ellipse cx="49.5" cy="97" rx="11.5" ry="8.5" fill="#ECD8A8" stroke="#C8B070" stroke-width=".7" opacity=".82"/>
+<path d="M 33.5,91 C 32,94 30,118 32,123 L 68,123 C 70,118 68,94 66.5,91 Z" fill="#5A2E08" stroke="#1A0C04" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M 33.5,91 C 32,96 31,116 33,123 L 43,123 C 41,116 38,96 38,91 Z" fill="#3A1A04" opacity=".55"/>
+<path d="M 44,85 C 44,89 56,89 56,85 C 56,81 53,79 50,79 C 47,79 44,81 44,85 Z" fill="#5A2E08" stroke="#1A0C04" stroke-width="1.2"/>
+<rect x="46" y="80" width="8" height="6" rx="1.5" fill="#3A1A04" stroke="#D4980C" stroke-width="1.2"/>
+<rect x="47.5" y="81" width="5" height="3.5" rx=".5" fill="#D4980C"/>
+<circle cx="37.5" cy="99" r="2" fill="#D4980C" stroke="#8A5808" stroke-width=".5"/>
+<circle cx="63" cy="99" r="2" fill="#D4980C" stroke="#8A5808" stroke-width=".5"/>
+<rect x="37" y="121" width="8.5" height="17" rx="4" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<rect x="54.5" y="121" width="8.5" height="17" rx="4" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<path d="M 31,137 C 29,139 30,143 35.5,144 C 40,145 48.5,143 49.5,141 C 50.5,139 47,136 42,136 C 38,136 33,135 31,137 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<circle cx="34" cy="137" r="2.5" fill="#1A0C04"/><circle cx="38.5" cy="135.5" r="2.5" fill="#1A0C04"/><circle cx="43" cy="137" r="2.5" fill="#1A0C04"/>
+<path d="M 51,137 C 49,139 50,143 55.5,144 C 60,145 68.5,143 69.5,141 C 70.5,139 67,136 62,136 C 58,136 53,135 51,137 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.5"/>
+<circle cx="54" cy="137" r="2.5" fill="#1A0C04"/><circle cx="58.5" cy="135.5" r="2.5" fill="#1A0C04"/><circle cx="63" cy="137" r="2.5" fill="#1A0C04"/>
+<!-- arms hold tome (static) -->
+<path d="M 17,107 Q 17,119 21.5,116" fill="none" stroke="#241408" stroke-width="10" stroke-linecap="round"/>
+<path d="M 17,107 Q 17,119 21.5,116" fill="none" stroke="#3A2010" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M 17,107 Q 17,119 21.5,116" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M 83,107 Q 83,119 78.5,116" fill="none" stroke="#241408" stroke-width="10" stroke-linecap="round"/>
+<path d="M 83,107 Q 83,119 78.5,116" fill="none" stroke="#3A2010" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M 83,107 Q 83,119 78.5,116" fill="none" stroke="#1A0C04" stroke-width="1.5" stroke-linecap="round"/>
+<!-- ancient tome (page-turn animated) -->
+<g style="transform-box:fill-box;transform-origin:center center;animation:tp 3.2s ease-in-out infinite;">
+  <rect x="21.5" y="91.5" width="57" height="39" rx="4" fill="#2A1A06" stroke="#1A0C04" stroke-width="1.5"/>
+  <rect x="21.5" y="91.5" width="28.5" height="39" rx="4" fill="#3A2410"/>
+  <rect x="50" y="91.5" width="28.5" height="39" fill="#3C2810"/>
+  <rect x="48.5" y="92.5" width="2.5" height="37" fill="#1A0E04"/>
+  <line x1="27" y1="100" x2="46" y2="100" stroke="#C89840" stroke-width=".7" opacity=".5"/>
+  <line x1="27" y1="104" x2="46" y2="104" stroke="#C89840" stroke-width=".6" opacity=".4"/>
+  <line x1="27" y1="108" x2="46" y2="108" stroke="#C89840" stroke-width=".6" opacity=".4"/>
+  <line x1="27" y1="112" x2="40" y2="112" stroke="#C89840" stroke-width=".6" opacity=".35"/>
+  <text x="63" y="102" text-anchor="middle" font-size="7" fill="#C89840" opacity=".6" font-family="serif">&#x169A;&#x160B;&#x160C;</text>
+  <text x="63" y="111" text-anchor="middle" font-size="7" fill="#C89840" opacity=".5" font-family="serif">&#x160D;&#x160E;&#x160F;</text>
+  <text x="63" y="120" text-anchor="middle" font-size="7" fill="#C89840" opacity=".45" font-family="serif">&#x169B;&#x1690;&#x169C;</text>
+  <circle cx="36" cy="121" r="6.5" fill="#1A0C04"/>
+  <circle cx="36" cy="121" r="5.5" fill="none" stroke="#C89840" stroke-width=".9" opacity=".65"/>
+  <line x1="32.5" y1="121" x2="39.5" y2="121" stroke="#C89840" stroke-width=".7" opacity=".65"/>
+  <line x1="36" y1="117.5" x2="36" y2="124.5" stroke="#C89840" stroke-width=".7" opacity=".65"/>
+  <circle cx="36" cy="121" r="1.5" fill="#D4A020" opacity=".5"/>
+</g>
+<!-- head tilts while reading -->
+<g style="transform-box:fill-box;transform-origin:50% 100%;animation:tt 3.2s ease-in-out infinite;">
+  <path d="M 50,17 C 72,17 81,28 81,46.5 C 81,65 68.5,79 50,79 C 31.5,79 19,65 19,46.5 C 19,28 28,17 50,17 Z" fill="#241408" stroke="#1A0C04" stroke-width="2"/>
+  <path d="M 19,42 C 19,30 26,21 36,19 C 30,24 27,31 27,40 C 27,52 31,62 38,70 C 28,64 19,54 19,42 Z" fill="#140C06" opacity=".42"/>
+  <path d="M 22,28 C 17,18 16.5,4 24.5,2.5 C 30,4.5 36.5,18 36,24 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+  <path d="M 24.5,26.5 C 20.5,18 20,8.5 24.5,6.5 C 28,8.5 32.5,19 32,23.5 Z" fill="#9A3828" opacity=".8"/>
+  <path d="M 78,28 C 83,18 83.5,4 75.5,2.5 C 70,4.5 63.5,18 64,24 Z" fill="#241408" stroke="#1A0C04" stroke-width="1.8"/>
+  <path d="M 75.5,26.5 C 79.5,18 80,8.5 75.5,6.5 C 72,8.5 67.5,19 68,23.5 Z" fill="#C8A048" opacity=".65"/>
+  <path d="M 62,21 C 66,25.5 70.5,33 69.5,42.5 C 68.5,51.5 65,57.5 63,63 C 60,68 58,72 56,74 C 54,69 53,63 54,58.5 C 56,51 60.5,43.5 63.5,34.5 C 65,27 63,22 62,21 Z" fill="#C8A048" opacity=".9"/>
+  <path d="M 64,23 C 67.5,27.5 72,35 71,44 C 70,53 66.5,59 64.5,64 C 62,68.5 60,72.5 58,74.5 C 57,70.5 56,64.5 57,60.5 C 59,53.5 63.5,46 66,37 C 67.5,30 65,24 64,23 Z" fill="#D4B060" opacity=".28"/>
+  <path d="M 19,33 C 21,27 30,25 50,25 C 70,25 79,27 81,33 C 79,37 70,39.5 50,39.5 C 30,39.5 21,37 19,33 Z" fill="#5A3008" stroke="#3A1A04" stroke-width=".8"/>
+  <circle cx="34.5" cy="33" r="8.5" fill="#161010"/>
+  <circle cx="34.5" cy="33" r="11" fill="none" stroke="#D4980C" stroke-width="3"/>
+  <line x1="34.5" y1="22" x2="34.5" y2="24.5" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="34.5" y1="41.5" x2="34.5" y2="44" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="23.5" y1="33" x2="26" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="43" y1="33" x2="45.5" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <path d="M 27.5,24 C 30,22 39,22 42,24" stroke="#F0C838" stroke-width="1.5" fill="none" opacity=".55"/>
+  <circle cx="65.5" cy="33" r="8.5" fill="#161010"/>
+  <circle cx="65.5" cy="33" r="11" fill="none" stroke="#D4980C" stroke-width="3"/>
+  <line x1="65.5" y1="22" x2="65.5" y2="24.5" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="65.5" y1="41.5" x2="65.5" y2="44" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="54.5" y1="33" x2="57" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <line x1="74" y1="33" x2="76.5" y2="33" stroke="#5A3008" stroke-width="2.2"/>
+  <circle cx="65.5" cy="33" r="6" fill="#C89820" opacity=".1"/>
+  <path d="M 58.5,24 C 61,22 70,22 73,24" stroke="#F0C838" stroke-width="1.5" fill="none" opacity=".55"/>
+  <path d="M 44.5,29.5 C 46,26.5 54,26.5 55.5,29.5 C 54,33 46,33 44.5,29.5 Z" fill="#5A3008" stroke="#3A1A04" stroke-width=".8"/>
+  <circle cx="50" cy="31" r="3.5" fill="none" stroke="#D4980C" stroke-width=".9"/>
+  <line x1="46.5" y1="31" x2="53.5" y2="31" stroke="#D4980C" stroke-width=".7"/>
+  <line x1="50" y1="27.5" x2="50" y2="34.5" stroke="#D4980C" stroke-width=".7"/>
+  <!-- eyes: blink layer -->
+  <g style="transform-box:fill-box;transform-origin:center;animation:tb 3.2s ease-in-out infinite;">
+    <ellipse cx="37" cy="53" rx="9.5" ry="11" fill="#F4EED8" stroke="#1A0C04" stroke-width="1.2"/>
+    <ellipse cx="37" cy="54" rx="8.5" ry="9.5" fill="#B8CC12"/>
+    <path d="M 28,47.5 C 28,45 33,43 37,43 C 41,43 46,45 46,47.5 C 44,51 40.5,53 37,53 C 33.5,53 30,51 28,47.5 Z" fill="#1A0C04" opacity=".4"/>
+    <ellipse cx="63" cy="53" rx="9.5" ry="11" fill="#F4EED8" stroke="#1A0C04" stroke-width="1.2"/>
+    <ellipse cx="63" cy="54" rx="8.5" ry="9.5" fill="#C4D418"/>
+    <ellipse cx="63" cy="54" rx="8.5" ry="9.5" fill="#D4A020" opacity=".14"/>
+    <path d="M 54,47.5 C 54,45 59,43 63,43 C 67,43 72,45 72,47.5 C 70,51 66.5,53 63,53 C 59.5,53 56,51 54,47.5 Z" fill="#1A0C04" opacity=".4"/>
+  </g>
+  <!-- pupils track text (scan animated) -->
+  <g style="transform-box:fill-box;transform-origin:center;animation:te 3.2s ease-in-out infinite;">
+    <ellipse cx="37" cy="55" rx="3" ry="8.5" fill="#1A0C04"/>
+    <ellipse cx="33" cy="48" rx="3" ry="3.5" fill="white" opacity=".9"/>
+    <circle cx="41.5" cy="58" r="1.3" fill="white" opacity=".6"/>
+    <path d="M 27.5,49.5 C 28.5,43 33,41 37,41 C 41,41 45.5,43 46.5,49.5" stroke="#1A0C04" stroke-width="1.5" fill="none"/>
+    <ellipse cx="63" cy="55" rx="3" ry="8.5" fill="#1A0C04"/>
+    <ellipse cx="59" cy="48" rx="3" ry="3.5" fill="white" opacity=".9"/>
+    <circle cx="67.5" cy="58" r="1.3" fill="white" opacity=".6"/>
+    <path d="M 53.5,49.5 C 54.5,43 59,41 63,41 C 67,41 71.5,43 72.5,49.5" stroke="#1A0C04" stroke-width="1.5" fill="none"/>
+  </g>
+  <path d="M 50,60 C 47,59 45.5,57 47,56 L 50,57.5 L 53,56 C 54.5,57 53,59 50,60 Z" fill="#C07878" stroke="#8A4858" stroke-width=".8"/>
+  <path d="M 46.5,61.5 Q 48.5,66 50,64 Q 51.5,66 53.5,61.5" stroke="#9A5060" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 40,65 C 38,70 38.5,77 44,79.5 C 47,80.5 53,80.5 56,79.5 C 61.5,77 62,70 60,65 C 56.5,68 53,70 50,70 C 47,70 43.5,68 40,65 Z" fill="#ECD8A8" opacity=".8"/>
+  <path d="M 56,63 C 63,61 73,58 79,56" stroke="#8A7040" stroke-width=".9" fill="none" opacity=".65"/>
+  <path d="M 44,63 C 37,61 27,58 21,56" stroke="#5A4828" stroke-width=".9" fill="none" opacity=".6"/>
+</g>
+</svg>
+<p class="fl">consulting the archives</p><p class="fs">data lookup · 3.2s loop</p>
+</div>
+
+</body></html>

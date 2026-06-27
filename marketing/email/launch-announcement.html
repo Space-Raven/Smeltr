@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Minty is live</title>
+<style>
+  body { margin:0; padding:0; background:#F9FAFB; font-family: Inter, system-ui, -apple-system, sans-serif; }
+  .wrapper { max-width:600px; margin:0 auto; padding:32px 16px; }
+  .card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+  .hero { background:linear-gradient(135deg,#1E1B4B 0%,#312E81 60%,#4C1D95 100%); padding:48px 40px; text-align:center; }
+  .hero-logo { font-size:36px; font-weight:800; color:#A5B4FC; letter-spacing:-1px; margin-bottom:8px; }
+  .hero-sub { color:#C7D2FE; font-size:15px; }
+  .body { padding:40px; }
+  .body p { color:#374151; font-size:15px; line-height:1.7; margin:0 0 16px; }
+  .feature { display:flex; gap:14px; align-items:flex-start; margin-bottom:16px; }
+  .feature-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px; }
+  .feature-text strong { display:block; color:#111827; font-size:14px; margin-bottom:2px; }
+  .feature-text span { color:#6B7280; font-size:13px; line-height:1.5; }
+  .cta { text-align:center; margin:32px 0; }
+  .cta a { display:inline-block; background:#4F46E5; color:white; text-decoration:none; padding:14px 36px; border-radius:10px; font-weight:700; font-size:15px; }
+  .divider { border:none; border-top:1px solid #F3F4F6; margin:24px 0; }
+  .footer { padding:24px 40px; background:#F9FAFB; text-align:center; }
+  .footer p { color:#9CA3AF; font-size:12px; margin:0 0 6px; }
+  .footer a { color:#6B7280; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card">
+    <div class="hero">
+      <div class="hero-logo">🌿 Minty</div>
+      <div class="hero-sub">Non-custodial Token-2022 launcher for Solana</div>
+    </div>
+    <div class="body">
+      <p>Hey,</p>
+      <p>Minty is live. You can now deploy Solana Token-2022 tokens with real extension support — no code, no custody, two wallet clicks.</p>
+
+      <div class="feature">
+        <div class="feature-icon" style="background:#EEF2FF;">🔵</div>
+        <div class="feature-text">
+          <strong>Transfer Fee</strong>
+          <span>Collect basis-point royalties on every transfer. Fees withheld in recipient accounts, harvestable on demand.</span>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:#FFF7ED;">⚪</div>
+        <div class="feature-text">
+          <strong>Non-Transferable</strong>
+          <span>Soul-bound tokens that stay with their original holder. Perfect for credentials, loyalty tiers, achievements.</span>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:#FFF1F2;">🔴</div>
+        <div class="feature-text">
+          <strong>Permanent Delegate</strong>
+          <span>Designate an authority over all token accounts. High-impact — Minty requires explicit acknowledgement.</span>
+        </div>
+      </div>
+
+      <hr class="divider"/>
+
+      <p>What makes Minty different: the platform's own addresses <em>cannot</em> appear in your token's authority slots. There's a runtime guard in the source code that throws an exception if they do. Not a policy — code.</p>
+      <p>No account required for the core flow. Connect your wallet, deploy, disconnect. Signing in only unlocks the deployment history dashboard.</p>
+
+      <div class="cta">
+        <a href="https://minty.app/deploy">Deploy your first token →</a>
+      </div>
+
+      <p style="font-size:13px;color:#6B7280;">Have questions? Reply to this email or ask in <a href="https://discord.gg/minty" style="color:#4F46E5;">our Discord</a>. We answer everything.</p>
+    </div>
+    <div class="footer">
+      <p><a href="https://minty.app">minty.app</a> · <a href="https://twitter.com/mintyapp">@mintyapp</a> · <a href="https://discord.gg/minty">Discord</a></p>
+      <p>Non-custodial token infrastructure. Built on Solana Token-2022.</p>
+      <p><a href="{{unsubscribe_url}}">Unsubscribe</a></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

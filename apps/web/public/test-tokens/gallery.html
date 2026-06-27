@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Minty — Test Token Icon Gallery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #F9FAFB;
+    color: #111827;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1E1B4B 0%, #312E81 60%, #4C1D95 100%);
+    padding: 40px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  header img { width: 40px; height: 40px; }
+  header h1 { font-size: 22px; font-weight: 700; color: white; letter-spacing: -0.5px; }
+  header p { font-size: 13px; color: #A5B4FC; margin-top: 2px; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  h2 { font-size: 13px; font-weight: 600; color: #6B7280; text-transform: uppercase;
+       letter-spacing: 0.08em; margin-bottom: 16px; }
+
+  .section { margin-bottom: 48px; }
+
+  /* Token grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .token-card {
+    background: white;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 20px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s, transform .12s;
+    user-select: none;
+  }
+  .token-card:hover {
+    border-color: #A5B4FC;
+    box-shadow: 0 4px 16px rgba(99,102,241,.12);
+    transform: translateY(-2px);
+  }
+  .token-card:active { transform: scale(0.97); }
+
+  .token-card img { width: 80px; height: 80px; border-radius: 50%; }
+  .token-card .name {
+    font-size: 13px; font-weight: 700; color: #374151;
+    letter-spacing: 0.04em;
+  }
+  .token-card .copy-hint {
+    font-size: 10px; color: #9CA3AF;
+  }
+
+  /* Module icons */
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .module-card {
+    background: white;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .module-card img { width: 44px; height: 44px; flex-shrink: 0; }
+  .module-card .module-name { font-size: 14px; font-weight: 600; color: #1F2937; }
+  .module-card .module-desc { font-size: 12px; color: #6B7280; margin-top: 2px; }
+
+  /* Logo row */
+  .logo-row {
+    display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+  }
+  .logo-box {
+    background: white;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-box.dark {
+    background: #1E1B4B;
+    border-color: #312E81;
+  }
+  .logo-box img { height: 40px; }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #1E1B4B; color: white;
+    padding: 10px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 500;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="../logo-mark.svg" alt="Minty"/>
+  <div>
+    <h1>Minty — Asset Gallery</h1>
+    <p>Test token icons · Module icons · Brand assets &nbsp;·&nbsp; Click any card to copy the SVG path</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Brand assets -->
+  <div class="section">
+    <h2>Brand</h2>
+    <div class="logo-row">
+      <div class="logo-box">
+        <img src="../logo.svg" alt="Minty logo"/>
+      </div>
+      <div class="logo-box dark">
+        <img src="../logo.svg" alt="Minty logo dark"/>
+      </div>
+      <div class="logo-box" style="padding: 20px;">
+        <img src="../logo-mark.svg" alt="Minty mark" style="height:48px;width:48px;"/>
+      </div>
+      <div class="logo-box" style="padding: 20px;">
+        <img src="../favicon.svg" alt="Favicon" style="height:32px;width:32px;"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module icons -->
+  <div class="section">
+    <h2>Module Icons</h2>
+    <div class="module-grid">
+      <div class="module-card">
+        <img src="../icons/module-transfer-fee.svg" alt="Transfer Fee"/>
+        <div>
+          <div class="module-name">Transfer Fee</div>
+          <div class="module-desc">module-transfer-fee.svg</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <img src="../icons/module-non-transferable.svg" alt="Non-Transferable"/>
+        <div>
+          <div class="module-name">Non-Transferable</div>
+          <div class="module-desc">module-non-transferable.svg</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <img src="../icons/module-permanent-delegate.svg" alt="Permanent Delegate"/>
+        <div>
+          <div class="module-name">Permanent Delegate</div>
+          <div class="module-desc">module-permanent-delegate.svg</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test tokens -->
+  <div class="section">
+    <h2>Test Token Icons — click to copy path</h2>
+    <div class="grid" id="token-grid"></div>
+  </div>
+
+</div>
+
+<div id="toast">Copied!</div>
+
+<script>
+const tokens = [
+  "LUNA","EMBER","VOID","REEF","PEAK","GLYPH",
+  "PULSE","DRIFT","FORGE","NOVA","JADE","FLUX",
+  "DUSK","ATOM","ZEST"
+];
+
+const grid = document.getElementById("token-grid");
+const toast = document.getElementById("toast");
+let toastTimer;
+
+tokens.forEach(name => {
+  const path = `/test-tokens/${name}.svg`;
+  const card = document.createElement("div");
+  card.className = "token-card";
+  card.innerHTML = `
+    <img src="${name}.svg" alt="${name}"/>
+    <span class="name">${name}</span>
+    <span class="copy-hint">click to copy</span>
+  `;
+  card.addEventListener("click", () => {
+    navigator.clipboard.writeText(path).then(() => {
+      clearTimeout(toastTimer);
+      toast.textContent = `Copied: ${path}`;
+      toast.classList.add("show");
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2000);
+    });
+  });
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>

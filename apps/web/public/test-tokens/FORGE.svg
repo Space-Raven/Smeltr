@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="60%" r="65%">
+      <stop offset="0%" stop-color="#1C1917"/>
+      <stop offset="100%" stop-color="#0C0A09"/>
+    </radialGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4D4D8"/>
+      <stop offset="100%" stop-color="#71717A"/>
+    </linearGradient>
+    <radialGradient id="heat" cx="50%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="60%" stop-color="#DC2626"/>
+      <stop offset="100%" stop-color="#DC2626" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <!-- Anvil body -->
+  <rect x="55" y="105" width="90" height="30" rx="4" fill="url(#metal)"/>
+  <!-- Anvil top -->
+  <rect x="65" y="88" width="70" height="20" rx="3" fill="#A1A1AA"/>
+  <!-- Anvil horn -->
+  <path d="M65 95 L40 103 L65 108z" fill="#A1A1AA"/>
+  <!-- Hammer -->
+  <rect x="92" y="58" width="22" height="14" rx="2" fill="#D4D4D8" transform="rotate(-20 103 65)"/>
+  <rect x="102" y="65" width="5" height="28" rx="1.5" fill="#92400E" transform="rotate(-20 104 72)"/>
+  <!-- Heat glow on anvil -->
+  <ellipse cx="100" cy="105" rx="30" ry="8" fill="url(#heat)" opacity="0.7"/>
+  <!-- Sparks -->
+  <circle cx="80" cy="85" r="2" fill="#FCD34D" opacity="0.9"/>
+  <circle cx="118" cy="78" r="1.5" fill="#FCD34D" opacity="0.8"/>
+  <circle cx="75" cy="75" r="1" fill="#FB923C" opacity="0.9"/>
+  <circle cx="128" cy="90" r="1.5" fill="#FCD34D" opacity="0.7"/>
+  <circle cx="105" cy="72" r="1" fill="#FB923C" opacity="0.9"/>
+  <text x="100" y="178" font-family="system-ui" font-size="17" font-weight="700" fill="#D4D4D8" text-anchor="middle" letter-spacing="2">FORGE</text>
+</svg>

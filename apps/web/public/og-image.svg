@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1E1B4B"/>
+      <stop offset="60%" stop-color="#312E81"/>
+      <stop offset="100%" stop-color="#4C1D95"/>
+    </linearGradient>
+    <linearGradient id="coin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#6EE7B7"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="900" cy="200" r="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="200" cy="500" r="250" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Grid lines -->
+  <line x1="0" y1="210" x2="1200" y2="210" stroke="#818CF8" stroke-width="0.5" opacity="0.12"/>
+  <line x1="0" y1="420" x2="1200" y2="420" stroke="#818CF8" stroke-width="0.5" opacity="0.12"/>
+  <line x1="400" y1="0" x2="400" y2="630" stroke="#818CF8" stroke-width="0.5" opacity="0.12"/>
+  <line x1="800" y1="0" x2="800" y2="630" stroke="#818CF8" stroke-width="0.5" opacity="0.12"/>
+
+  <!-- Logo mark — large, right side -->
+  <g transform="translate(860, 140) scale(3.2)">
+    <circle cx="40" cy="52" r="26" fill="url(#coin)" opacity="0.9"/>
+    <circle cx="40" cy="52" r="19" fill="none" stroke="#A5B4FC" stroke-width="2" opacity="0.5"/>
+    <text x="40" y="60" font-family="system-ui" font-size="18" font-weight="700" fill="#E0E7FF" text-anchor="middle">T</text>
+    <path d="M40 26 C40 26 26 14 26 26 C26 36 40 34 40 34 C40 34 54 36 54 26 C54 14 40 26 40 26z" fill="url(#leaf)"/>
+    <line x1="40" y1="26" x2="40" y2="35" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="80" y="260" font-family="system-ui,-apple-system,sans-serif" font-size="108" font-weight="800" fill="white" letter-spacing="-3" opacity="0.97">Minty</text>
+
+  <!-- Tagline -->
+  <text x="80" y="330" font-family="system-ui,-apple-system,sans-serif" font-size="32" fill="#A5B4FC" letter-spacing="0.5">Deploy Solana Token-2022 tokens without writing code</text>
+
+  <!-- Feature pills -->
+  <rect x="80" y="390" width="210" height="44" rx="22" fill="#4F46E5" opacity="0.8"/>
+  <text x="185" y="418" font-family="system-ui" font-size="18" font-weight="600" fill="white" text-anchor="middle">Transfer Fee</text>
+
+  <rect x="308" y="390" width="228" height="44" rx="22" fill="#7C3AED" opacity="0.8"/>
+  <text x="422" y="418" font-family="system-ui" font-size="18" font-weight="600" fill="white" text-anchor="middle">Non-Transferable</text>
+
+  <rect x="554" y="390" width="240" height="44" rx="22" fill="#0D9488" opacity="0.8"/>
+  <text x="674" y="418" font-family="system-ui" font-size="18" font-weight="600" fill="white" text-anchor="middle">Permanent Delegate</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="570" width="1200" height="60" fill="#312E81" opacity="0.6"/>
+  <text x="80" y="606" font-family="system-ui" font-size="20" fill="#A5B4FC">Non-custodial  ·  Token-2022 native  ·  Two wallet clicks</text>
+  <text x="1120" y="606" font-family="system-ui" font-size="20" fill="#6366F1" text-anchor="end">minty.app</text>
+</svg>

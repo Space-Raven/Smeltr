@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F0D2E"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <linearGradient id="stepLine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </linearGradient>
+    <radialGradient id="coinGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="50%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- Dot pattern -->
+  <pattern id="dots" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+    <circle cx="25" cy="25" r="1" fill="white" opacity="0.05"/>
+  </pattern>
+  <rect width="1080" height="1080" fill="url(#dots)"/>
+
+  <!-- Logo top left -->
+  <circle cx="80" cy="70" r="32" fill="url(#coinGrad)"/>
+  <circle cx="80" cy="70" r="32" fill="none" stroke="#A5B4FC" stroke-width="1" opacity="0.5"/>
+  <path d="M80 50 C80 50 78 60 77 66" stroke="#34D399" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M77 66 C71 59 63 52 65 44 C67 37 75 34 78 42 C78 42 77 53 77 66" fill="#10B981"/>
+  <path d="M77 66 C84 57 93 49 90 42 C87 34 78 33 77 43 C77 43 77 53 77 66" fill="#059669"/>
+  <text x="124" y="78" font-family="'Segoe UI', Arial, sans-serif" font-size="30" font-weight="800" fill="white">minty</text>
+
+  <!-- Headline -->
+  <text x="540" y="175" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="60" font-weight="800" fill="white">How It Works</text>
+  <line x1="290" y1="195" x2="790" y2="195" stroke="#6366F1" stroke-width="2"/>
+
+  <!-- Vertical connector line -->
+  <line x1="100" y1="280" x2="100" y2="880" stroke="url(#stepLine)" stroke-width="2" stroke-dasharray="8,6"/>
+
+  <!-- Step 1 -->
+  <circle cx="100" cy="290" r="28" fill="#6366F1"/>
+  <text x="100" y="298" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="800" fill="white">1</text>
+  <text x="150" y="282" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="white">Connect Wallet</text>
+  <text x="150" y="312" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">Phantom, Solflare, or any Solana wallet.</text>
+  <text x="150" y="335" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">No account needed — ever.</text>
+  <!-- Wallet icon -->
+  <rect x="870" y="258" width="140" height="96" rx="12" fill="#1E1B4B" stroke="#4338CA" stroke-width="1.5"/>
+  <rect x="870" y="258" width="140" height="30" rx="12" fill="#312E81"/>
+  <rect x="870" y="276" width="140" height="12" fill="#312E81"/>
+  <circle cx="970" cy="306" r="14" fill="#6366F1" opacity="0.7"/>
+  <text x="970" y="311" text-anchor="middle" font-family="serif" font-size="14" fill="white">$</text>
+
+  <!-- Step 2 -->
+  <circle cx="100" cy="470" r="28" fill="#6366F1"/>
+  <text x="100" y="478" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="800" fill="white">2</text>
+  <text x="150" y="462" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="white">Choose Modules</text>
+  <text x="150" y="492" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">Pick from Transfer Fee, Non-Transferable,</text>
+  <text x="150" y="515" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">or Permanent Delegate extensions.</text>
+  <!-- Module pills -->
+  <rect x="150" y="530" width="130" height="30" rx="15" fill="#312E81" stroke="#6366F1" stroke-width="1"/>
+  <text x="215" y="550" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" fill="#C7D2FE">Transfer Fee</text>
+  <rect x="292" y="530" width="154" height="30" rx="15" fill="#312E81" stroke="#F97316" stroke-width="1"/>
+  <text x="369" y="550" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" fill="#FED7AA">Non-Transferable</text>
+
+  <!-- Step 3 -->
+  <circle cx="100" cy="650" r="28" fill="#6366F1"/>
+  <text x="100" y="658" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="800" fill="white">3</text>
+  <text x="150" y="642" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="white">Add Metadata</text>
+  <text x="150" y="672" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">Name, symbol, logo. Uploaded to Arweave</text>
+  <text x="150" y="695" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">permanently — no servers, no downtime.</text>
+  <!-- Arweave badge -->
+  <rect x="150" y="710" width="160" height="30" rx="8" fill="#0F172A" stroke="#34D399" stroke-width="1"/>
+  <text x="230" y="730" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" fill="#34D399">⬡ Stored on Arweave</text>
+
+  <!-- Step 4 -->
+  <circle cx="100" cy="830" r="28" fill="#10B981"/>
+  <text x="100" y="838" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" fill="white">✓</text>
+  <text x="150" y="822" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="white">Sign &amp; Deploy</text>
+  <text x="150" y="852" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">Two wallet signatures. Your token is live</text>
+  <text x="150" y="875" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#94A3B8">on Solana. You hold all authorities.</text>
+
+  <!-- Bottom -->
+  <rect x="0" y="930" width="1080" height="150" fill="#0A0825"/>
+  <text x="540" y="990" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="white">Ready in under 2 minutes.</text>
+  <text x="540" y="1025" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="20" fill="#6366F1">minty.app</text>
+  <text x="540" y="1058" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="15" fill="#4338CA" letter-spacing="2">#Solana  #Token2022  #Web3  #DeFi</text>
+</svg>
