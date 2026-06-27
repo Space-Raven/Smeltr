@@ -112,12 +112,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WalletProviders>
           <div className="min-h-screen flex flex-col">
             <SiteHeader />
+            <BetaBanner />
             <main className="flex-1">{children}</main>
             <SiteFooter />
           </div>
         </WalletProviders>
       </body>
     </html>
+  );
+}
+
+function BetaBanner() {
+  return (
+    <div className="w-full bg-amber-50 border-b border-amber-200 px-4 py-2.5">
+      <p className="text-center text-xs text-amber-800 leading-relaxed max-w-3xl mx-auto">
+        <span className="font-semibold">Smeltr is in public beta.</span>{" "}
+        Token deployments are real and permanent on Solana mainnet. All transactions
+        are signed by your wallet — Smeltr never holds your keys or funds.
+        Use at your own risk. Not financial advice.
+      </p>
+    </div>
   );
 }
 
@@ -135,26 +149,29 @@ function SiteHeader() {
               height={32}
               className="transition-transform duration-200 group-hover:scale-105"
             />
-            <span className="text-lg font-bold tracking-tight text-indigo-950">Smeltr</span>
+            <span className="text-lg font-bold tracking-tight text-amber-900">Smeltr</span>
+            <span className="text-[10px] font-semibold tracking-widest uppercase text-amber-600 bg-amber-100 border border-amber-200 rounded px-1.5 py-0.5 leading-none">
+              beta
+            </span>
           </a>
 
           <nav className="hidden sm:flex items-center gap-6 text-sm font-medium text-gray-600">
-            <a href="/deploy" className="hover:text-indigo-600 transition-colors">Deploy</a>
-            <a href="/dashboard" className="hover:text-indigo-600 transition-colors">Dashboard</a>
-            <a href="/blog" className="hover:text-indigo-600 transition-colors">Blog</a>
+            <a href="/deploy" className="hover:text-amber-700 transition-colors">Deploy</a>
+            <a href="/dashboard" className="hover:text-amber-700 transition-colors">Dashboard</a>
+            <a href="/blog" className="hover:text-amber-700 transition-colors">Blog</a>
             <a
               href="https://github.com/smeltrapp"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-indigo-600 transition-colors"
+              className="hover:text-amber-700 transition-colors"
             >
               GitHub ↗
             </a>
           </nav>
 
           <div className="flex items-center gap-3">
-              <WalletButton />
-            </div>
+            <WalletButton />
+          </div>
         </div>
       </div>
     </header>
@@ -170,7 +187,10 @@ function SiteFooter() {
             <div className="flex items-center gap-2 mb-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo-mark.svg" alt="Smeltr" width={22} height={22} />
-              <span className="font-bold text-indigo-950">Smeltr</span>
+              <span className="font-bold text-amber-900">Smeltr</span>
+              <span className="text-[9px] font-semibold tracking-widest uppercase text-amber-600 bg-amber-100 border border-amber-200 rounded px-1 py-0.5 leading-none">
+                beta
+              </span>
             </div>
             <p className="text-xs text-gray-400 leading-relaxed">
               Non-custodial Token-2022 deployment. Your keys, your token.
@@ -179,30 +199,30 @@ function SiteFooter() {
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Product</p>
             <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="/deploy" className="hover:text-indigo-600 transition-colors no-underline">Deploy a token</a>
-              <a href="/dashboard" className="hover:text-indigo-600 transition-colors no-underline">Dashboard</a>
-              <a href="/blog" className="hover:text-indigo-600 transition-colors no-underline">Blog</a>
+              <a href="/deploy" className="hover:text-amber-700 transition-colors no-underline">Deploy a token</a>
+              <a href="/dashboard" className="hover:text-amber-700 transition-colors no-underline">Dashboard</a>
+              <a href="/blog" className="hover:text-amber-700 transition-colors no-underline">Blog</a>
             </div>
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Extensions</p>
             <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="/blog/how-to-deploy-solana-token-2022-transfer-fee" className="hover:text-indigo-600 transition-colors no-underline">Transfer Fee</a>
-              <a href="/blog/solana-soulbound-token-non-transferable-extension" className="hover:text-indigo-600 transition-colors no-underline">Non-Transferable</a>
-              <a href="/blog/permanent-delegate-token-2022-explained" className="hover:text-indigo-600 transition-colors no-underline">Permanent Delegate</a>
+              <a href="/blog/how-to-deploy-solana-token-2022-transfer-fee" className="hover:text-amber-700 transition-colors no-underline">Transfer Fee</a>
+              <a href="/blog/solana-soulbound-token-non-transferable-extension" className="hover:text-amber-700 transition-colors no-underline">Non-Transferable</a>
+              <a href="/blog/permanent-delegate-token-2022-explained" className="hover:text-amber-700 transition-colors no-underline">Permanent Delegate</a>
             </div>
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Community</p>
             <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="https://twitter.com/smeltrapp" target="_blank" rel="noreferrer" className="hover:text-indigo-600 transition-colors no-underline">Twitter / X ↗</a>
-              <a href="https://discord.gg/smeltr" target="_blank" rel="noreferrer" className="hover:text-indigo-600 transition-colors no-underline">Discord ↗</a>
-              <a href="https://github.com/smeltrapp" target="_blank" rel="noreferrer" className="hover:text-indigo-600 transition-colors no-underline">GitHub ↗</a>
+              <a href="https://twitter.com/smeltrapp" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Twitter / X ↗</a>
+              <a href="https://discord.gg/smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Discord ↗</a>
+              <a href="https://github.com/smeltrapp" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">GitHub ↗</a>
             </div>
           </div>
         </div>
         <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
-          <span>© 2026 Smeltr. Non-custodial infrastructure. Built on Solana Token-2022.</span>
+          <span>© 2026 Smeltr beta. Non-custodial infrastructure. Built on Solana Token-2022.</span>
           <span>Not financial advice. Always verify transaction details before signing.</span>
         </div>
       </div>
