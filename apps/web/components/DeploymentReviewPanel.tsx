@@ -1,3 +1,4 @@
+"use client";
 import { ModuleId } from "@platform/module-registry";
 import { DeploymentPlan } from "../lib/buildDeploymentPlan";
 import { HIGH_IMPACT_MODULE_WARNINGS } from "../lib/risk";

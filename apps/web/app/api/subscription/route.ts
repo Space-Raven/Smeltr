@@ -11,7 +11,7 @@ import { isPremium, getSubscription } from "../../../lib/subscription";
  * "premium" is the boolean the client uses to gate UI paths.
  * "status" and "currentPeriodEnd" are exposed for the dashboard UI.
  */
-export async function GET(req: Request) {
+export async function GET() {
   const walletAddress = await getSessionWallet();
   if (!walletAddress) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });

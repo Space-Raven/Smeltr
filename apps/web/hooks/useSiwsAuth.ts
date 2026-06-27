@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import type { SolanaSignInInput, SolanaSignInOutput } from "@solana/wallet-standard-features";

@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { ModuleId } from "@platform/module-registry";
 import { ModuleSelection } from "@platform/tx-builder";

@@ -128,8 +128,10 @@ export interface ModuleDefinition<TParams> {
   /** Token-2022 extension(s) this module activates on the mint account. */
   extensionTypes: ExtensionType[];
 
-  /** Validates raw (string-based) input from the UI/API into typed params. */
-  paramsSchema: z.ZodSchema<TParams>;
+  /** Validates raw (string-based) input from the UI/API into typed params.
+   *  Input type is intentionally `unknown` — schemas transform string-based
+   *  form data (e.g. base58 pubkeys) into rich output types (PublicKey). */
+  paramsSchema: z.ZodType<TParams, z.ZodTypeDef, unknown>;
 
   /** True once this module's instruction set has passed a security audit. */
   verified: boolean;

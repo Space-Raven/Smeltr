@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useRef } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WebUploader } from "@irys/web-upload";

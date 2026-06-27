@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,6 +17,14 @@ import { useRouter, useSearchParams } from "next/navigation";
  * redirects to the originally requested page (or /deploy).
  */
 export default function BetaPage() {
+  return (
+    <Suspense>
+      <BetaPageInner />
+    </Suspense>
+  );
+}
+
+function BetaPageInner() {
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next") ?? "/deploy";
