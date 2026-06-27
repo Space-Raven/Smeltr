@@ -1,10 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  // Produces a self-contained server bundle under .next/standalone
-  // Required for Docker deployments — copies only production deps
-  output: "standalone",
-
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   // Compile workspace packages (they ship raw TypeScript, not built JS)
   transpilePackages: [
     "@platform/core-schemas",
@@ -12,7 +7,7 @@ const nextConfig: NextConfig = {
     "@platform/tx-builder",
   ],
 
-  // Allow images from Arweave (metadata URIs) and arweave.net CDN
+  // Allow images from Arweave (metadata URIs)
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "arweave.net" },
