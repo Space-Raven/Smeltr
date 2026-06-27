@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   // Required for Docker deployments — copies only production deps
   output: "standalone",
 
+  // Compile workspace packages (they ship raw TypeScript, not built JS)
+  transpilePackages: [
+    "@platform/core-schemas",
+    "@platform/module-registry",
+    "@platform/tx-builder",
+  ],
+
   // Allow images from Arweave (metadata URIs) and arweave.net CDN
   images: {
     remotePatterns: [
