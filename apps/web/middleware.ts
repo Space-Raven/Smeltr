@@ -4,11 +4,16 @@ import type { NextRequest } from "next/server";
 /**
  * Site-wide mode gate.
  *
- * NEXT_PUBLIC_MODE controls routing for the entire app:
+ * SITE_MODE controls routing for the entire app:
  *
  *   coming-soon  — all traffic → /coming-soon (except /api/health)
  *   beta         — unapproved wallets/codes → /beta (approved users pass through)
  *   live         — no gating, normal routing
+ *
+ * Uses SITE_MODE (server-only, not NEXT_PUBLIC_) so that flipping modes in
+ * Vercel env vars takes effect on the next request without a full redeploy.
+ * NEXT_PUBLIC_MODE is kept for client-side reads (e.g. conditional UI), but
+ * the middleware gate always reads the server-side SITE_MODE.
  *
  * The beta allowlist lives in BETA_ALLOWLIST (comma-separated wallet addresses
  * and/or invite codes). Checked via a session cookie set by /api/beta/verify.
@@ -17,7 +22,7 @@ import type { NextRequest } from "next/server";
  *   /coming-soon, /beta, /api/health, /_next/*, /favicon.ico, /robots.txt
  */
 
-const MODE = process.env.NEXT_PUBLIC_MODE ?? "live";
+const MODE = process.env.SITE_MODE ?? process.env.NEXT_PUBLIC_MODE ?? "live";
 
 // Paths that bypass all gating
 const PUBLIC_PATHS = [
