@@ -2,7 +2,7 @@
   "version": 2,
   "buildCommand": "npm run build --workspace=packages/module-registry && npm run build --workspace=packages/tx-builder && cd apps/web && npx prisma generate && npm run build",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "npm ci",
+  "installCommand": "npm install --legacy-peer-deps",
   "framework": "nextjs",
   "regions": ["iad1"],
   "headers": [
