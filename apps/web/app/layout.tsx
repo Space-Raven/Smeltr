@@ -203,4 +203,9 @@ function SiteFooter() {
         </div>
         <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
           <span>© 2026 Smeltr. Non-custodial infrastructure. Built on Solana Token-2022.</span>
-          <span>Not financial advice. Always verify transaction details before signing.</sp
+          <span>Not financial advice. Always verify transaction details before signing.</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
