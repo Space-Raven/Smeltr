@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ModuleId } from "@platform/module-registry";
 import { ModuleSelection } from "@platform/tx-builder";
 import { HIGH_IMPACT_MODULES } from "../../lib/risk";
@@ -53,10 +53,12 @@ const initialState = (): Record<ModuleId, ModuleState> =>
 
 export function ModuleConfigSection({ onChange }: ModuleConfigSectionProps) {
   const [moduleStates, setModuleStates] = useState<Record<ModuleId, ModuleState>>(initialState);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
 
-  // Aggregate -> parent as a side effect of state changes, not inside the
-  // updater functions themselves (avoids double-invocation under
-  // StrictMode/concurrent rendering).
+  // Aggregate -> parent as a side effect of state changes. `onChange` is read
+  // through a ref and kept OUT of the dep array — a non-memoized parent callback
+  // would otherwise re-fire this every render and cause an infinite update loop.
   useEffect(() => {
     const enabled = Object.entries(moduleStates).filter(
       ([, s]) => (s as ModuleState).enabled
@@ -65,8 +67,8 @@ export function ModuleConfigSection({ onChange }: ModuleConfigSectionProps) {
     const modules: ModuleSelection[] = enabled.map(([id, s]) => ({ id, params: s.params }));
     const allValid = enabled.every(([, s]) => s.isValid);
 
-    onChange(modules, allValid);
-  }, [moduleStates, onChange]);
+    onChangeRef.current(modules, allValid);
+  }, [moduleStates]);
 
   const toggleModule = (id: ModuleId, enabled: boolean) => {
     setModuleStates((prev) => ({ ...prev, [id]: { ...prev[id], enabled } }));

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface ModuleFormProps {
   onChange: (params: unknown, isValid: boolean) => void;
@@ -7,9 +7,14 @@ interface ModuleFormProps {
 
 /** No configurable parameters — reports an empty, always-valid config. */
 export function NonTransferableConfigForm({ onChange }: ModuleFormProps) {
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  // Emit once on mount. Keep `onChange` out of the dep array — a non-memoized
+  // parent callback would otherwise re-fire this every render (re-render loop).
   useEffect(() => {
-    onChange({}, true);
-  }, [onChange]);
+    onChangeRef.current({}, true);
+  }, []);
 
   return (
     <p className="pl-4 text-sm text-gray-600 border-l-2 border-gray-200">

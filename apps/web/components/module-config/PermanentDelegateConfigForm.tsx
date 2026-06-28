@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -12,12 +12,15 @@ interface ModuleFormProps {
 export function PermanentDelegateConfigForm({ onChange }: ModuleFormProps) {
   const wallet = useWallet();
   const walletAddress = wallet.publicKey?.toBase58() ?? "";
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
 
   const {
     register,
     watch,
     trigger,
-    formState: { errors, isValid },
+    getValues,
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(PermanentDelegateParamsSchema),
     mode: "onBlur",
@@ -25,17 +28,20 @@ export function PermanentDelegateConfigForm({ onChange }: ModuleFormProps) {
     defaultValues: { delegate: walletAddress },
   });
 
-  const values = watch();
-
-  // Validate default values immediately on mount so the parent's `modulesValid`
-  // reflects the real validity state before the user has touched any field.
+  // Emit validated values on mount AND on every change. Reading watch() at render
+  // time + using it as an effect dependency caused an infinite render loop; the
+  // subscription form fires only on real changes and trigger() supplies validity.
   useEffect(() => {
-    trigger();
-  }, [trigger]);
-
-  useEffect(() => {
-    onChange(values, isValid);
-  }, [values, isValid, onChange]);
+    const emit = async () => {
+      const valid = await trigger();
+      onChangeRef.current(getValues(), valid);
+    };
+    void emit();
+    const subscription = watch(() => {
+      void emit();
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, trigger, getValues]);
 
   if (!walletAddress) {
     return (
