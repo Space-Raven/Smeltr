@@ -146,8 +146,8 @@ export function validateModuleSelection(
   // --- 4. Hard conflicts (checked bidirectionally) ------------------------
   for (let i = 0; i < deduped.length; i++) {
     for (let j = i + 1; j < deduped.length; j++) {
-      const a = deduped[i];
-      const b = deduped[j];
+      const a = deduped[i]!;
+      const b = deduped[j]!;
       const modA = getModule(a);
       const modB = getModule(b);
 

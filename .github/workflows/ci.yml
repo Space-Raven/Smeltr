@@ -1,0 +1,61 @@
+# PR / push CI — required gate for engineering agents (ci-investigator, Bugbot).
+# Deploy remains in deploy.yml (main only).
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test (unit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck packages
+        run: npx tsc -p tsconfig.json --noEmit
+
+      - name: Unit tests
+        run: npm run test:ci
+
+  build-web:
+    name: Build web
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci
+      SESSION_JWT_SECRET: ci-test-secret-min-32-chars-long!!
+      NEXT_PUBLIC_APP_DOMAIN: localhost:3000
+      NEXT_PUBLIC_SOLANA_RPC_URL: https://api.devnet.solana.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate --schema=apps/web/prisma/schema.prisma
+
+      - name: Build Next.js app
+        run: npm run build --workspace=apps/web

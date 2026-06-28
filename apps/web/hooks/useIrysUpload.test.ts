@@ -2,11 +2,11 @@
  * Irys SDK API Smoke Test
  *
  * Verifies that the @irys/web-upload-solana API hasn't changed in ways
- * that would break useIrysUpload.ts at runtime. Tests method names,
- * signatures, and return types against actual Irys library.
+ * that would break useIrysUpload.ts at runtime.
  *
- * Run with: npm test
- * Requires devnet Solana RPC and a funded test wallet
+ * Run with: npm test (full suite)
+ * CI uses test:ci which skips this file — dynamic import of @irys/web-upload-solana
+ * requires ESM transforms not yet wired in next/jest. Run manually before Irys upgrades.
  */
 
 import { strict as assert } from "assert";
@@ -35,7 +35,7 @@ describe("Irys SDK API Surface", () => {
   describe("WebUploader(WebSolana) instance API", () => {
     let uploader: any;
 
-    before(async () => {
+    beforeAll(async () => {
       const { WebUploader } = await import("@irys/web-upload");
       const { WebSolana } = await import("@irys/web-upload-solana");
 

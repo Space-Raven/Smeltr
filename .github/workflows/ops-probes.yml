@@ -1,0 +1,23 @@
+# Scheduled ops probes for agent triage (Irys connectivity, etc.).
+# Does not block merges — alerts via failed workflow run.
+name: Ops probes
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  irys-connectivity:
+    name: Irys /info probe
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Probe devnet and mainnet bundlers
+        run: node scripts/probe-irys.mjs

@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test": "npm run test:unit",
+    "test:all": "jest --detectOpenHandles",
     "test:unit": "jest --detectOpenHandles --testPathPattern=\"extensionCollision\"",
     "test:devnet": "jest --detectOpenHandles --runInBand --testPathPattern=\"metadata.devnet\""
   },

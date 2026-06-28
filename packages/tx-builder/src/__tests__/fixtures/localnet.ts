@@ -117,8 +117,10 @@ export async function sendAndConfirm(
   tx: Transaction,
   signers: Keypair[]
 ): Promise<string> {
+  const feePayer = signers[0];
+  if (!feePayer) throw new Error("sendAndConfirm requires at least one signer");
   tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-  tx.feePayer = signers[0].publicKey;
+  tx.feePayer = feePayer.publicKey;
   return sendAndConfirmTransaction(connection, tx, signers, {
     commitment: "confirmed",
   });

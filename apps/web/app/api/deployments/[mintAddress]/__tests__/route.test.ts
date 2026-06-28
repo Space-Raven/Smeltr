@@ -22,6 +22,8 @@ const mockGetSessionWallet = getSessionWallet as jest.Mock;
 const MINT_ADDRESS = "MintAddress1111111111111111111111111111111";
 const SESSION_WALLET = "SessionWallet11111111111111111111111111111";
 const OTHER_WALLET = "OtherWallet111111111111111111111111111111";
+/** Matches PatchDeploymentSchema — base58 charset, uppercase letters only. */
+const VALID_SIG = "3ABCDEFGHJKLMNPQRSTUVWXYZ23456789ABCDE";
 
 function makeRequest(body: unknown): Request {
   return new Request(`http://localhost/api/deployments/${MINT_ADDRESS}`, {
@@ -43,7 +45,7 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
   it("returns 401 when there is no session", async () => {
     mockGetSessionWallet.mockResolvedValue(null);
 
-    const res = await PATCH(makeRequest({ metadataSignature: "sig" }), params);
+    const res = await PATCH(makeRequest({ metadataSignature: VALID_SIG }), params);
 
     expect(res.status).toBe(401);
     expect(mockFindUnique).not.toHaveBeenCalled();
@@ -53,7 +55,7 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
     mockGetSessionWallet.mockResolvedValue(SESSION_WALLET);
     mockFindUnique.mockResolvedValue(null);
 
-    const res = await PATCH(makeRequest({ metadataSignature: "sig" }), params);
+    const res = await PATCH(makeRequest({ metadataSignature: VALID_SIG }), params);
     const body = await res.json();
 
     expect(res.status).toBe(404);
@@ -68,7 +70,7 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
       metadataAttached: false,
     });
 
-    const res = await PATCH(makeRequest({ metadataSignature: "sig" }), params);
+    const res = await PATCH(makeRequest({ metadataSignature: VALID_SIG }), params);
     const body = await res.json();
 
     expect(res.status).toBe(404);
@@ -87,14 +89,14 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
     mockGetSessionWallet.mockResolvedValue(SESSION_WALLET);
 
     mockFindUnique.mockResolvedValueOnce(null);
-    const notFoundRes = await PATCH(makeRequest({ metadataSignature: "sig" }), params);
+    const notFoundRes = await PATCH(makeRequest({ metadataSignature: VALID_SIG }), params);
 
     mockFindUnique.mockResolvedValueOnce({
       mintAddress: MINT_ADDRESS,
       walletAddress: OTHER_WALLET,
       metadataAttached: false,
     });
-    const notYoursRes = await PATCH(makeRequest({ metadataSignature: "sig" }), params);
+    const notYoursRes = await PATCH(makeRequest({ metadataSignature: VALID_SIG }), params);
 
     expect(notFoundRes.status).toBe(notYoursRes.status);
     expect(await notFoundRes.json()).toEqual(await notYoursRes.json());
@@ -111,16 +113,16 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
       mintAddress: MINT_ADDRESS,
       walletAddress: SESSION_WALLET,
       metadataAttached: true,
-      metadataSignature: "sig123",
+      metadataSignature: VALID_SIG,
     });
 
-    const res = await PATCH(makeRequest({ metadataSignature: "sig123" }), params);
+    const res = await PATCH(makeRequest({ metadataSignature: VALID_SIG }), params);
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(mockUpdate).toHaveBeenCalledWith({
       where: { mintAddress: MINT_ADDRESS },
-      data: { metadataAttached: true, metadataSignature: "sig123" },
+      data: { metadataAttached: true, metadataSignature: VALID_SIG },
     });
     expect(body.deployment.metadataAttached).toBe(true);
   });
