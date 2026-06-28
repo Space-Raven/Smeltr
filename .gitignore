@@ -16,3 +16,14 @@ packages/tx-builder/src/__tests__/fixtures/.cache/
 
 # Prisma
 apps/web/prisma/migrations/dev/
+
+# Internal corporate / legal / brand documents — local only, never committed.
+# (Brand security: keep these referenceable on disk for agents, out of the repo.)
+# The Whitepaper is the one public document and stays tracked (negated below).
+corporate/
+ip-filings/
+Smeltr-*.docx
+!Smeltr-Whitepaper.docx
+# Word lock/temp files
+~$*.docx
+~$*.doc
