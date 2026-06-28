@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { ModuleSelection } from "@platform/tx-builder";
 import { Token2022NativeMetadataProvider, TokenMetadataInput } from "@platform/module-registry";
@@ -20,6 +20,14 @@ export default function DeployPage() {
   const [modulesValid, setModulesValid] = useState(true);
   const [includeMetadata, setIncludeMetadata] = useState(true);
   const [metadataInput, setMetadataInput] = useState<TokenMetadataInput | undefined>();
+
+  // Memoized — ModuleConfigSection uses this in a useEffect dependency array.
+  // An inline function would create a new reference every render, causing an
+  // infinite re-render loop that silently crashes the module section.
+  const handleModulesChange = useCallback((mods: ModuleSelection[], valid: boolean) => {
+    setModules(mods);
+    setModulesValid(valid);
+  }, []);
 
   const canReview =
     wallet.connected && modulesValid && (!includeMetadata || metadataInput !== undefined);
@@ -167,12 +175,7 @@ export default function DeployPage() {
         />
       </div>
 
-      <ModuleConfigSection
-        onChange={(mods, valid) => {
-          setModules(mods);
-          setModulesValid(valid);
-        }}
-      />
+      <ModuleConfigSection onChange={handleModulesChange} />
 
       <div className="rounded-md border border-gray-200 p-3">
         <label className="flex items-center gap-2 text-sm font-medium">

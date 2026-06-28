@@ -12,10 +12,17 @@ export interface SubmitTransactionArgs {
 }
 
 /**
- * Assembles, size-checks, simulates, signs, and submits a transaction. The
- * platform never holds or transmits a signing key for the user's wallet —
- * only `extraSigners` (ephemeral keypairs generated client-side, e.g. for
- * a new mint account) are signed locally and discarded after use.
+ * Assembles, size-checks, signs, and submits a transaction.
+ *
+ * Uses wallet.sendTransaction (not signTransaction + sendRawTransaction) so
+ * that the wallet adapter handles submission through its own reliable RPC
+ * endpoint with built-in retry. Phantom, Backpack, etc. each maintain their
+ * own high-availability nodes — bypassing them with sendRawTransaction via
+ * the public mainnet RPC caused dropped transactions and "unsafe" warnings.
+ *
+ * The platform never holds or transmits a signing key for the user's wallet.
+ * Only extraSigners (ephemeral keypairs, e.g. a new mint account) are signed
+ * locally and discarded after use.
  */
 export async function submitTransaction({
   connection,
@@ -23,11 +30,11 @@ export async function submitTransaction({
   instructions,
   extraSigners = [],
 }: SubmitTransactionArgs): Promise<string> {
-  if (!wallet.publicKey || !wallet.signTransaction) {
-    throw new Error("Wallet not connected or does not support signing.");
+  if (!wallet.publicKey || !wallet.sendTransaction) {
+    throw new Error("Wallet not connected or does not support sending transactions.");
   }
 
-  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash("confirmed");
 
   const transaction = new Transaction({
     feePayer: wallet.publicKey,
@@ -35,13 +42,10 @@ export async function submitTransaction({
     lastValidBlockHeight,
   }).add(...instructions);
 
-  for (const signer of extraSigners) {
-    transaction.partialSign(signer);
-  }
-
   // --- Pre-flight size check ------------------------------------------------
   // Catch oversized transactions with a clear message instead of an opaque
-  // RPC rejection.
+  // RPC rejection. Serialize without requiring all signatures since the
+  // user's wallet hasn't signed yet.
   const serializedSize = transaction.serialize({
     requireAllSignatures: false,
     verifySignatures: false,
@@ -55,19 +59,20 @@ export async function submitTransaction({
     );
   }
 
-  // --- Simulate before requesting the user's signature ----------------------
-  const simulation = await connection.simulateTransaction(transaction);
-  if (simulation.value.err) {
-    throw new Error(
-      `Simulation failed: ${JSON.stringify(simulation.value.err)}. ` +
-        `Logs: ${simulation.value.logs?.join("\n") ?? "none"}`
-    );
-  }
+  // wallet.sendTransaction: signs via the wallet UI, co-signs with any
+  // extraSigners, and submits through the wallet's own RPC endpoint.
+  // skipPreflight: false keeps simulation on so errors surface before
+  // the user sees a wallet prompt.
+  const signature = await wallet.sendTransaction(transaction, connection, {
+    signers: extraSigners,
+    skipPreflight: false,
+    preflightCommitment: "confirmed",
+  });
 
-  const signedTransaction = await wallet.signTransaction(transaction);
-  const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-
-  await connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, "confirmed");
+  await connection.confirmTransaction(
+    { signature, blockhash, lastValidBlockHeight },
+    "confirmed"
+  );
 
   return signature;
 }
