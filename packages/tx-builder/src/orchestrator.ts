@@ -56,6 +56,23 @@ export interface BuildMintInstructionsParams {
     provider: MetadataProvider;
     input: TokenMetadataInput;
   };
+
+  /**
+   * Optional platform protocol fee. When provided, a SOL transfer from `payer`
+   * to the platform fee wallet is appended to transaction 1. The recipient is
+   * the platform's own fee wallet (configured via PLATFORM_FEE_RECIPIENT) and is
+   * intentionally NOT subject to the user-authority denylist — it is a payment
+   * destination, never a token authority. The fee is surfaced transparently to
+   * the user at the review step; it is never hidden.
+   */
+  platformFee?: PlatformFeeConfig;
+}
+
+export interface PlatformFeeConfig {
+  /** Flat fee in lamports transferred to the platform fee wallet. */
+  feeLamports: number;
+  /** Platform fee recipient (PLATFORM_FEE_RECIPIENT). */
+  feeRecipient: PublicKey;
 }
 
 export interface BuildMintInstructionsResult {
@@ -63,6 +80,8 @@ export interface BuildMintInstructionsResult {
   mintAccountSpace: number;
   rentExemptLamports: number;
   warnings: CompatibilityWarning[];
+  /** Non-null when a platform fee instruction was appended to transaction 1. */
+  platformFee: PlatformFeeConfig | null;
 }
 
 export class ModuleValidationError extends Error {
@@ -216,10 +235,25 @@ export async function buildMintInstructions(
     )
   );
 
+  // --- 5. Platform protocol fee (optional) --------------------------------
+  // Flat SOL fee per deployment, transferred from the payer to the platform
+  // fee wallet within transaction 1. Order-independent of the mint setup;
+  // appended last for clarity. Surfaced transparently in the review step.
+  if (args.platformFee && args.platformFee.feeLamports > 0) {
+    instructions.push(
+      SystemProgram.transfer({
+        fromPubkey: payer,
+        toPubkey: args.platformFee.feeRecipient,
+        lamports: args.platformFee.feeLamports,
+      })
+    );
+  }
+
   return {
     instructions,
     mintAccountSpace,
     rentExemptLamports,
     warnings: compatibility.warnings,
+    platformFee: args.platformFee ?? null,
   };
 }

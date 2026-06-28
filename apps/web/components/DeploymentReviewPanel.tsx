@@ -56,9 +56,29 @@ export function DeploymentReviewPanel({
         </label>
       ))}
 
-      <div className="text-sm text-gray-600">
-        Estimated rent-exempt deposit:{" "}
-        {(plan.rentExemptLamports / 1_000_000_000).toFixed(6)} SOL
+      {/* Cost breakdown — every charge shown explicitly. The platform fee is
+          never hidden; transparency is a hard requirement. */}
+      <div className="space-y-1 rounded-md border border-gray-200 p-3 text-sm text-gray-600">
+        <div className="flex justify-between">
+          <span>Rent-exempt deposit</span>
+          <span>{(plan.rentExemptLamports / 1_000_000_000).toFixed(6)} SOL</span>
+        </div>
+        {plan.platformFee && (
+          <div className="flex justify-between">
+            <span>Smeltr platform fee</span>
+            <span>{(plan.platformFee.feeLamports / 1_000_000_000).toFixed(2)} SOL</span>
+          </div>
+        )}
+        <div className="flex justify-between border-t border-gray-200 pt-1 font-medium text-gray-900">
+          <span>Total (excl. network fee)</span>
+          <span>
+            {(
+              (plan.rentExemptLamports + (plan.platformFee?.feeLamports ?? 0)) /
+              1_000_000_000
+            ).toFixed(6)}{" "}
+            SOL
+          </span>
+        </div>
       </div>
 
       <button

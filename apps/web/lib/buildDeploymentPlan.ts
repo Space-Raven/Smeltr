@@ -3,9 +3,11 @@ import {
   buildMintInstructions,
   BuildMintInstructionsResult,
   ModuleSelection,
+  PlatformFeeConfig,
 } from "@platform/tx-builder";
 import { ModuleId, MetadataProvider, TokenMetadataInput } from "@platform/module-registry";
 import { HIGH_IMPACT_MODULES } from "./risk";
+import { PLATFORM_FEE_LAMPORTS, PLATFORM_FEE_RECIPIENT } from "./constants";
 
 export interface DeploymentPlan extends BuildMintInstructionsResult {
   highImpactModules: ModuleId[];
@@ -35,7 +37,18 @@ export interface BuildDeploymentPlanArgs {
 export async function buildDeploymentPlan(
   args: BuildDeploymentPlanArgs
 ): Promise<DeploymentPlan> {
-  const result = await buildMintInstructions(args);
+  // Apply the platform protocol fee when a recipient wallet is configured.
+  // Left undefined (no fee) when PLATFORM_FEE_RECIPIENT is unset — e.g. local
+  // dev or any environment where fee capture is intentionally disabled.
+  let platformFee: PlatformFeeConfig | undefined;
+  if (PLATFORM_FEE_RECIPIENT) {
+    platformFee = {
+      feeLamports: PLATFORM_FEE_LAMPORTS,
+      feeRecipient: new PublicKey(PLATFORM_FEE_RECIPIENT),
+    };
+  }
+
+  const result = await buildMintInstructions({ ...args, platformFee });
 
   const highImpactModules = args.modules
     .map((m) => m.id)
