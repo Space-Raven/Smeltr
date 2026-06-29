@@ -12,10 +12,10 @@
 - [x] Workspaces configured (4 packages: core-schemas, module-registry, tx-builder, web)
 
 ### 2. Environment Configuration
-- [x] Generated SESSION_JWT_SECRET: `***REMOVED***=`
+- [x] Generated SESSION_JWT_SECRET (stored in `.env` only — never commit; rotate per Audit-1 TOB-02)
 - [x] Created `.env` in project root
 - [x] Created `.env` in `apps/web/` (for Prisma)
-- [x] Database URL: `postgresql://postgres:***REMOVED***@localhost:5432/platform`
+- [x] Database URL configured in `.env` (local Postgres connection string — never commit)
 - [x] NEXT_PUBLIC_APP_DOMAIN: `localhost:3000` (development)
 - [x] NEXT_PUBLIC_SOLANA_RPC_URL: `https://api.devnet.solana.com` (devnet)
 
@@ -101,10 +101,12 @@
 ## 📝 Environment Variables Reference
 
 ### Required for Development
+> Real values live in `.env` only (gitignored). Never paste actual secrets into
+> committed docs — see Audit-1 TOB-02. The values below are placeholders.
 ```env
-DATABASE_URL=postgresql://postgres:***REMOVED***@localhost:5432/platform
+DATABASE_URL=postgresql://<user>:<password>@localhost:5432/platform
 NEXT_PUBLIC_APP_DOMAIN=localhost:3000
-SESSION_JWT_SECRET=***REMOVED***=
+SESSION_JWT_SECRET=<generate: openssl rand -base64 32>
 NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
 ```
 

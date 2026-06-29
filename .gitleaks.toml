@@ -1,0 +1,42 @@
+title = "Smeltr gitleaks config"
+
+# Extend gitleaks' default rule set, then add project-specific rules for the
+# exact secret shapes that leaked in Audit-1 TOB-02 — the default rules do NOT
+# catch a bare SESSION_JWT_SECRET= base64 assignment or our Postgres URL, so
+# relying on defaults alone would have missed the very leak we are remediating.
+[extend]
+useDefault = true
+
+# --- Project-specific rules --------------------------------------------------
+
+[[rules]]
+id = "smeltr-session-jwt-secret"
+description = "SESSION_JWT_SECRET assigned a real (base64-ish, 20+ char) value"
+regex = '''(?i)SESSION_JWT_SECRET\s*[:=]\s*["'`]?[A-Za-z0-9+/]{20,}={0,2}'''
+keywords = ["session_jwt_secret"]
+
+[[rules]]
+id = "smeltr-postgres-url-with-password"
+description = "Postgres connection string with an inline password"
+regex = '''postgres(?:ql)?://[^:@\s/]+:[^@\s/]+@[^\s/]+'''
+keywords = ["postgres"]
+
+# --- Allowlist ---------------------------------------------------------------
+
+[allowlist]
+description = "Generated files and known-safe placeholders (not real secrets)"
+paths = [
+  '''node_modules/''',
+  '''\.next/''',
+  '''dist/''',
+  '''package-lock\.json''',
+  # .env.example documents PLACEHOLDER credentials only.
+  '''\.env\.example''',
+]
+# Placeholder/example strings that must never count as findings.
+regexes = [
+  '''replace-me-with-a-random-secret''',
+  '''generate: openssl rand''',
+  '''postgresql://<user>:<password>@''',
+  '''postgresql://user:password@''',
+]
