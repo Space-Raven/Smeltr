@@ -7,7 +7,7 @@
   "scripts": {
     "test": "npm run test:unit",
     "test:all": "jest --detectOpenHandles",
-    "test:unit": "jest --detectOpenHandles --testPathPattern=\"extensionCollision\"",
+    "test:unit": "jest --detectOpenHandles --testPathPattern=\"extensionCollision|platformAuthorityDenylist|moduleIntegrity\"",
     "test:devnet": "jest --detectOpenHandles --runInBand --testPathPattern=\"metadata.devnet\""
   },
   "dependencies": {

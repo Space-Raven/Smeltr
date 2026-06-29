@@ -3,41 +3,66 @@ import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { ExtensionType } from "@solana/spl-token";
 
 /**
- * ============================================================================
- * PLATFORM AUTHORITY DENYLIST
- * ============================================================================
- * Critical Security Path — non-custodial invariant.
+ * PLATFORM AUTHORITY DENYLIST — non-custodial invariant.
  *
- * No module may ever assign a Token-2022 authority field (transfer fee
- * authority, withdraw authority, permanent delegate, mint authority,
- * freeze authority, metadata update authority, etc.) to a platform-held
- * key. This denylist is the runtime backstop; assertNoPlatformAuthority is
- * called by every module/provider that accepts an authority parameter, and
- * by the orchestrator for core mint authorities.
+ * No module may assign a Token-2022 authority field (mint, freeze, permanent
+ * delegate, transfer-fee, withdraw, metadata-update) to a platform-held key.
+ * assertNoPlatformAuthority is the runtime backstop.
  *
- * Populate from secure environment config at startup. Never hardcode real
- * keys in source — placeholders only.
+ * ⚠️ RUNTIME BOUNDARY (Audit-1 TOB-01): bundled into the BROWSER, where only
+ * NEXT_PUBLIC_* env vars are defined — the denylist MUST come from NEXT_PUBLIC_
+ * vars or the check silently no-ops in production. Public keys are not secret.
+ * (NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT is folded in per Audit-1 TOB-11.)
  */
+export function parsePlatformAuthorityDenylist(
+  env: Record<string, string | undefined> = process.env
+): ReadonlySet<string> {
+  const keys: string[] = [];
+
+  const list = env.NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST;
+  if (list) {
+    for (const key of list.split(/[\s,]+/)) {
+      if (key.length > 0) keys.push(key);
+    }
+  }
+
+  const feeRecipient = env.NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT;
+  if (feeRecipient && feeRecipient.length > 0) keys.push(feeRecipient);
+
+  return new Set(keys);
+}
+
+export const PLATFORM_AUTHORITY_DENYLIST: ReadonlySet<string> =
+  parsePlatformAuthorityDenylist();
+
 /**
- * Populated at module load time from env. Filters out missing/empty entries
- * so an unset var doesn't add "" to the set (which would block nothing but
- * pollute logs). In dev with no vars set this is an empty set and
- * assertNoPlatformAuthority is a no-op — that is intentional for local
- * development. MUST be populated before any production deployment.
+ * Fail-closed guard: throws when the denylist is unconfigured in a production
+ * build (the TOB-01 failure mode). Called at the deployment chokepoint
+ * (buildMintInstructions), so a misconfigured env aborts the deploy with a clear
+ * error rather than shipping an inert non-custodial guarantee. Params are
+ * overridable for unit testing.
  */
-export const PLATFORM_AUTHORITY_DENYLIST: ReadonlySet<string> = new Set<string>(
-  [
-    process.env.PLATFORM_FEE_PAYER_PUBKEY,
-    process.env.PLATFORM_SERVICE_WALLET_PUBKEY,
-  ].filter((key): key is string => typeof key === "string" && key.length > 0)
-);
+export function assertPlatformDenylistConfigured(
+  opts: { isProduction?: boolean; denylist?: ReadonlySet<string> } = {}
+): void {
+  const isProduction = opts.isProduction ?? process.env.NODE_ENV === "production";
+  const denylist = opts.denylist ?? PLATFORM_AUTHORITY_DENYLIST;
+  if (isProduction && denylist.size === 0) {
+    throw new Error(
+      "[SECURITY] Platform authority denylist is not configured. Refusing to " +
+        "build a deployment — set NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST."
+    );
+  }
+}
 
 export function assertNoPlatformAuthority(
   authority: PublicKey,
   fieldName: string,
-  moduleId: string
+  moduleId: string,
+  // Defaults to the module-level denylist; overridable for unit testing.
+  denylist: ReadonlySet<string> = PLATFORM_AUTHORITY_DENYLIST
 ): void {
-  if (PLATFORM_AUTHORITY_DENYLIST.has(authority.toBase58())) {
+  if (denylist.has(authority.toBase58())) {
     throw new Error(
       `[SECURITY] "${moduleId}" attempted to set "${fieldName}" to a ` +
         `platform-controlled key (${authority.toBase58()}). This violates the ` +

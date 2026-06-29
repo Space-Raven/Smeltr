@@ -19,6 +19,7 @@ import {
   getModule,
   validateModuleSelection,
   assertNoPlatformAuthority,
+  assertPlatformDenylistConfigured,
   assertNoExtensionCollision,
 } from "@platform/module-registry";
 
@@ -109,7 +110,11 @@ export async function buildMintInstructions(
     modules,
   } = args;
 
-  // --- 0. Core authority check (outside the module system) ----------------
+  // --- 0. Security preconditions ------------------------------------------
+  // Fail closed if the denylist is unconfigured in production (Audit-1 TOB-01):
+  // without it the non-custodial authority backstop is inert, so refuse to build.
+  assertPlatformDenylistConfigured();
+
   // mintAuthority/freezeAuthority feed directly into initializeMint and are
   // NOT covered by any module's buildInitInstructions — check here.
   assertNoPlatformAuthority(mintAuthority, "mintAuthority", "core/initializeMint");
