@@ -160,7 +160,7 @@ function SiteHeader() {
             <a href="/dashboard" className="hover:text-amber-700 transition-colors">Dashboard</a>
             <a href="/blog" className="hover:text-amber-700 transition-colors">Blog</a>
             <a
-              href="https://github.com/smeltrapp"
+              href="https://github.com/Space-Raven/Smeltr"
               target="_blank"
               rel="noreferrer"
               className="hover:text-amber-700 transition-colors"
@@ -217,7 +217,7 @@ function SiteFooter() {
             <div className="flex flex-col gap-2 text-sm text-gray-500">
               <a href="https://twitter.com/smeltrapp" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Twitter / X ↗</a>
               <a href="https://discord.gg/smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Discord ↗</a>
-              <a href="https://github.com/smeltrapp" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">GitHub ↗</a>
+              <a href="https://github.com/Space-Raven/Smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">GitHub ↗</a>
             </div>
           </div>
         </div>
