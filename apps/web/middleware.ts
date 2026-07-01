@@ -8,19 +8,18 @@ import { isMutatingMethod, isCsrfExempt, originAllowed } from "./lib/csrf";
  * SITE_MODE controls routing for the entire app:
  *
  *   coming-soon  — all traffic → /coming-soon (except /api/health)
- *   beta         — unapproved wallets/codes → /beta (approved users pass through)
- *   live         — no gating, normal routing
+ *   live         — no gating, normal routing (this is the open-beta mode)
  *
  * Uses SITE_MODE (server-only, not NEXT_PUBLIC_) so that flipping modes in
  * Vercel env vars takes effect on the next request without a full redeploy.
- * NEXT_PUBLIC_MODE is kept for client-side reads (e.g. conditional UI), but
- * the middleware gate always reads the server-side SITE_MODE.
+ * NEXT_PUBLIC_MODE is kept for client-side reads (e.g. the "public beta"
+ * banner), but the middleware gate always reads the server-side SITE_MODE.
  *
- * The beta allowlist lives in BETA_ALLOWLIST (comma-separated wallet addresses
- * and/or invite codes). Checked via a session cookie set by /api/beta/verify.
+ * The invite-code beta allowlist was removed for open beta — anyone can
+ * access the app; the "beta" labeling (banner, disclaimer) stays.
  *
  * Paths that are always public regardless of mode:
- *   /coming-soon, /beta, /api/health, /_next/*, /favicon.ico, /robots.txt
+ *   /coming-soon, /api/health, /_next/*, /favicon.ico, /robots.txt
  */
 
 const MODE = process.env.SITE_MODE ?? process.env.NEXT_PUBLIC_MODE ?? "live";
@@ -28,9 +27,7 @@ const MODE = process.env.SITE_MODE ?? process.env.NEXT_PUBLIC_MODE ?? "live";
 // Paths that bypass all gating
 const PUBLIC_PATHS = [
   "/coming-soon",
-  "/beta",
   "/api/health",
-  "/api/beta/verify",
   "/favicon.ico",
   "/robots.txt",
   "/sitemap.xml",
@@ -48,8 +45,7 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // ── CSRF: Origin allowlist on state-changing API routes (TOB-13) ─────────
-  // Runs before the mode gate so it also covers public API mutations
-  // (e.g. /api/beta/verify). Webhook is exempt (signature-authed, cross-origin).
+  // Runs before the mode gate. Webhook is exempt (signature-authed, cross-origin).
   if (
     isMutatingMethod(req.method) &&
     pathname.startsWith("/api/") &&
@@ -68,17 +64,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/coming-soon", req.url));
   }
 
-  // ── beta mode ─────────────────────────────────────────────────────────────
-  if (MODE === "beta") {
-    const approved = req.cookies.get("smeltr_beta_approved")?.value === "1";
-    if (!approved) {
-      const url = new URL("/beta", req.url);
-      url.searchParams.set("next", pathname);
-      return NextResponse.redirect(url);
-    }
-  }
-
-  // ── live mode (or approved beta user) ────────────────────────────────────
+  // ── live / open-beta: no access gating ───────────────────────────────────
   return NextResponse.next();
 }
 

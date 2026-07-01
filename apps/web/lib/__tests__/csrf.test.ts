@@ -20,7 +20,7 @@ describe("isCsrfExempt", () => {
   it("does not exempt other mutating routes", () => {
     expect(isCsrfExempt("/api/deployments")).toBe(false);
     expect(isCsrfExempt("/api/upload/metadata")).toBe(false);
-    expect(isCsrfExempt("/api/beta/verify")).toBe(false);
+    expect(isCsrfExempt("/api/auth/verify")).toBe(false);
   });
 });
 
