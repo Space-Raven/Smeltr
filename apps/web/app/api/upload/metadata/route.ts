@@ -5,6 +5,7 @@ import { Keypair } from "@solana/web3.js";
 import bs58 from "bs58";
 import { getSessionWallet } from "../../../../lib/session";
 import { isPremium } from "../../../../lib/subscription";
+import { reserveQuota, refundQuota } from "../../../../lib/uploadQuota";
 
 /**
  * POST /api/upload/metadata
@@ -115,6 +116,15 @@ export async function POST(req: Request) {
     );
   }
 
+  // --- Abuse control: per-wallet daily quota (TOB-04) -----------------------
+  // Reserve quota BEFORE spending the platform balance. This caps both request
+  // count and total bytes per wallet per UTC day, preventing a single session
+  // (including a stolen/forged one) from draining platform storage funds.
+  const reservation = await reserveQuota(walletAddress, file.size);
+  if (!reservation.ok) {
+    return NextResponse.json({ error: reservation.reason }, { status: 429 });
+  }
+
   // --- Upload via platform wallet -------------------------------------------
   try {
     const uploader = await getPlatformUploader();
@@ -134,6 +144,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ uri: `${gateway}/${receipt.id}` });
   } catch (err) {
+    // The upload never happened, so don't count it against the wallet's quota.
+    await refundQuota(walletAddress, file.size);
     console.error("[upload/metadata] Irys upload failed:", err);
     return NextResponse.json(
       { error: "Upload failed — platform storage unavailable" },

@@ -57,3 +57,19 @@ model Deployment {
 
   @@index([walletAddress])
 }
+
+// --- Platform-funded upload quotas (Audit-1 TOB-04) ------------------------
+// Per-wallet, per-UTC-day usage counters for the platform-funded Irys upload
+// endpoint. Prevents a single premium (or forged) session from draining the
+// platform storage balance via repeated large uploads (financial DoS).
+// One row per (wallet, day); rows are cheap and can be pruned by a later job.
+
+model UploadUsage {
+  walletAddress String
+  day           String   // UTC calendar day, "YYYY-MM-DD"
+  requests      Int      @default(0)
+  bytes         BigInt   @default(0)
+  updatedAt     DateTime @updatedAt
+
+  @@id([walletAddress, day])
+}
