@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { isMutatingMethod, isCsrfExempt, originAllowed } from "./lib/csrf";
 
 /**
  * Site-wide mode gate.
@@ -45,6 +46,18 @@ function isPublicPath(pathname: string): boolean {
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // ── CSRF: Origin allowlist on state-changing API routes (TOB-13) ─────────
+  // Runs before the mode gate so it also covers public API mutations
+  // (e.g. /api/beta/verify). Webhook is exempt (signature-authed, cross-origin).
+  if (
+    isMutatingMethod(req.method) &&
+    pathname.startsWith("/api/") &&
+    !isCsrfExempt(pathname) &&
+    !originAllowed(req.headers.get("origin"), req.headers.get("host"))
+  ) {
+    return NextResponse.json({ error: "Cross-origin request blocked" }, { status: 403 });
+  }
 
   if (isPublicPath(pathname)) {
     return NextResponse.next();
