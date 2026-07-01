@@ -18,11 +18,16 @@ model AuthNonce {
   // tampered with (Audit-1 TOB-07). Nullable for backward compatibility with
   // any pre-migration rows; verify rejects a nonce that lacks it.
   issuedInput String?
+  // Client IP that requested this nonce, for per-IP rate limiting (Audit-1
+  // TOB-06). Nullable: not always resolvable behind proxies. Short-lived —
+  // purged with the nonce once expired.
+  ip        String?
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime  @default(now())
 
   @@index([expiresAt])
+  @@index([ip, createdAt])
 }
 
 // --- Subscriptions (PAUSED — Stripe checkout/webhook not yet built) -------

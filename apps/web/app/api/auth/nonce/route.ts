@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { randomBytes } from "crypto";
 import type { SolanaSignInInput } from "@solana/wallet-standard-features";
 import { prisma } from "../../../../lib/prisma";
+import { getClientIp, getNonceRateLimit } from "../../../../lib/rateLimit";
 
 const NONCE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -32,6 +33,26 @@ export async function POST() {
   // window.location.hostname which never includes a port.
   const domain = host.split(":")[0];
 
+  // --- Abuse controls (TOB-06) ---------------------------------------------
+  // 1. Opportunistically purge expired nonces so the table can't grow
+  //    unbounded from unauthenticated traffic (no cron needed).
+  await prisma.authNonce.deleteMany({ where: { expiresAt: { lt: new Date() } } });
+
+  // 2. Per-IP rate limit, counted in the DB so it holds across serverless
+  //    instances. Counts this IP's live (unexpired) nonces in the window.
+  const ip = getClientIp(headersList);
+  const { maxPerWindow, windowMs } = getNonceRateLimit();
+  const since = new Date(Date.now() - windowMs);
+  const recent = await prisma.authNonce.count({
+    where: { ip, createdAt: { gte: since } },
+  });
+  if (recent >= maxPerWindow) {
+    return NextResponse.json(
+      { error: "Too many sign-in requests. Please wait a moment and try again." },
+      { status: 429 }
+    );
+  }
+
   const nonce = randomBytes(16).toString("hex");
   const expiresAt = new Date(Date.now() + NONCE_TTL_MS);
 
@@ -55,7 +76,7 @@ export async function POST() {
   // signature against this canonical copy, so the client cannot alter any
   // field of `input` after we hand it out.
   await prisma.authNonce.create({
-    data: { nonce, domain, expiresAt, issuedInput: JSON.stringify(input) },
+    data: { nonce, domain, expiresAt, ip, issuedInput: JSON.stringify(input) },
   });
 
   return NextResponse.json({ input });
