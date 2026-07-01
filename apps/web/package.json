@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
-    "test:ci": "jest --testPathPattern=\"__tests__/route.test\""
+    "test:ci": "jest --testPathPattern=\"lib/__tests__|__tests__/route.test\""
   },
   "dependencies": {
     "@platform/core-schemas": "*",
