@@ -28,6 +28,9 @@ const MODE = process.env.SITE_MODE ?? process.env.NEXT_PUBLIC_MODE ?? "live";
 const PUBLIC_PATHS = [
   "/coming-soon",
   "/api/health",
+  // Vercel Cron ops endpoints — auth'd by CRON_SECRET, must bypass the mode gate
+  // so a scheduled GET isn't redirected before reaching the handler.
+  "/api/ops",
   "/favicon.ico",
   "/robots.txt",
   "/sitemap.xml",

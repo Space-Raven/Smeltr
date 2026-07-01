@@ -25,5 +25,7 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" }
   ],
-  "crons": []
+  "crons": [
+    { "path": "/api/ops/sweep-irys", "schedule": "0 0 * * *" }
+  ]
 }
