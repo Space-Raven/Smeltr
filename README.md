@@ -1,13 +1,15 @@
-# Token Deployment Platform
+# Smeltr
+Non-custodial Token-2022 deployment infrastructure for Solana.
 
-A non-custodial SaaS platform for deploying Solana Token-2022 tokens via
-pre-audited, composable modules (mint extensions).
+The non-custodial guarantee: Smeltr builds transaction instructions.
+Your wallet signs them. assertNoPlatformAuthority() runs on every
+authority field in every module before any instruction is constructed.
 
-**Start here:** [`CLAUDE.md`](./CLAUDE.md) — full architecture, key
-decisions (including two corrections made during development that are easy
-to accidentally reintroduce), security invariants, current status, and
-prioritized next steps. If you're using Claude Code, it reads this file
-automatically.
+Open source: @smeltr/module-registry — MIT licensed.
+The module registry is open so the non-custodial guarantee is
+independently verifiable. You don't have to take our word for it.
+
+Extensions: Transfer Fee · Non-Transferable · Permanent Delegate · Arweave metadata
 
 ## Setup
 
