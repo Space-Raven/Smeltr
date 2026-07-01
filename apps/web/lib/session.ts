@@ -20,7 +20,13 @@ export async function getSessionWallet(): Promise<string | null> {
   }
 
   try {
-    const { payload } = await jwtVerify(token, new TextEncoder().encode(sessionSecret));
+    // Pin the accepted algorithm (Audit-1 TOB-05). jose already rejects
+    // `alg: none` and won't use an asymmetric alg with a symmetric key, so this
+    // is defense-in-depth — it keeps verification correct if issuance is ever
+    // refactored to introduce other keys/algorithms.
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(sessionSecret), {
+      algorithms: ["HS256"],
+    });
     return typeof payload.walletAddress === "string" ? payload.walletAddress : null;
   } catch {
     return null;
