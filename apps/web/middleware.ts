@@ -28,6 +28,10 @@ const MODE = process.env.SITE_MODE ?? process.env.NEXT_PUBLIC_MODE ?? "live";
 // Paths that bypass all gating
 const PUBLIC_PATHS = [
   "/coming-soon",
+  // Legal pages stay reachable in every mode.
+  "/terms",
+  "/privacy",
+  "/refunds",
   "/api/health",
   // Vercel Cron ops endpoints — auth'd by CRON_SECRET, must bypass the mode gate
   // so a scheduled GET isn't redirected before reaching the handler.

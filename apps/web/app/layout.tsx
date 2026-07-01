@@ -182,7 +182,7 @@ function SiteFooter() {
   return (
     <footer className="border-t border-gray-100 bg-white py-10 mt-16">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-8 mb-10">
           <div>
             <div className="flex items-center gap-2 mb-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -202,6 +202,7 @@ function SiteFooter() {
               <a href="/deploy" className="hover:text-amber-700 transition-colors no-underline">Deploy a token</a>
               <a href="/dashboard" className="hover:text-amber-700 transition-colors no-underline">Dashboard</a>
               <a href="/blog" className="hover:text-amber-700 transition-colors no-underline">Blog</a>
+              <a href="/about" className="hover:text-amber-700 transition-colors no-underline">About</a>
             </div>
           </div>
           <div>
@@ -220,9 +221,17 @@ function SiteFooter() {
               <a href="https://github.com/Space-Raven/Smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">GitHub ↗</a>
             </div>
           </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Legal</p>
+            <div className="flex flex-col gap-2 text-sm text-gray-500">
+              <a href="/terms" className="hover:text-amber-700 transition-colors no-underline">Terms of Service</a>
+              <a href="/privacy" className="hover:text-amber-700 transition-colors no-underline">Privacy Policy</a>
+              <a href="/refunds" className="hover:text-amber-700 transition-colors no-underline">Refund Policy</a>
+            </div>
+          </div>
         </div>
         <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
-          <span>© 2026 Smeltr beta. Non-custodial infrastructure. Built on Solana Token-2022.</span>
+          <span>© 2026 Smeltr Technologies LLC. Non-custodial infrastructure. Built on Solana Token-2022.</span>
           <span>Not financial advice. Always verify transaction details before signing.</span>
         </div>
       </div>
