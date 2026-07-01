@@ -25,7 +25,8 @@ export function DeploymentReviewPanel({
   const allHighImpactAcknowledged = plan.highImpactModules.every((id) =>
     acknowledgedModules.has(id)
   );
-  const canConfirm = allHighImpactAcknowledged && status === "ready";
+  // "error" is retryable — the plan is still valid and nothing was minted.
+  const canConfirm = allHighImpactAcknowledged && (status === "ready" || status === "error");
 
   return (
     <div className="space-y-4 rounded-lg border border-gray-200 p-4">

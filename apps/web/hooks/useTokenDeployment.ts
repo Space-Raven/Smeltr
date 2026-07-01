@@ -1,6 +1,6 @@
 "use client";
-import { useCallback, useState } from "react";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { ModuleId, MetadataProvider, TokenMetadataInput } from "@platform/module-registry";
 import { ModuleSelection, buildMetadataAttachmentInstructions } from "@platform/tx-builder";
@@ -144,6 +144,31 @@ export function useTokenDeployment() {
     setError(null);
 
     try {
+      // --- Pre-flight: friendly funds check BEFORE the wallet prompt --------
+      // An underfunded wallet fails the wallet's own simulation, which surfaces
+      // as an intimidating "possibly malicious" warning. Catch it here with a
+      // plain-language message instead. This also catches the wrong-network
+      // case (wallet funded on mainnet while the app runs on devnet, or vice
+      // versa) — the balance on THIS app's network would read 0.
+      if (!wallet.publicKey) throw new Error("Wallet disconnected — reconnect and try again.");
+      const feeLamports = plan.platformFee?.feeLamports ?? 0;
+      const txFeeBufferLamports = 100_000; // covers tx1 + tx2 network fees
+      const requiredLamports = plan.rentExemptLamports + feeLamports + txFeeBufferLamports;
+      const balance = await connection.getBalance(wallet.publicKey);
+      if (balance < requiredLamports) {
+        const network = connection.rpcEndpoint.includes("devnet") ? "Devnet" : "Mainnet";
+        const need = (requiredLamports / LAMPORTS_PER_SOL).toFixed(3);
+        const have = (balance / LAMPORTS_PER_SOL).toFixed(3);
+        throw new Error(
+          `Not enough SOL to create this token. You need about ${need} SOL on ` +
+            `${network} but this wallet has ${have} SOL. ` +
+            (balance === 0
+              ? `If you expected funds here, your wallet may be set to a different ` +
+                `network — Smeltr is currently running on ${network}.`
+              : `Add SOL to your wallet and try again.`)
+        );
+      }
+
       const sig = await submitTransaction({
         connection,
         wallet,
@@ -226,7 +251,26 @@ export function useTokenDeployment() {
     }
   }, [connection, wallet, mintKeypair, metadataConfig, decimals]);
 
+  // --- Auto-run the metadata step (signature 2) ------------------------------
+  // Users expect the flow to continue after the mint is created, not to hunt
+  // for an "Add Metadata" button. Trigger attachMetadata once when tx1
+  // succeeds; the wallet still prompts (that IS the second signature), and on
+  // failure the manual retry button on the success screen remains available.
+  const autoMetadataStarted = useRef(false);
+  useEffect(() => {
+    if (
+      status === "success" &&
+      metadataStatus === "ready" &&
+      metadataConfig &&
+      !autoMetadataStarted.current
+    ) {
+      autoMetadataStarted.current = true;
+      void attachMetadata();
+    }
+  }, [status, metadataStatus, metadataConfig, attachMetadata]);
+
   const reset = useCallback(() => {
+    autoMetadataStarted.current = false;
     setStatus("idle");
     setPlan(null);
     setMintKeypair(null);

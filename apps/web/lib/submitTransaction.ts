@@ -69,10 +69,20 @@ export async function submitTransaction({
     preflightCommitment: "confirmed",
   });
 
-  await connection.confirmTransaction(
+  const confirmation = await connection.confirmTransaction(
     { signature, blockhash, lastValidBlockHeight },
     "confirmed"
   );
+
+  // A confirmed-but-reverted transaction is a FAILURE — without this check a
+  // reverted mint would flow into the success UI and dashboard indexing.
+  if (confirmation.value.err) {
+    throw new Error(
+      `The transaction was rejected by the network (${JSON.stringify(confirmation.value.err)}). ` +
+        `No token was created and only the network fee was spent. ` +
+        `Details: https://explorer.solana.com/tx/${signature}`
+    );
+  }
 
   return signature;
 }

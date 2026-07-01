@@ -113,9 +113,9 @@ function DeployPageInner() {
         {deployment.metadataStatus !== "idle" && deployment.metadataStatus !== "success" && (
           <div className="space-y-2 rounded-md border border-gray-200 p-4">
             <p className="text-sm text-gray-700">
-              Your token was created, but it has no on-chain metadata yet &mdash;
-              wallets and explorers may show it as &quot;Unknown Token&quot;
-              until this step completes.
+              {deployment.metadataStatus === "submitting"
+                ? "Step 2 of 2: approve the second signature in your wallet to attach your token's name, symbol, and logo."
+                : 'Your token was created, but it has no on-chain metadata yet — wallets and explorers may show it as "Unknown Token" until this step completes.'}
             </p>
             {deployment.metadataError && (
               <p className="text-sm text-red-600">{deployment.metadataError}</p>
@@ -151,8 +151,12 @@ function DeployPageInner() {
     );
   }
 
-  // --- Review: plan built, awaiting signature ---------------------------------
-  if (deployment.status === "ready" && deployment.plan) {
+  // --- Review / signing / confirm-failure --------------------------------------
+  // The panel stays mounted through "submitting" (wallet prompt + on-chain
+  // confirmation) and "error" (retry). Previously only "ready" rendered it, so
+  // clicking Sign & Deploy dropped the user straight back to the configuration
+  // form while the wallet was still open — the "deploy loop" bug.
+  if (deployment.plan && ["ready", "submitting", "error"].includes(deployment.status)) {
     return (
       <div className="max-w-xl mx-auto p-6 space-y-4">
         {showDenylistDebug && <DenylistDebugPanel />}
@@ -163,8 +167,30 @@ function DeployPageInner() {
           onConfirm={deployment.confirm}
           status={deployment.status}
         />
-        {deployment.error && <p className="mt-3 text-sm text-red-600">{deployment.error}</p>}
-        <button onClick={deployment.reset} className="mt-3 text-sm text-gray-500 underline">
+        {deployment.status === "submitting" && (
+          <div className="rounded-md border border-indigo-200 bg-indigo-50 p-4 text-sm text-indigo-800">
+            <p className="font-medium">Creating your token…</p>
+            <p className="mt-1">
+              Approve the transaction in your wallet, then we&apos;ll wait for the
+              network to confirm it. This usually takes a few seconds — don&apos;t
+              close this page.
+            </p>
+          </div>
+        )}
+        {deployment.status === "error" && deployment.error && (
+          <div className="rounded-md border border-red-200 bg-red-50 p-4 space-y-2">
+            <p className="text-sm font-medium text-red-800">The token was not created</p>
+            <p className="text-sm text-red-700">{deployment.error}</p>
+            <p className="text-sm text-red-700">
+              Nothing was minted, and you can safely try again.
+            </p>
+          </div>
+        )}
+        <button
+          onClick={deployment.reset}
+          disabled={deployment.status === "submitting"}
+          className="mt-3 text-sm text-gray-500 underline disabled:opacity-40"
+        >
           Back to configuration
         </button>
       </div>
