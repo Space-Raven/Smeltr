@@ -28,8 +28,9 @@ export const PermanentDelegateModule: ModuleDefinition<PermanentDelegateParams> 
     "enables this module. See apps/web/lib/risk.ts (HIGH_IMPACT_MODULES).",
   extensionTypes: [ExtensionType.PermanentDelegate],
   paramsSchema: PermanentDelegateParamsSchema,
-  verified: true,
-  auditReference: "TODO: link audit report before production launch",
+  // TOB-12: no external audit yet — do not claim "verified" until auditReference
+  // cites a completed report. assertModuleVerificationIntegrity enforces this.
+  verified: false,
   incompatibleWith: [],
 
   buildInitInstructions(ctx, params) {

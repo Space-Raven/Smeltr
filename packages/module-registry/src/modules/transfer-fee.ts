@@ -40,8 +40,9 @@ export const TransferFeeModule: ModuleDefinition<TransferFeeParams> = {
     "authority — the platform never touches withheld fees.",
   extensionTypes: [ExtensionType.TransferFeeConfig],
   paramsSchema: TransferFeeParamsSchema,
-  verified: true,
-  auditReference: "TODO: link audit report before production launch",
+  // TOB-12: no external audit yet — do not claim "verified" until auditReference
+  // cites a completed report. assertModuleVerificationIntegrity enforces this.
+  verified: false,
   incompatibleWith: [],
 
   buildInitInstructions(ctx, params) {

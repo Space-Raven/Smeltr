@@ -158,11 +158,24 @@ export interface ModuleDefinition<TParams> {
    *  form data (e.g. base58 pubkeys) into rich output types (PublicKey). */
   paramsSchema: z.ZodType<TParams, z.ZodTypeDef, unknown>;
 
-  /** True once this module's instruction set has passed a security audit. */
+  /**
+   * True ONLY when this module's instruction set has passed a completed
+   * EXTERNAL security audit cited in `auditReference`. A placeholder/TODO
+   * reference does not count — see assertModuleVerificationIntegrity, which
+   * fails the registry load if this invariant is violated (Audit-1 TOB-12).
+   */
   verified: boolean;
 
-  /** Reference (URL or doc id) to the audit report. Required if verified. */
+  /** Reference (URL or doc id) to the completed audit report. Required if verified. */
   auditReference?: string;
+
+  /**
+   * Relative position of this module's init instruction(s) within a mint
+   * transaction, ascending. The universal "before initializeMint" rule always
+   * applies; this only orders extensions against EACH OTHER (Audit-1 TOB-15).
+   * Omitted → 0. Modules with equal priority keep caller/input order.
+   */
+  initOrderPriority?: number;
 
   /**
    * Reserved for future Transfer Hook modules — the on-chain program that
@@ -195,4 +208,52 @@ export interface ModuleDefinition<TParams> {
     ctx: ModuleContext,
     params: TParams
   ): TransactionInstruction[];
+}
+
+/**
+ * ============================================================================
+ * MODULE INTEGRITY (Audit-1 TOB-12 / TOB-15)
+ * ============================================================================
+ */
+
+/** Matches a placeholder audit reference (e.g. "TODO: link audit report"). */
+const PLACEHOLDER_AUDIT_REF = /^\s*(todo|tbd|placeholder)\b/i;
+
+/**
+ * True only when a module carries a completed EXTERNAL audit: `verified` is set
+ * AND `auditReference` is present and not a placeholder. This is the honest
+ * signal to surface to users, not the raw `verified` boolean.
+ */
+export function isExternallyAudited(
+  m: Pick<ModuleDefinition<unknown>, "verified" | "auditReference">
+): boolean {
+  return (
+    m.verified === true &&
+    typeof m.auditReference === "string" &&
+    m.auditReference.trim().length > 0 &&
+    !PLACEHOLDER_AUDIT_REF.test(m.auditReference)
+  );
+}
+
+/**
+ * Fails closed if a module claims `verified: true` without a real audit
+ * reference, so the misleading "verified + TODO" state can never ship. Run
+ * against every registered module at load time.
+ */
+export function assertModuleVerificationIntegrity(m: ModuleDefinition<unknown>): void {
+  if (m.verified && !isExternallyAudited(m)) {
+    throw new Error(
+      `Module "${m.id}" is marked verified:true but cites no completed audit ` +
+        `(auditReference: ${m.auditReference ?? "undefined"}). Set verified:false ` +
+        `until a real external audit reference is provided.`
+    );
+  }
+}
+
+/** Ascending comparator by initOrderPriority (undefined → 0). Stable-friendly. */
+export function compareInitOrder(
+  a: Pick<ModuleDefinition<unknown>, "initOrderPriority">,
+  b: Pick<ModuleDefinition<unknown>, "initOrderPriority">
+): number {
+  return (a.initOrderPriority ?? 0) - (b.initOrderPriority ?? 0);
 }

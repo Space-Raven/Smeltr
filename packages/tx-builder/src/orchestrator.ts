@@ -21,6 +21,7 @@ import {
   assertNoPlatformAuthority,
   assertPlatformDenylistConfigured,
   assertNoExtensionCollision,
+  compareInitOrder,
 } from "@platform/module-registry";
 
 export interface ModuleSelection {
@@ -142,6 +143,12 @@ export async function buildMintInstructions(
     return { moduleDef, params: result.data };
   });
 
+  // TOB-15: enforce canonical extension init order. Array.sort is stable, so
+  // modules with equal (or default 0) initOrderPriority keep their input order.
+  // This orders BOTH the sizing pass below and the instruction assembly, so a
+  // future order-sensitive module can pin its position without callers knowing.
+  parsedModules.sort((a, b) => compareInitOrder(a.moduleDef, b.moduleDef));
+
   // --- 3. Build context, then compute mint account size -------------------
   const ctx: ModuleContext = {
     mint,
@@ -184,16 +191,11 @@ export async function buildMintInstructions(
     })
   );
 
-  // NOTE: iteration order = input order. Safe for the current module set
-  // (Transfer Fee, Non-Transferable, Permanent Delegate) since none of them
-  // have relative-ordering requirements against each other — only the
-  // universal "before initializeMint" rule applies.
-  //
-  // TODO(future modules): if a future module (e.g. Transfer Hook) requires
-  // a specific position relative to other extensions, add an
-  // `initOrderPriority: number` field to ModuleDefinition and sort
-  // `parsedModules` by it here, rather than relying on caller-supplied
-  // order.
+  // Iteration order = the initOrderPriority-sorted order established above
+  // (TOB-15). The current module set (Transfer Fee, Non-Transferable,
+  // Permanent Delegate) all use the default priority, so this is input order
+  // today; an order-sensitive future module (e.g. Transfer Hook) just sets a
+  // priority and lands in the right position without caller changes.
   for (const { moduleDef, params } of parsedModules) {
     instructions.push(...moduleDef.buildInitInstructions(ctx, params));
   }
