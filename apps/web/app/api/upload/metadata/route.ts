@@ -121,7 +121,7 @@ export async function POST(req: Request) {
   // count and total bytes per wallet per UTC day, preventing a single session
   // (including a stolen/forged one) from draining platform storage funds.
   const reservation = await reserveQuota(walletAddress, file.size);
-  if (!reservation.ok) {
+  if (reservation.ok === false) {
     return NextResponse.json({ error: reservation.reason }, { status: 429 });
   }
 

@@ -79,7 +79,7 @@ export async function POST(req: Request) {
   }
 
   const verdict = checkMintCreation(tx, validated.mintAddress, walletAddress);
-  if (!verdict.ok) {
+  if (verdict.ok === false) {
     return NextResponse.json({ error: verdict.reason }, { status: verdict.status });
   }
 

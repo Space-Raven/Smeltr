@@ -14,6 +14,16 @@ const nextConfig = {
       { protocol: "https", hostname: "*.arweave.net" },
     ],
   },
+
+  // @solana/wallet-adapter-react pulls optional mobile deps (react-native) that
+  // must never enter the Next.js webpack graph — they also hoist React 19.
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "react-native$": false,
+    };
+    return config;
+  },
 };
 
 export default nextConfig;

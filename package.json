@@ -9,6 +9,10 @@
   "engines": {
     "node": ">=18"
   },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json && npm run build:apps",
     "build:apps": "cd apps/web && npm run build",
