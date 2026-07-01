@@ -47,12 +47,39 @@ export async function POST(req: Request) {
   try {
     await handleEvent(event);
   } catch (err) {
-    // Log but return 200 — Stripe retries on non-2xx, which could cause loops
-    // if the error is non-transient (e.g. bad data).
-    console.error("[stripe/webhook] Handler error:", err);
+    // TOB-10: distinguish transient from permanent failures. Handlers upsert
+    // (idempotent), so it is safe to let Stripe retry a transient error by
+    // returning a non-2xx. Permanent errors (bad/unexpected data) must NOT be
+    // retried — ack with 200 and alert instead, or Stripe would loop until it
+    // gives up.
+    if (isTransientError(err)) {
+      console.error("[stripe/webhook] Transient handler error — asking Stripe to retry:", err);
+      return NextResponse.json({ error: "Temporary failure, please retry" }, { status: 503 });
+    }
+    // TODO(ops): wire this to an alert channel — a swallowed permanent error
+    // means Subscription state may have silently drifted.
+    console.error("[stripe/webhook] PERMANENT handler error — acking to stop retries:", err);
   }
 
   return NextResponse.json({ received: true });
+}
+
+/**
+ * Transient = worth retrying (DB unreachable, timeout, connection reset).
+ * Prisma initialization/connection errors and generic network errors qualify;
+ * a data/programming error does not. Conservative: only known-transient shapes
+ * return true, so we don't loop Stripe on real bugs.
+ */
+function isTransientError(err: unknown): boolean {
+  const name = (err as { name?: string })?.name ?? "";
+  const code = (err as { code?: string })?.code ?? "";
+  // Prisma: initialization + known connection/timeout codes (P1xxx).
+  if (name === "PrismaClientInitializationError") return true;
+  if (name === "PrismaClientRustPanicError") return true;
+  if (/^P1\d{3}$/.test(code)) return true;
+  // Node network errors.
+  if (["ECONNRESET", "ETIMEDOUT", "ECONNREFUSED", "EAI_AGAIN"].includes(code)) return true;
+  return false;
 }
 
 async function handleEvent(event: Stripe.Event) {

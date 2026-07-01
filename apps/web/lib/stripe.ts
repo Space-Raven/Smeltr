@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { assertValidWalletAddress } from "./solanaAddress";
 
 /**
  * Lazy Stripe singleton. Throws at call time (not module load) if the secret
@@ -31,6 +32,13 @@ export function getStripePriceId(): string {
  */
 export async function getOrCreateCustomer(walletAddress: string): Promise<Stripe.Customer> {
   const stripe = getStripe();
+
+  // TOB-08: the address is interpolated into a Stripe Search Query Language
+  // string below — treat it as code. A strict base58 check here guarantees no
+  // quote/operator can break out of the literal, independent of upstream
+  // constraints (today it's always a SIWS-verified pubkey, but this keeps the
+  // guarantee if a future caller passes less-constrained input).
+  assertValidWalletAddress(walletAddress);
 
   // Search for an existing customer with this wallet address in metadata.
   const existing = await stripe.customers.search({
