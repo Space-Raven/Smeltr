@@ -33,6 +33,19 @@ import { reserveQuota, refundQuota } from "../../../../lib/uploadQuota";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5MB hard cap
 
+// Only token-metadata content is platform-funded. Without this allowlist a
+// premium session could publish arbitrary permanent content (e.g. text/html
+// phishing pages) to Arweave at the platform's expense, under our funding
+// wallet's name.
+// The client always uploads image/webp (imageCompression.ts) or JSON; png/jpeg
+// are kept as headroom. SVG is deliberately excluded (can embed scripts).
+const ALLOWED_CONTENT_TYPES = new Set([
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "application/json",
+]);
+
 // Lazy-initialised uploader so cold starts don't hit Irys if keys aren't set.
 let _uploader: Awaited<ReturnType<typeof WebUploader>> | null = null;
 
@@ -106,6 +119,13 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { error: "Required fields: file (Blob), type (string)" },
       { status: 400 }
+    );
+  }
+
+  if (!ALLOWED_CONTENT_TYPES.has(contentType)) {
+    return NextResponse.json(
+      { error: "Unsupported content type — token metadata uploads accept images and JSON only." },
+      { status: 415 }
     );
   }
 

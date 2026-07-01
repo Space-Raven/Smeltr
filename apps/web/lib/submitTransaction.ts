@@ -1,5 +1,6 @@
 import { Connection, Keypair, Transaction, TransactionInstruction } from "@solana/web3.js";
 import type { WalletContextState } from "@solana/wallet-adapter-react";
+import { explorerTxUrl } from "./explorer";
 
 const MAX_TRANSACTION_SIZE = 1232; // Solana's hard packet-size limit, in bytes.
 
@@ -80,7 +81,7 @@ export async function submitTransaction({
     throw new Error(
       `The transaction was rejected by the network (${JSON.stringify(confirmation.value.err)}). ` +
         `No token was created and only the network fee was spent. ` +
-        `Details: https://explorer.solana.com/tx/${signature}`
+        `Details: ${explorerTxUrl(signature, connection.rpcEndpoint)}`
     );
   }
 

@@ -58,8 +58,8 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — Deploy Solana Token-2022 tokens without writing code`,
     description: SITE_DESCRIPTION,
     images: ["/og-image.svg"],
-    creator: "@smeltrapp",
-    site: "@smeltrapp",
+    creator: "@Smeltr_App",
+    site: "@Smeltr_App",
   },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
@@ -215,8 +215,8 @@ function SiteFooter() {
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Community</p>
             <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="https://twitter.com/smeltrapp" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Twitter / X ↗</a>
-              <a href="https://discord.gg/smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Discord ↗</a>
+              <a href="https://twitter.com/Smeltr_App" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Twitter / X ↗</a>
+              <a href="mailto:pjorg@smeltr.org" className="hover:text-amber-700 transition-colors no-underline">Contact ↗</a>
               <a href="https://github.com/Space-Raven/Smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">GitHub ↗</a>
             </div>
           </div>

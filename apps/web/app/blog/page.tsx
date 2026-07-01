@@ -30,7 +30,7 @@ const posts = [
     title: "Permanent Delegate: the most powerful (and misunderstood) Token-2022 extension",
     description:
       "Permanent Delegate lets a designated address transfer or burn tokens from any holder's account. Here's exactly what that means, when it's legitimate, and how to use it safely.",
-    date: "July 6, 2026",
+    date: "June 30, 2026",
     readTime: "7 min read",
     tag: "Deep Dive",
   },

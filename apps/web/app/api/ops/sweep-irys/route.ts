@@ -111,11 +111,6 @@ export async function GET(req: Request) {
     });
   }
 
-  // --- Guard: destination must still be Founder (belt-and-suspenders) -------
-  if (!destination.equals(new PublicKey(founder))) {
-    return NextResponse.json({ error: "Destination allowlist violation" }, { status: 500 });
-  }
-
   try {
     const tx = new Transaction().add(
       SystemProgram.transfer({

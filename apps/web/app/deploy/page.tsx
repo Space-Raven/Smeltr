@@ -2,7 +2,8 @@
 
 import { Suspense, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { explorerTxUrl } from "../../lib/explorer";
 import { ModuleSelection } from "@platform/tx-builder";
 import { Token2022NativeMetadataProvider, TokenMetadataInput } from "@platform/module-registry";
 import { ModuleConfigSection } from "../../components/module-config/ModuleConfigSection";
@@ -23,6 +24,7 @@ export default function DeployPage() {
 function DeployPageInner() {
   const searchParams = useSearchParams();
   const showDenylistDebug = searchParams.get("debug") === "denylist";
+  const { connection } = useConnection();
   const wallet = useWallet();
   const deployment = useTokenDeployment();
   const siws = useSiwsAuth();
@@ -70,7 +72,7 @@ function DeployPageInner() {
           Transaction:{" "}
           <a
             className="text-indigo-600 underline"
-            href={`https://explorer.solana.com/tx/${deployment.signature}`}
+            href={explorerTxUrl(deployment.signature ?? "", connection.rpcEndpoint)}
             target="_blank"
             rel="noreferrer"
           >
@@ -135,7 +137,7 @@ function DeployPageInner() {
             Metadata attached &mdash;{" "}
             <a
               className="underline"
-              href={`https://explorer.solana.com/tx/${deployment.metadataSignature}`}
+              href={explorerTxUrl(deployment.metadataSignature ?? "", connection.rpcEndpoint)}
               target="_blank"
               rel="noreferrer"
             >

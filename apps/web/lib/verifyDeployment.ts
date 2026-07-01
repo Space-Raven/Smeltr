@@ -49,14 +49,28 @@ export function checkMintCreation(
     return { ok: false, status: 400, reason: "Transaction does not reference the given mint." };
   }
 
-  // The transaction must invoke the Token-2022 program.
-  const usesToken2022 =
-    accountKeys.some((k) => k.pubkey.toBase58() === TOKEN_2022_PROGRAM_ID) ||
-    tx.transaction.message.instructions.some(
-      (ix) => "programId" in ix && ix.programId.toBase58() === TOKEN_2022_PROGRAM_ID
+  // The transaction must CREATE the mint, not merely reference it. Without
+  // this, any successful Token-2022 transaction the wallet fee-paid (e.g. a
+  // plain transfer of an existing token) could be submitted to claim that
+  // token in the dashboard. getParsedTransaction decodes SPL Token-2022
+  // instructions, so a genuine deployment contains an initializeMint
+  // instruction whose `info.mint` is this mint.
+  const createsMint = tx.transaction.message.instructions.some((ix) => {
+    if (!("programId" in ix) || ix.programId.toBase58() !== TOKEN_2022_PROGRAM_ID) return false;
+    if (!("parsed" in ix) || typeof ix.parsed !== "object" || ix.parsed === null) return false;
+    const parsed = ix.parsed as { type?: string; info?: { mint?: string } };
+    return (
+      typeof parsed.type === "string" &&
+      parsed.type.startsWith("initializeMint") &&
+      parsed.info?.mint === mintAddress
     );
-  if (!usesToken2022) {
-    return { ok: false, status: 400, reason: "Transaction is not a Token-2022 deployment." };
+  });
+  if (!createsMint) {
+    return {
+      ok: false,
+      status: 400,
+      reason: "Transaction does not initialize this mint — only the deployment transaction can register a token.",
+    };
   }
 
   return { ok: true };

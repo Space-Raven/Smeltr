@@ -10,6 +10,7 @@ import { useSubscription } from "../../hooks/useSubscription";
 import { useBetaDisclaimer } from "../../components/BetaDisclaimerModal";
 import { submitTransaction } from "../../lib/submitTransaction";
 import { API_ENDPOINTS, EXPLORER } from "../../lib/constants";
+import { explorerClusterParam } from "../../lib/explorer";
 
 interface DeploymentRecord {
   mintAddress: string;
@@ -185,7 +186,7 @@ export default function DashboardPage() {
           )}
           <a
             className="text-indigo-600 underline text-xs"
-            href={`${EXPLORER.BASE_URL}/address/${d.mintAddress}`}
+            href={`${EXPLORER.BASE_URL}/address/${d.mintAddress}${explorerClusterParam(connection.rpcEndpoint)}`}
             target="_blank"
             rel="noreferrer"
           >

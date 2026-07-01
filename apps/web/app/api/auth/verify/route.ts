@@ -37,7 +37,13 @@ export async function POST(req: Request) {
     // Pre-migration nonce with no stored input — force a fresh sign-in.
     return NextResponse.json({ error: "Stale sign-in request, please retry" }, { status: 401 });
   }
-  const issuedInput: SolanaSignInInput = JSON.parse(nonceRecord.issuedInput);
+  let issuedInput: SolanaSignInInput;
+  try {
+    issuedInput = JSON.parse(nonceRecord.issuedInput);
+  } catch {
+    // Corrupt stored input — treat like a stale nonce rather than a 500.
+    return NextResponse.json({ error: "Stale sign-in request, please retry" }, { status: 401 });
+  }
 
   // --- 3. Cryptographic verification against the canonical input -----------
   const isValid = verifySignIn(issuedInput, fromWireOutput(output));

@@ -10,7 +10,7 @@ export default function Post3() {
       <div className="mb-8"><a href="/blog" className="text-sm text-indigo-600 hover:text-indigo-700 no-underline">← Blog</a></div>
       <span className="badge bg-red-100 text-red-700 mb-4 inline-block">Deep Dive</span>
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">Permanent Delegate: the most powerful (and misunderstood) Token-2022 extension</h1>
-      <p className="text-gray-400 text-sm mb-10">July 6, 2026 · 7 min read</p>
+      <p className="text-gray-400 text-sm mb-10">June 30, 2026 · 7 min read</p>
       <div className="prose prose-gray max-w-none space-y-6 text-[15px] leading-relaxed text-gray-700">
         <div className="rounded-lg bg-red-50 border border-red-200 p-4">
           <p className="text-sm text-red-800 font-semibold">High-impact extension</p>

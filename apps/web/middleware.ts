@@ -10,8 +10,9 @@ import { isMutatingMethod, isCsrfExempt, originAllowed } from "./lib/csrf";
  *   coming-soon  — all traffic → /coming-soon (except /api/health)
  *   live         — no gating, normal routing (this is the open-beta mode)
  *
- * Uses SITE_MODE (server-only, not NEXT_PUBLIC_) so that flipping modes in
- * Vercel env vars takes effect on the next request without a full redeploy.
+ * SITE_MODE is a server-side env var read at module init. NOTE: on Vercel,
+ * changing any env var requires a redeploy to take effect — there is no
+ * "flip without redeploy"; treat mode changes as deploys.
  * NEXT_PUBLIC_MODE is kept for client-side reads (e.g. the "public beta"
  * banner), but the middleware gate always reads the server-side SITE_MODE.
  *

@@ -23,7 +23,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
               </span>
-              Token-2022 · Non-custodial · Mainnet
+              Token-2022 · Non-custodial · Two signatures
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6" style={{ color: "#FEF3C7" }}>
@@ -62,7 +62,7 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold mb-3" style={{ color: "#1A0C05" }}>Composable extension modules</h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Each module wraps a pre-audited Token-2022 extension. Mix and match —
+              Each module wraps an extension of the independently audited SPL Token-2022 program. Mix and match —
               compatibility is checked before you sign anything.
             </p>
           </div>
@@ -137,16 +137,12 @@ export default function HomePage() {
                 body: "Metadata and images go straight to Arweave. No separate funding transaction, no SOL required for storage.",
               },
               {
-                title: "Saved deployment history",
-                body: "Every token you deploy is tracked in your dashboard. Resume incomplete metadata attachments from any device.",
-              },
-              {
-                title: "Priority RPC",
-                body: "Transactions submit through a dedicated high-availability endpoint — fewer dropped transactions during network congestion.",
+                title: "Larger uploads",
+                body: "Free deployments cover compact metadata; Smeltr+ raises the storage limits for bigger images and richer token pages.",
               },
               {
                 title: "Early access to new modules",
-                body: "Transfer Hook, Interest-Bearing, Confidential Transfers — premium subscribers get new modules as soon as they pass audit.",
+                body: "Transfer Hook, Interest-Bearing, Confidential Transfers — premium subscribers get new modules first as they ship.",
               },
             ].map(({ title, body }) => (
               <div key={title} className="rounded-xl p-5 border" style={{ background: "rgba(245,158,11,0.06)", borderColor: "#92400E" }}>
