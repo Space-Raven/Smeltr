@@ -1,16 +1,28 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { Suspense, useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { ModuleSelection } from "@platform/tx-builder";
 import { Token2022NativeMetadataProvider, TokenMetadataInput } from "@platform/module-registry";
 import { ModuleConfigSection } from "../../components/module-config/ModuleConfigSection";
 import { MetadataForm } from "../../components/MetadataForm";
 import { DeploymentReviewPanel } from "../../components/DeploymentReviewPanel";
+import { DenylistDebugPanel } from "../../components/DenylistDebugPanel";
 import { useTokenDeployment } from "../../hooks/useTokenDeployment";
 import { useSiwsAuth } from "../../hooks/useSiwsAuth";
 
 export default function DeployPage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-sm text-gray-500">Loading…</div>}>
+      <DeployPageInner />
+    </Suspense>
+  );
+}
+
+function DeployPageInner() {
+  const searchParams = useSearchParams();
+  const showDenylistDebug = searchParams.get("debug") === "denylist";
   const wallet = useWallet();
   const deployment = useTokenDeployment();
   const siws = useSiwsAuth();
@@ -142,7 +154,8 @@ export default function DeployPage() {
   // --- Review: plan built, awaiting signature ---------------------------------
   if (deployment.status === "ready" && deployment.plan) {
     return (
-      <div className="max-w-xl mx-auto p-6">
+      <div className="max-w-xl mx-auto p-6 space-y-4">
+        {showDenylistDebug && <DenylistDebugPanel />}
         <DeploymentReviewPanel
           plan={deployment.plan}
           acknowledgedModules={deployment.acknowledgedModules}
@@ -162,6 +175,8 @@ export default function DeployPage() {
   return (
     <div className="max-w-xl mx-auto space-y-6 p-6">
       <h2 className="text-xl font-semibold">Deploy a Token</h2>
+
+      {showDenylistDebug && <DenylistDebugPanel />}
 
       <div>
         <label className="block text-sm font-medium">Decimals</label>

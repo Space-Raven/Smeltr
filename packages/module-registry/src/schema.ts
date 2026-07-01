@@ -15,7 +15,7 @@ import { ExtensionType } from "@solana/spl-token";
  * (NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT is folded in per Audit-1 TOB-11.)
  */
 export function parsePlatformAuthorityDenylist(
-  env: Record<string, string | undefined> = process.env
+  env: Record<string, string | undefined>
 ): ReadonlySet<string> {
   const keys: string[] = [];
 
@@ -32,8 +32,58 @@ export function parsePlatformAuthorityDenylist(
   return new Set(keys);
 }
 
+/**
+ * Snapshot of denylist env vars using **static** `process.env.NEXT_PUBLIC_*`
+ * property access. Next.js/webpack only inlines NEXT_PUBLIC values when read
+ * this way — dynamic access like `process.env[key]` or reading from a generic
+ * `env` object (the TOB-01 bug) leaves the browser bundle with an empty denylist
+ * even when Vercel has the var set at build time.
+ */
+function readPublicDenylistEnv(): Record<string, string | undefined> {
+  return {
+    NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST:
+      process.env.NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST,
+    NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT: process.env.NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT,
+  };
+}
+
+/** Current denylist — always re-reads from (build-time-inlined) public env. */
+export function getPlatformAuthorityDenylist(): ReadonlySet<string> {
+  return parsePlatformAuthorityDenylist(readPublicDenylistEnv());
+}
+
+/** Diagnostic snapshot for TOB-01 / denylist misconfiguration (pubkeys are public). */
+export interface DenylistDebugSnapshot {
+  nodeEnv: string;
+  /** Whether the raw NEXT_PUBLIC list env var is defined (may be build-time-inlined). */
+  rawListDefined: boolean;
+  rawListLength: number;
+  /** First 8 chars of raw value — enough to confirm inlining without logging full list. */
+  rawListPrefix: string | null;
+  feeRecipientDefined: boolean;
+  parsedKeyCount: number;
+  /** Parsed base58 pubkeys — safe to expose; used to verify comma-splitting. */
+  parsedKeys: string[];
+}
+
+export function getDenylistDebugSnapshot(): DenylistDebugSnapshot {
+  const raw = readPublicDenylistEnv();
+  const list = raw.NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST;
+  const denylist = getPlatformAuthorityDenylist();
+  return {
+    nodeEnv: process.env.NODE_ENV ?? "unknown",
+    rawListDefined: typeof list === "string" && list.length > 0,
+    rawListLength: list?.length ?? 0,
+    rawListPrefix: list && list.length > 0 ? list.slice(0, 8) : null,
+    feeRecipientDefined: !!raw.NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT,
+    parsedKeyCount: denylist.size,
+    parsedKeys: [...denylist],
+  };
+}
+
+/** @deprecated Use getPlatformAuthorityDenylist() — evaluated once at import. */
 export const PLATFORM_AUTHORITY_DENYLIST: ReadonlySet<string> =
-  parsePlatformAuthorityDenylist();
+  getPlatformAuthorityDenylist();
 
 /**
  * Fail-closed guard: throws when the denylist is unconfigured in a production
@@ -46,11 +96,14 @@ export function assertPlatformDenylistConfigured(
   opts: { isProduction?: boolean; denylist?: ReadonlySet<string> } = {}
 ): void {
   const isProduction = opts.isProduction ?? process.env.NODE_ENV === "production";
-  const denylist = opts.denylist ?? PLATFORM_AUTHORITY_DENYLIST;
+  const denylist = opts.denylist ?? getPlatformAuthorityDenylist();
   if (isProduction && denylist.size === 0) {
+    const dbg = getDenylistDebugSnapshot();
     throw new Error(
       "[SECURITY] Platform authority denylist is not configured. Refusing to " +
-        "build a deployment — set NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST."
+        "build a deployment — set NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST and " +
+        "redeploy (NEXT_PUBLIC_* vars are inlined at build time). " +
+        `Debug: ${JSON.stringify(dbg)}`
     );
   }
 }
@@ -60,7 +113,7 @@ export function assertNoPlatformAuthority(
   fieldName: string,
   moduleId: string,
   // Defaults to the module-level denylist; overridable for unit testing.
-  denylist: ReadonlySet<string> = PLATFORM_AUTHORITY_DENYLIST
+  denylist: ReadonlySet<string> = getPlatformAuthorityDenylist()
 ): void {
   if (denylist.has(authority.toBase58())) {
     throw new Error(

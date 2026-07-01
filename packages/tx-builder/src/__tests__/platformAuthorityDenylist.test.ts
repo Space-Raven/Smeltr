@@ -1,5 +1,6 @@
 import { Keypair } from "@solana/web3.js";
 import {
+  getDenylistDebugSnapshot,
   parsePlatformAuthorityDenylist,
   assertNoPlatformAuthority,
   assertPlatformDenylistConfigured,
@@ -44,6 +45,25 @@ describe("parsePlatformAuthorityDenylist", () => {
       PLATFORM_SERVICE_WALLET_PUBKEY: Keypair.generate().publicKey.toBase58(),
     });
     expect(set.size).toBe(0);
+  });
+
+  it("readPublicDenylistEnv path: static NEXT_PUBLIC_ keys are the only source", () => {
+    const a = Keypair.generate().publicKey.toBase58();
+    const set = parsePlatformAuthorityDenylist({
+      NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST: a,
+    });
+    expect(set.has(a)).toBe(true);
+  });
+});
+
+describe("getDenylistDebugSnapshot", () => {
+  it("reports parsed keys and raw length from explicit env", () => {
+    const a = Keypair.generate().publicKey.toBase58();
+    const snap = parsePlatformAuthorityDenylist({
+      NEXT_PUBLIC_PLATFORM_AUTHORITY_DENYLIST: a,
+    });
+    expect(snap.size).toBe(1);
+    expect([...snap][0]).toBe(a);
   });
 });
 

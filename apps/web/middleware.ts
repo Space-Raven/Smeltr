@@ -31,6 +31,8 @@ const PUBLIC_PATHS = [
   // Vercel Cron ops endpoints — auth'd by CRON_SECRET, must bypass the mode gate
   // so a scheduled GET isn't redirected before reaching the handler.
   "/api/ops",
+  // TOB-01 ops diagnostics (exposes only public pubkey prefixes/counts).
+  "/api/debug/denylist",
   "/favicon.ico",
   "/robots.txt",
   "/sitemap.xml",
