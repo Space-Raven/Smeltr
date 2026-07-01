@@ -15,6 +15,8 @@ interface VerifyRequestBody {
 export async function POST(req: Request) {
   const { input, output }: VerifyRequestBody = await req.json();
 
+  // The client's `input` is used ONLY to look up the nonce. Everything the
+  // signature is checked against comes from the server's stored copy below.
   if (!input?.nonce) {
     return NextResponse.json({ error: "Missing nonce" }, { status: 400 });
   }
@@ -25,13 +27,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid, expired, or already-used nonce" }, { status: 401 });
   }
 
-  // --- 2. Echoed input.domain must match what THIS server issued -----------
-  if (input.domain !== nonceRecord.domain) {
-    return NextResponse.json({ error: "Domain mismatch" }, { status: 401 });
+  // --- 2. Recover the canonical input THIS server issued -------------------
+  // Verifying against the stored input (not the client's echoed copy) makes
+  // every field — uri, issuedAt, expirationTime, domain, statement — tamper-
+  // evident: the wallet signed exactly this, so any client mutation breaks the
+  // signature. Freshness is already bounded by the 5-minute nonce TTL above,
+  // which equals input.expirationTime (TOB-07).
+  if (!nonceRecord.issuedInput) {
+    // Pre-migration nonce with no stored input — force a fresh sign-in.
+    return NextResponse.json({ error: "Stale sign-in request, please retry" }, { status: 401 });
   }
+  const issuedInput: SolanaSignInInput = JSON.parse(nonceRecord.issuedInput);
 
-  // --- 3. Cryptographic verification ----------------------------------------
-  const isValid = verifySignIn(input, fromWireOutput(output));
+  // --- 3. Cryptographic verification against the canonical input -----------
+  const isValid = verifySignIn(issuedInput, fromWireOutput(output));
   if (!isValid) {
     return NextResponse.json({ error: "Signature verification failed" }, { status: 401 });
   }

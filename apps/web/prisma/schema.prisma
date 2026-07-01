@@ -12,6 +12,12 @@ datasource db {
 model AuthNonce {
   nonce     String    @id
   domain    String
+  // The full SolanaSignInInput this server issued, as JSON. On verify the
+  // signature is checked against THIS canonical input, not the client's echoed
+  // copy, so no non-domain field (uri/issuedAt/expirationTime/...) can be
+  // tampered with (Audit-1 TOB-07). Nullable for backward compatibility with
+  // any pre-migration rows; verify rejects a nonce that lacks it.
+  issuedInput String?
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime  @default(now())

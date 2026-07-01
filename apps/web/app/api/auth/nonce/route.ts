@@ -35,8 +35,6 @@ export async function POST() {
   const nonce = randomBytes(16).toString("hex");
   const expiresAt = new Date(Date.now() + NONCE_TTL_MS);
 
-  await prisma.authNonce.create({ data: { nonce, domain, expiresAt } });
-
   // Localhost is served over plain HTTP; production uses HTTPS.
   // Phantom validates that the URI scheme matches the actual page, so a
   // mismatch (https://localhost vs http://localhost) triggers an "unsafe" warning.
@@ -52,6 +50,13 @@ export async function POST() {
     issuedAt: new Date().toISOString(),
     expirationTime: expiresAt.toISOString(),
   };
+
+  // Persist the full issued input (TOB-07). /api/auth/verify checks the
+  // signature against this canonical copy, so the client cannot alter any
+  // field of `input` after we hand it out.
+  await prisma.authNonce.create({
+    data: { nonce, domain, expiresAt, issuedInput: JSON.stringify(input) },
+  });
 
   return NextResponse.json({ input });
 }
