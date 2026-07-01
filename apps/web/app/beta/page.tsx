@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useRouter, useSearchParams } from "next/navigation";
 
 /**
  * /beta
  *
  * Shown when NEXT_PUBLIC_MODE=beta and the visitor lacks the
- * smeltr_beta_approved cookie. Accepts either:
- *   - A wallet address (automatically populated if wallet is connected)
- *   - An invite code
+ * smeltr_beta_approved cookie. Access is granted via an invite code only.
  *
- * On approval: sets the httpOnly cookie via /api/beta/verify and
- * redirects to the originally requested page (or /deploy).
+ * (Audit-1 TOB-09: the wallet-address path was removed — a public wallet
+ * address is not proof of ownership, and SIWS can't run ahead of this gate.
+ * Beta access is high-entropy invite codes issued in BETA_ALLOWLIST.)
+ *
+ * On approval: sets the httpOnly cookie via /api/beta/verify and redirects to
+ * the originally requested page (or /deploy).
  */
 export default function BetaPage() {
   return (
@@ -28,7 +28,6 @@ function BetaPageInner() {
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next") ?? "/deploy";
-  const { publicKey } = useWallet();
 
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -39,25 +38,19 @@ function BetaPageInner() {
     setError(null);
     setChecking(true);
 
-    const payload = publicKey
-      ? { walletAddress: publicKey.toBase58() }
-      : { code: code.trim() };
-
     try {
       const res = await fetch("/api/beta/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ code: code.trim() }),
       });
 
       if (res.ok) {
         router.push(next);
+      } else if (res.status === 429) {
+        setError("Too many attempts. Please wait a minute and try again.");
       } else {
-        setError(
-          publicKey
-            ? "This wallet is not on the beta list. Try an invite code, or request access."
-            : "Invalid invite code. Check your email or request access."
-        );
+        setError("Invalid invite code. Check your email or request access.");
       }
     } catch {
       setError("Something went wrong. Please try again.");
@@ -96,35 +89,6 @@ function BetaPageInner() {
       </p>
 
       <div className="w-full max-w-sm bg-[#2A1205] border border-amber-900/40 rounded-xl p-6 space-y-5">
-        {/* Option A — wallet */}
-        <div className="space-y-2">
-          <p className="text-xs text-amber-200/60 uppercase tracking-widest">
-            Connect your wallet
-          </p>
-          <WalletMultiButton
-            style={{
-              width: "100%",
-              background: "#78350F",
-              borderRadius: "8px",
-              fontSize: "14px",
-              fontWeight: 600,
-              height: "42px",
-            }}
-          />
-          {publicKey && (
-            <p className="text-xs text-amber-400/70 font-mono truncate">
-              {publicKey.toBase58()}
-            </p>
-          )}
-        </div>
-
-        <div className="flex items-center gap-3">
-          <hr className="flex-1 border-amber-900/30" />
-          <span className="text-xs text-amber-900">or</span>
-          <hr className="flex-1 border-amber-900/30" />
-        </div>
-
-        {/* Option B — invite code */}
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-1.5">
             <label className="text-xs text-amber-200/60 uppercase tracking-widest">
@@ -135,21 +99,18 @@ function BetaPageInner() {
               value={code}
               onChange={(e) => setCode(e.target.value)}
               placeholder="Enter your invite code"
-              disabled={!!publicKey}
+              autoFocus
               className="w-full rounded-lg border border-amber-900/50 bg-[#1A0C05] px-3.5 py-2.5
                          text-sm text-amber-100 placeholder:text-amber-900/60
-                         focus:outline-none focus:ring-2 focus:ring-amber-600/40
-                         disabled:opacity-40"
+                         focus:outline-none focus:ring-2 focus:ring-amber-600/40"
             />
           </div>
 
-          {error && (
-            <p className="text-xs text-red-400">{error}</p>
-          )}
+          {error && <p className="text-xs text-red-400">{error}</p>}
 
           <button
             type="submit"
-            disabled={checking || (!publicKey && !code.trim())}
+            disabled={checking || !code.trim()}
             className="w-full rounded-lg bg-amber-600 hover:bg-amber-500 active:bg-amber-700
                        px-4 py-2.5 text-sm font-semibold text-white transition-colors
                        disabled:opacity-40 disabled:pointer-events-none"
