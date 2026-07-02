@@ -10,6 +10,7 @@ import { ModuleConfigSection } from "../../components/module-config/ModuleConfig
 import { MetadataForm } from "../../components/MetadataForm";
 import { DeploymentReviewPanel } from "../../components/DeploymentReviewPanel";
 import { DenylistDebugPanel } from "../../components/DenylistDebugPanel";
+import { GettingStarted } from "../../components/GettingStarted";
 import { useTokenDeployment } from "../../hooks/useTokenDeployment";
 import { useSiwsAuth } from "../../hooks/useSiwsAuth";
 
@@ -203,6 +204,8 @@ function DeployPageInner() {
   return (
     <div className="max-w-xl mx-auto space-y-6 p-6">
       <h2 className="text-xl font-semibold">Deploy a Token</h2>
+
+      <GettingStarted />
 
       {showDenylistDebug && <DenylistDebugPanel />}
 
