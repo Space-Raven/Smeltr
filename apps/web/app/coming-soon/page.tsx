@@ -70,9 +70,27 @@ export default function ComingSoonPage() {
       </p>
 
       {/* Message */}
-      <p className="text-center text-amber-200/70 text-base max-w-sm leading-relaxed mb-10">
+      <p className="text-center text-amber-200/70 text-base max-w-sm leading-relaxed mb-8">
         A new way to deploy Solana tokens — coming soon.
       </p>
+
+      {/* Public content — the guides and story are live before the forge opens */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-10">
+        <a
+          href="/blog"
+          className="rounded-lg border px-6 py-2.5 text-sm font-semibold no-underline transition-colors"
+          style={{ borderColor: "#92400E", color: "#FCD34D" }}
+        >
+          Read the Token-2022 guides →
+        </a>
+        <a
+          href="/about"
+          className="rounded-lg border px-6 py-2.5 text-sm font-semibold no-underline transition-colors"
+          style={{ borderColor: "#92400E", color: "#FCD34D" }}
+        >
+          About Smeltr
+        </a>
+      </div>
 
       {/* Chartreuse accent */}
       <div className="flex gap-2">

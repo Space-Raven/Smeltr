@@ -12,6 +12,8 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "arweave.net" },
       { protocol: "https", hostname: "*.arweave.net" },
+      { protocol: "https", hostname: "gateway.irys.xyz" },
+      { protocol: "https", hostname: "devnet.irys.xyz" },
     ],
   },
 
