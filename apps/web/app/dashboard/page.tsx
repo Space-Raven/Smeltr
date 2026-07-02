@@ -164,16 +164,39 @@ export default function DashboardPage() {
       {/* Premium feature callout for free users */}
       {subscriptionStatus === "free" && (
         <div className="rounded-md border border-amber-100 bg-amber-50 p-3 text-sm text-amber-800 space-y-1">
-          <p className="font-medium">Smeltr Premium</p>
+          <p className="font-medium">Smeltr+</p>
           <p>
-            Platform-funded metadata uploads (no wallet transaction), saved
-            deployment history, and priority RPC for faster transactions.
+            Platform-funded metadata uploads (no storage transaction from your
+            wallet), larger upload limits, and early access to new modules.
           </p>
         </div>
       )}
 
       {loading && <p className="text-sm text-gray-500">Loading…</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
+
+      {/* Empty state — a first-time user's very first impression of the dashboard */}
+      {!loading && !error && siws.status === "authenticated" && deployments.length === 0 && (
+        <div
+          className="rounded-xl border border-amber-200 p-8 text-center"
+          style={{ background: "#FDF8EF" }}
+        >
+          <p className="text-2xl mb-2" aria-hidden="true">⚒️</p>
+          <h3 className="font-semibold mb-1" style={{ color: "#1A0C05" }}>
+            Nothing forged yet
+          </h3>
+          <p className="text-sm text-amber-900/70 max-w-sm mx-auto mb-4">
+            Tokens you deploy will appear here, with their metadata status and
+            explorer links — resumable from any device.
+          </p>
+          <a
+            href="/deploy"
+            className="inline-block rounded-lg bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-500 no-underline"
+          >
+            Deploy your first token →
+          </a>
+        </div>
+      )}
 
       {deployments.map((d) => (
         <div key={d.mintAddress} className="rounded-md border border-gray-200 p-3 text-sm">

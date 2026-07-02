@@ -10,6 +10,8 @@ import { ModuleConfigSection } from "../../components/module-config/ModuleConfig
 import { MetadataForm } from "../../components/MetadataForm";
 import { DeploymentReviewPanel } from "../../components/DeploymentReviewPanel";
 import { DenylistDebugPanel } from "../../components/DenylistDebugPanel";
+import { CopyButton } from "../../components/CopyButton";
+import { TxFinalityBadge } from "../../components/TxFinalityBadge";
 import { GettingStarted } from "../../components/GettingStarted";
 import { useTokenDeployment } from "../../hooks/useTokenDeployment";
 import { useSiwsAuth } from "../../hooks/useSiwsAuth";
@@ -65,19 +67,24 @@ function DeployPageInner() {
   if (deployment.status === "success") {
     return (
       <div className="max-w-xl mx-auto space-y-4 p-6">
-        <h2 className="text-xl font-semibold">Token created</h2>
-        <p className="text-sm text-gray-600">
-          Mint address: <span className="font-mono">{deployment.mintAddress}</span>
+        <div className="flex items-center gap-3">
+          <h2 className="text-xl font-semibold">Token created</h2>
+          {deployment.signature && <TxFinalityBadge signature={deployment.signature} />}
+        </div>
+        <p className="text-sm text-gray-600 flex items-center gap-2 flex-wrap">
+          Mint address:{" "}
+          <span className="font-mono break-all">{deployment.mintAddress}</span>
+          {deployment.mintAddress && <CopyButton value={deployment.mintAddress} />}
         </p>
         <p className="text-sm text-gray-600">
           Transaction:{" "}
           <a
-            className="text-amber-700 underline"
+            className="text-amber-700 underline break-all"
             href={explorerTxUrl(deployment.signature ?? "", connection.rpcEndpoint)}
             target="_blank"
             rel="noreferrer"
           >
-            {deployment.signature}
+            View on Solana Explorer ↗
           </a>
         </p>
 
