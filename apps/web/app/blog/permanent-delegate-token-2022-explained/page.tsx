@@ -1,13 +1,25 @@
 import type { Metadata } from "next";
+import { articleJsonLd } from "../../../lib/articleJsonLd";
 export const metadata: Metadata = {
   title: "Permanent Delegate: the most powerful (and misunderstood) Token-2022 extension",
   description: "Permanent Delegate lets a single address transfer or burn tokens from any holder's account. Here's exactly what that means, when it's legitimate, and how to use it safely.",
   openGraph: { title: "Permanent Delegate: the most powerful Token-2022 extension", description: "What Permanent Delegate is, when it's legitimate, and the risks of misusing it.", images: [{ url: "/og-image.svg", width: 1200, height: 630 }] },
 };
+const jsonLd = articleJsonLd({
+  slug: "permanent-delegate-token-2022-explained",
+  headline: "Permanent Delegate: the most powerful (and misunderstood) Token-2022 extension",
+  description: "What the PermanentDelegate authority can do, when it is legitimate, and how to use it safely.",
+  datePublished: "2026-06-30",
+});
+
 export default function Post3() {
   return (
     <article className="mx-auto max-w-3xl px-4 sm:px-6 py-16">
-      <div className="mb-8"><a href="/blog" className="text-sm text-indigo-600 hover:text-indigo-700 no-underline">← Blog</a></div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="mb-8"><a href="/blog" className="text-sm text-amber-700 hover:text-amber-800 no-underline">← Blog</a></div>
       <span className="badge bg-red-100 text-red-700 mb-4 inline-block">Deep Dive</span>
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">Permanent Delegate: the most powerful (and misunderstood) Token-2022 extension</h1>
       <p className="text-gray-400 text-sm mb-10">June 30, 2026 · 7 min read</p>
@@ -45,14 +57,14 @@ export default function Post3() {
         <h2 className="text-xl font-bold text-gray-900 mt-8">Deploy with Smeltr — the acknowledgement gate</h2>
         <p>Smeltr requires a mandatory acknowledgement checkbox before any deployment including Permanent Delegate can proceed. The confirmation is re-checked in the transaction builder as a defence-in-depth measure — the UI cannot bypass it.</p>
         <ol className="list-decimal list-inside space-y-3 pl-2">
-          <li>Go to <a href="/deploy" className="text-indigo-600">smeltr.app/deploy</a>.</li>
+          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.app/deploy</a>.</li>
           <li>Toggle on <strong>Permanent Delegate</strong> and enter the delegate address (recommend a multisig, not your hot wallet).</li>
           <li>In the Review panel, check the acknowledgement confirming you understand the implications.</li>
           <li>Sign and deploy.</li>
         </ol>
-        <div className="rounded-lg bg-indigo-50 border border-indigo-200 p-5 mt-8">
-          <p className="font-semibold text-indigo-900 mb-1">Deploy with Permanent Delegate</p>
-          <p className="text-sm text-indigo-700 mb-3">Full acknowledgement flow. Non-custodial. Your delegate address, not ours.</p>
+        <div className="rounded-lg bg-amber-50 border border-amber-200 p-5 mt-8">
+          <p className="font-semibold text-amber-900 mb-1">Deploy with Permanent Delegate</p>
+          <p className="text-sm text-amber-700 mb-3">Full acknowledgement flow. Non-custodial. Your delegate address, not ours.</p>
           <a href="/deploy" className="btn-primary inline-flex text-sm">Deploy now →</a>
         </div>
       </div>

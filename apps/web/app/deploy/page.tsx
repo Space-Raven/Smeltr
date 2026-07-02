@@ -71,7 +71,7 @@ function DeployPageInner() {
         <p className="text-sm text-gray-600">
           Transaction:{" "}
           <a
-            className="text-indigo-600 underline"
+            className="text-amber-700 underline"
             href={explorerTxUrl(deployment.signature ?? "", connection.rpcEndpoint)}
             target="_blank"
             rel="noreferrer"
@@ -125,7 +125,7 @@ function DeployPageInner() {
             <button
               onClick={deployment.attachMetadata}
               disabled={deployment.metadataStatus === "submitting"}
-              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+              className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
             >
               {deployment.metadataStatus === "submitting" ? "Adding metadata…" : "Add Metadata"}
             </button>
@@ -170,7 +170,7 @@ function DeployPageInner() {
           status={deployment.status}
         />
         {deployment.status === "submitting" && (
-          <div className="rounded-md border border-indigo-200 bg-indigo-50 p-4 text-sm text-indigo-800">
+          <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
             <p className="font-medium">Creating your token…</p>
             <p className="mt-1">
               Approve the transaction in your wallet, then we&apos;ll wait for the
@@ -241,7 +241,7 @@ function DeployPageInner() {
       <button
         onClick={handlePrepare}
         disabled={!canReview || deployment.status === "planning"}
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
       >
         {deployment.status === "planning" ? "Building plan…" : "Review Deployment"}
       </button>

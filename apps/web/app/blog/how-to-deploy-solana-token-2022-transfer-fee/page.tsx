@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { articleJsonLd } from "../../../lib/articleJsonLd";
 
 export const metadata: Metadata = {
   title: "How to deploy a Solana Token-2022 token with transfer fees",
@@ -11,13 +12,24 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = articleJsonLd({
+  slug: "how-to-deploy-solana-token-2022-transfer-fee",
+  headline: "How to deploy a Solana Token-2022 token with transfer fees",
+  description: "Complete guide to the TransferFeeConfig extension: fee mechanics, parameters, withheld amounts, and no-code deployment.",
+  datePublished: "2026-06-22",
+});
+
 export default function Post1() {
   return (
     <article className="mx-auto max-w-3xl px-4 sm:px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="mb-8">
-        <a href="/blog" className="text-sm text-indigo-600 hover:text-indigo-700 no-underline">← Blog</a>
+        <a href="/blog" className="text-sm text-amber-700 hover:text-amber-800 no-underline">← Blog</a>
       </div>
-      <span className="badge-indigo mb-4 inline-block">Tutorial</span>
+      <span className="badge-amber mb-4 inline-block">Tutorial</span>
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">
         How to deploy a Solana Token-2022 token with transfer fees
       </h1>
@@ -59,10 +71,10 @@ export default function Post1() {
         <h2 className="text-xl font-bold text-gray-900 mt-8">The parameters</h2>
         <div className="rounded-lg border border-gray-200 overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-indigo-50">
+            <thead className="bg-amber-50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold text-indigo-900">Parameter</th>
-                <th className="px-4 py-2 text-left font-semibold text-indigo-900">What it does</th>
+                <th className="px-4 py-2 text-left font-semibold text-amber-900">Parameter</th>
+                <th className="px-4 py-2 text-left font-semibold text-amber-900">What it does</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -88,7 +100,7 @@ export default function Post1() {
           Smeltr handles the TransferFeeConfig extension as one of its core modules. You don't need to write any transaction code — the platform constructs the correctly ordered instruction set and your wallet signs it.
         </p>
         <ol className="list-decimal list-inside space-y-3 pl-2">
-          <li>Go to <a href="/deploy" className="text-indigo-600">smeltr.app/deploy</a> and connect your wallet.</li>
+          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.app/deploy</a> and connect your wallet.</li>
           <li>In the Module Selection section, toggle on <strong>Transfer Fee</strong>.</li>
           <li>Enter your basis points (e.g., <code className="address inline-block">50</code> for 0.5%), your maximum fee, and the two authority addresses (default: your connected wallet).</li>
           <li>Optionally fill in the Metadata section with a name, symbol, and image.</li>
@@ -97,9 +109,9 @@ export default function Post1() {
         </ol>
         <p>Your token is live on Solana. The transfer fee is enforced by the runtime — no ongoing action required until you want to harvest.</p>
 
-        <div className="rounded-lg bg-indigo-50 border border-indigo-200 p-5 mt-8">
-          <p className="font-semibold text-indigo-900 mb-1">Ready to deploy?</p>
-          <p className="text-sm text-indigo-700 mb-3">No code. No custody. Two wallet signatures.</p>
+        <div className="rounded-lg bg-amber-50 border border-amber-200 p-5 mt-8">
+          <p className="font-semibold text-amber-900 mb-1">Ready to deploy?</p>
+          <p className="text-sm text-amber-700 mb-3">No code. No custody. Two wallet signatures.</p>
           <a href="/deploy" className="btn-primary inline-flex text-sm">Deploy a transfer-fee token →</a>
         </div>
       </div>

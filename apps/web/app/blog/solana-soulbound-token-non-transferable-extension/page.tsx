@@ -1,14 +1,26 @@
 import type { Metadata } from "next";
+import { articleJsonLd } from "../../../lib/articleJsonLd";
 export const metadata: Metadata = {
   title: "Soul-bound tokens on Solana: the Non-Transferable extension explained",
   description: "What soul-bound tokens are, why they matter for credentials and loyalty, and how to deploy a Non-Transferable SPL token using Token-2022 without code.",
   openGraph: { title: "Soul-bound tokens on Solana: the Non-Transferable extension", description: "Deploy non-transferable (soul-bound) tokens on Solana using Token-2022. No code required.", images: [{ url: "/og-image.svg", width: 1200, height: 630 }] },
 };
+const jsonLd = articleJsonLd({
+  slug: "solana-soulbound-token-non-transferable-extension",
+  headline: "Soul-bound tokens on Solana: the Non-Transferable extension explained",
+  description: "What soul-bound tokens are, why they matter for credentials and loyalty, and how to deploy one with Token-2022.",
+  datePublished: "2026-06-29",
+});
+
 export default function Post2() {
   return (
     <article className="mx-auto max-w-3xl px-4 sm:px-6 py-16">
-      <div className="mb-8"><a href="/blog" className="text-sm text-indigo-600 hover:text-indigo-700 no-underline">← Blog</a></div>
-      <span className="badge-indigo mb-4 inline-block">Deep Dive</span>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="mb-8"><a href="/blog" className="text-sm text-amber-700 hover:text-amber-800 no-underline">← Blog</a></div>
+      <span className="badge-amber mb-4 inline-block">Deep Dive</span>
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">Soul-bound tokens on Solana: the Non-Transferable extension explained</h1>
       <p className="text-gray-400 text-sm mb-10">June 29, 2026 · 6 min read</p>
       <div className="prose prose-gray max-w-none space-y-6 text-[15px] leading-relaxed text-gray-700">
@@ -34,14 +46,14 @@ export default function Post2() {
         <p>Operationally, this means your distribution system needs mint authority access. Design your authority structure accordingly — consider a programmatic multisig or a DAO-controlled mint authority for large-scale credential issuance.</p>
         <h2 className="text-xl font-bold text-gray-900 mt-8">Deploy a non-transferable token with Smeltr</h2>
         <ol className="list-decimal list-inside space-y-3 pl-2">
-          <li>Go to <a href="/deploy" className="text-indigo-600">smeltr.app/deploy</a> and connect your wallet.</li>
+          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.app/deploy</a> and connect your wallet.</li>
           <li>Toggle on <strong>Non-Transferable</strong> in the module selection. No parameters needed — it's a flag.</li>
           <li>Add metadata (name, symbol, image) to make it recognisable in wallets.</li>
           <li>Review and sign. The mint is live in two transactions.</li>
         </ol>
-        <div className="rounded-lg bg-indigo-50 border border-indigo-200 p-5 mt-8">
-          <p className="font-semibold text-indigo-900 mb-1">Deploy a soul-bound token</p>
-          <p className="text-sm text-indigo-700 mb-3">Credentials, loyalty tiers, achievements — all in two wallet clicks.</p>
+        <div className="rounded-lg bg-amber-50 border border-amber-200 p-5 mt-8">
+          <p className="font-semibold text-amber-900 mb-1">Deploy a soul-bound token</p>
+          <p className="text-sm text-amber-700 mb-3">Credentials, loyalty tiers, achievements — all in two wallet clicks.</p>
           <a href="/deploy" className="btn-primary inline-flex text-sm">Deploy now →</a>
         </div>
       </div>

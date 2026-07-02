@@ -8,6 +8,15 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    slug: "token-2022-module-configuration-reference",
+    title: "Token-2022 module configuration: the complete reference",
+    description:
+      "Every extension parameter, valid range, authority field, compatibility rule, and security implication — Transfer Fee, Non-Transferable, Permanent Delegate, and on-chain metadata in one page.",
+    date: "July 1, 2026",
+    readTime: "12 min read",
+    tag: "Reference",
+  },
+  {
     slug: "how-to-deploy-solana-token-2022-transfer-fee",
     title: "How to deploy a Solana Token-2022 token with transfer fees",
     description:
@@ -46,13 +55,13 @@ export default function BlogIndex() {
           <a
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group block rounded-xl border border-gray-200 bg-white p-6 hover:border-indigo-300 hover:shadow-md transition-all no-underline"
+            className="group block rounded-xl border border-gray-200 bg-white p-6 hover:border-amber-300 hover:shadow-md transition-all no-underline"
           >
             <div className="flex items-center gap-3 mb-3">
-              <span className="badge-indigo">{post.tag}</span>
+              <span className="badge-amber">{post.tag}</span>
               <span className="text-xs text-gray-400">{post.date} · {post.readTime}</span>
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 group-hover:text-indigo-700 transition-colors mb-2">
+            <h2 className="text-lg font-semibold text-gray-900 group-hover:text-amber-700 transition-colors mb-2">
               {post.title}
             </h2>
             <p className="text-sm text-gray-500 leading-relaxed">{post.description}</p>

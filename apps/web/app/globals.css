@@ -7,16 +7,17 @@
 /* ------------------------------------------------------------------ */
 :root {
   /* Brand */
-  --color-brand-50:  #EEF2FF;
-  --color-brand-100: #E0E7FF;
-  --color-brand-200: #C7D2FE;
-  --color-brand-300: #A5B4FC;
-  --color-brand-400: #818CF8;
-  --color-brand-500: #6366F1;
-  --color-brand-600: #4F46E5;
-  --color-brand-700: #4338CA;
-  --color-brand-900: #312E81;
-  --color-brand-950: #1E1B4B;
+  /* Forge amber — brand palette (gold/coffee/orange) */
+  --color-brand-50:  #FFFBEB;
+  --color-brand-100: #FEF3C7;
+  --color-brand-200: #FDE68A;
+  --color-brand-300: #FCD34D;
+  --color-brand-400: #FBBF24;
+  --color-brand-500: #F59E0B;
+  --color-brand-600: #D97706;
+  --color-brand-700: #B45309;
+  --color-brand-900: #78350F;
+  --color-brand-950: #451A03;
 
   /* Surface */
   --surface-0: #FFFFFF;
@@ -235,11 +236,11 @@
   font-weight: 600 !important;
   height: 40px !important;
   padding: 0 16px !important;
-  background-color: #4F46E5 !important;
+  background-color: #D97706 !important; /* amber-600 — forge palette */
 }
 
 .wallet-adapter-button:hover {
-  background-color: #4338CA !important;
+  background-color: #B45309 !important; /* amber-700 */
 }
 
 .wallet-adapter-modal-wrapper {

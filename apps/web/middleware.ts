@@ -32,6 +32,11 @@ const PUBLIC_PATHS = [
   "/terms",
   "/privacy",
   "/refunds",
+  // Content pages stay live in every mode — the blog and about pages are the
+  // site's reference/SEO surface and must be crawlable pre-launch.
+  "/blog",
+  "/about",
+  "/llms.txt",
   "/api/health",
   // Vercel Cron ops endpoints — auth'd by CRON_SECRET, must bypass the mode gate
   // so a scheduled GET isn't redirected before reaching the handler.

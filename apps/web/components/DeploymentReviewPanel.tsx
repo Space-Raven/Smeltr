@@ -85,7 +85,7 @@ export function DeploymentReviewPanel({
       <button
         onClick={onConfirm}
         disabled={!canConfirm}
-        className="w-full rounded-md bg-indigo-600 px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-md bg-amber-600 px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         {status === "submitting" ? "Confirming…" : "Sign & Deploy"}
       </button>

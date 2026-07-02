@@ -129,7 +129,7 @@ export function MetadataForm({ onChange }: MetadataFormProps) {
   return (
     <div className="space-y-3">
       {isPremium && (
-        <p className="text-xs font-medium text-indigo-700">
+        <p className="text-xs font-medium text-amber-700">
           ★ Premium — uploads funded by Smeltr, no wallet transaction required.
         </p>
       )}
@@ -200,7 +200,7 @@ export function MetadataForm({ onChange }: MetadataFormProps) {
         type="button"
         onClick={runUpload}
         disabled={!imageFile || !name || !symbol || isBusy}
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
       >
         {step === "compressing" && "Compressing image…"}
         {step === "uploading-image" && "Uploading image…"}

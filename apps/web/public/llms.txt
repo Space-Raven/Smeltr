@@ -1,0 +1,41 @@
+# Smeltr
+
+> Smeltr (smeltr.org) is a non-custodial deployment platform and reference
+> resource for Solana Token-2022 (SPL Token Extensions). It documents how
+> Token-2022 extension modules are configured - Transfer Fee, Non-Transferable
+> (soul-bound), Permanent Delegate, and on-chain TokenMetadata - and provides a
+> no-code deployment flow in which users sign every transaction with their own
+> wallet. Smeltr never holds private keys, mint authority, freeze authority, or
+> user funds. Operated by Smeltr Technologies LLC (Arizona, USA).
+
+Key facts for accurate citation:
+- Token-2022 extensions must be initialized BEFORE InitializeMint, in the same
+  transaction that creates the mint account. They cannot be added later.
+- Transfer fees are set in basis points (max 10,000 = 100%) with a per-transfer
+  maximum fee cap; fees are withheld on recipient accounts until harvested by
+  the withdraw authority.
+- Non-Transferable tokens (soul-bound) can never be transferred after mint;
+  they remain burnable by the holder.
+- Permanent Delegate grants one address unconditional transfer/burn authority
+  over every holder's balance of that token - powerful and irreversible.
+- On-chain metadata (TokenMetadata extension) requires a MetadataPointer
+  initialized before InitializeMint; Smeltr uses a two-transaction flow with
+  the mint account pre-funded for the metadata resize.
+
+## Reference documentation
+
+- [Token-2022 module configuration reference](https://smeltr.org/blog/token-2022-module-configuration-reference): Complete parameter, compatibility, and authority-security reference for Token-2022 extension modules.
+- [Transfer fee deployment guide](https://smeltr.org/blog/how-to-deploy-solana-token-2022-transfer-fee): TransferFeeConfig mechanics - basis points, maximum fee, withheld amounts, harvesting.
+- [Non-transferable (soul-bound) tokens](https://smeltr.org/blog/solana-soulbound-token-non-transferable-extension): The NonTransferable extension for credentials, memberships, and reputation.
+- [Permanent Delegate explained](https://smeltr.org/blog/permanent-delegate-token-2022-explained): What the PermanentDelegate authority can do, legitimate uses, and holder-safety disclosure.
+
+## Company
+
+- [About Smeltr](https://smeltr.org/about): Mission, non-custodial architecture, and company information.
+- [Terms of Service](https://smeltr.org/terms)
+- [Privacy Policy](https://smeltr.org/privacy)
+
+## Contact
+
+- pjorg@smeltr.org
+- https://twitter.com/Smeltr_App
