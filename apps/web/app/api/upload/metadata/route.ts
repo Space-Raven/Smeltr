@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
-import { WebUploader } from "@irys/web-upload";
-import { WebSolana } from "@irys/web-upload-solana";
-import { Keypair } from "@solana/web3.js";
-import bs58 from "bs58";
+import { Uploader } from "@irys/upload";
+import { Solana } from "@irys/upload-solana";
 import { getSessionWallet } from "../../../../lib/session";
 import { isPremium } from "../../../../lib/subscription";
 import { reserveQuota, refundQuota } from "../../../../lib/uploadQuota";
+import { resolveIrysNetwork } from "../../../../lib/irysNetwork";
+
+// The Irys Node SDK pulls native/CJS deps that must run in the Node runtime,
+// never Edge.
+export const runtime = "nodejs";
 
 /**
  * POST /api/upload/metadata
@@ -47,7 +50,11 @@ const ALLOWED_CONTENT_TYPES = new Set([
 ]);
 
 // Lazy-initialised uploader so cold starts don't hit Irys if keys aren't set.
-let _uploader: Awaited<ReturnType<typeof WebUploader>> | null = null;
+// Uses the Irys NODE SDK (@irys/upload) — the previous implementation drove the
+// browser SDK with a hand-rolled wallet shim server-side (engineering roadmap
+// 1E), which was fragile in the serverless runtime. The Node builder takes the
+// base58 secret key directly.
+let _uploader: Awaited<ReturnType<ReturnType<typeof Uploader>["build"]>> | null = null;
 
 async function getPlatformUploader() {
   if (_uploader) return _uploader;
@@ -55,35 +62,15 @@ async function getPlatformUploader() {
   const privateKeyB58 = process.env.PLATFORM_IRYS_PRIVATE_KEY;
   if (!privateKeyB58) throw new Error("PLATFORM_IRYS_PRIVATE_KEY is not set");
 
-  const keypair = Keypair.fromSecretKey(bs58.decode(privateKeyB58));
+  const net = resolveIrysNetwork({
+    platformRpcUrl: process.env.PLATFORM_RPC_URL,
+    publicRpcUrl: process.env.NEXT_PUBLIC_SOLANA_RPC_URL,
+  });
 
-  // Minimal wallet-adapter-compatible shim for the platform keypair.
-  // Irys only needs signTransaction and publicKey for server-side uploads.
-  const walletShim = {
-    publicKey: keypair.publicKey,
-    signTransaction: async <T>(tx: T) => tx, // unused for funded uploads
-    signMessage: async (msg: Uint8Array) => {
-      const { sign } = await import("tweetnacl");
-      return sign.detached(msg, keypair.secretKey);
-    },
-  };
-
-  const IS_MAINNET =
-    (process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? "").includes("mainnet") ||
-    (process.env.PLATFORM_RPC_URL ?? "").includes("mainnet");
-
-  if (IS_MAINNET) {
-    _uploader = await WebUploader(WebSolana).withProvider(walletShim as any);
-  } else {
-    const rpcUrl =
-      process.env.PLATFORM_RPC_URL ??
-      process.env.NEXT_PUBLIC_SOLANA_RPC_URL ??
-      "https://api.devnet.solana.com";
-    _uploader = await WebUploader(WebSolana)
-      .withProvider(walletShim as any)
-      .withRpc(rpcUrl)
-      .devnet();
-  }
+  const builder = Uploader(Solana).withWallet(privateKeyB58);
+  _uploader = net.mainnet
+    ? await builder.build()
+    : await builder.withRpc(net.rpcUrl).devnet().build();
 
   return _uploader;
 }
@@ -154,15 +141,12 @@ export async function POST(req: Request) {
       tags: [{ name: "Content-Type", value: contentType }],
     });
 
-    const IS_MAINNET =
-      (process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? "").includes("mainnet") ||
-      (process.env.PLATFORM_RPC_URL ?? "").includes("mainnet");
+    const { gatewayBase } = resolveIrysNetwork({
+      platformRpcUrl: process.env.PLATFORM_RPC_URL,
+      publicRpcUrl: process.env.NEXT_PUBLIC_SOLANA_RPC_URL,
+    });
 
-    const gateway = IS_MAINNET
-      ? "https://gateway.irys.xyz"
-      : "https://devnet.irys.xyz";
-
-    return NextResponse.json({ uri: `${gateway}/${receipt.id}` });
+    return NextResponse.json({ uri: `${gatewayBase}/${receipt.id}` });
   } catch (err) {
     // The upload never happened, so don't count it against the wallet's quota.
     await refundQuota(walletAddress, file.size);
