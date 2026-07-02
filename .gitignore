@@ -27,3 +27,6 @@ Smeltr-*.docx
 # Word lock/temp files
 ~$*.docx
 ~$*.doc
+
+# TypeScript incremental build cache (regenerated on every typecheck)
+*.tsbuildinfo
