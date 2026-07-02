@@ -17,12 +17,13 @@
     "build": "tsc -p tsconfig.json && npm run build:apps",
     "build:apps": "cd apps/web && npm run build",
     "dev": "cd apps/web && npm run dev",
-    "test": "npm run test:registry && npm run test:web",
-    "test:ci": "npm run test:registry:unit && npm run test:web:ci",
+    "test": "npm run test:registry && npm run test:web && npm run test:mcp",
+    "test:ci": "npm run test:registry:unit && npm run test:web:ci && npm run test:mcp",
     "test:registry": "cd packages/tx-builder && npm test",
     "test:registry:unit": "cd packages/tx-builder && npm run test:unit",
     "test:web": "cd apps/web && npm test",
-    "test:web:ci": "cd apps/web && npm run test:ci"
+    "test:web:ci": "cd apps/web && npm run test:ci",
+    "test:mcp": "cd packages/mcp-server && npm run test:unit"
   },
   "dependencies": {
     "react": "^18.3.0",

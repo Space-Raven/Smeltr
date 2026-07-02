@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": false,
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "@platform/module-registry": ["../module-registry/src"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.test.ts"]
+}

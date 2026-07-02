@@ -1,0 +1,28 @@
+{
+  "name": "@platform/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Smeltr MCP server — Solana Token-2022 module configuration tools for AI assistants",
+  "main": "src/server.ts",
+  "bin": {
+    "smeltr-mcp": "dist/server.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "test": "jest",
+    "test:unit": "jest"
+  },
+  "dependencies": {
+    "@platform/module-registry": "*",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.4.0"
+  }
+}

@@ -11,5 +11,10 @@
     }
   },
   "include": ["packages/**/src/**/*.ts"],
-  "exclude": ["node_modules", "apps", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "apps",
+    "**/*.test.ts",
+    "packages/mcp-server/src/server.ts"
+  ]
 }
