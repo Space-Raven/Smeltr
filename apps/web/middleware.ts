@@ -47,6 +47,7 @@ const PUBLIC_PATHS = [
   "/favicon.ico",
   "/robots.txt",
   "/sitemap.xml",
+  "/.well-known", // security.txt (RFC 9116) + any future well-known files
 ];
 
 function isPublicPath(pathname: string): boolean {

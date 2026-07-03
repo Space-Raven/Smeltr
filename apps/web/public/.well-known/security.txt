@@ -1,0 +1,6 @@
+# Smeltr security contact — https://smeltr.org/trust
+Contact: mailto:pjorg@smeltr.org
+Expires: 2026-12-31T23:59:59.000Z
+Policy: https://smeltr.org/trust
+Preferred-Languages: en
+Canonical: https://smeltr.org/.well-known/security.txt
