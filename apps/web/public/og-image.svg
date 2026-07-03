@@ -43,6 +43,6 @@
   <text x="674" y="408" font-family="system-ui,sans-serif" font-size="18" font-weight="600" fill="#FEF3C7" text-anchor="middle">Permanent Delegate</text>
 
   <!-- Footer line -->
-  <text x="80" y="520" font-family="system-ui,sans-serif" font-size="20" fill="#A5B4FC" opacity="0.9">Non-custodial · Token-2022 native · MCP for AI assistants</text>
+  <text x="80" y="520" font-family="system-ui,sans-serif" font-size="20" fill="#D97706">Non-custodial software · Token-2022 · MCP for AI assistants</text>
   <text x="80" y="560" font-family="system-ui,sans-serif" font-size="22" font-weight="600" fill="#F59E0B">smeltr.org</text>
 </svg>

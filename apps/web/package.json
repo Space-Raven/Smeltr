@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
-    "test:ci": "jest --testPathPattern=\"lib/__tests__|__tests__/route.test\""
+    "test:ci": "jest --testPathPattern=\"lib/__tests__|__tests__/route.test\"",
+    "og:export": "node scripts/export-og.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -38,6 +39,7 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/jest": "^29.5.0",
     "@types/node": "^20.14.0",
     "@types/react": "^18.3.0",
