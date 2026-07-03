@@ -5,8 +5,8 @@ import { WalletProviders } from "@/components/WalletProviders";
 import { RpcConfigGuard } from "@/components/RpcConfigGuard";
 import { NetworkBadge } from "@/components/NetworkBadge";
 import { WalletButton } from "@/components/WalletButton";
+import { OG_IMAGE, SITE_URL } from "@/lib/seo";
 
-const SITE_URL = "https://smeltr.org";
 const SITE_NAME = "Smeltr";
 const SITE_DESCRIPTION =
   "Deploy Solana Token-2022 tokens without writing code. Transfer fees, soul-bound locks, permanent delegate — composable, schema-validated, non-custodial. Your wallet signs every step.";
@@ -30,6 +30,9 @@ export const metadata: Metadata = {
     "token launcher",
     "solana no-code",
     "non-custodial token",
+    "mcp server solana",
+    "ai token creation",
+    "model context protocol solana",
   ],
   authors: [{ name: "Smeltr" }],
   creator: "Smeltr",
@@ -48,10 +51,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: "/og-image.svg",
-        width: 1200,
-        height: 630,
-        alt: "Smeltr — Non-Custodial Token-2022 Launcher",
+        ...OG_IMAGE,
       },
     ],
   },
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME} — Deploy Solana Token-2022 tokens without writing code`,
     description: SITE_DESCRIPTION,
-    images: ["/og-image.svg"],
+    images: [OG_IMAGE.url],
     creator: "@Smeltr_App",
     site: "@Smeltr_App",
   },
@@ -163,6 +163,7 @@ function SiteHeader() {
             <a href="/deploy" className="hover:text-amber-700 transition-colors">Deploy</a>
             <a href="/dashboard" className="hover:text-amber-700 transition-colors">Dashboard</a>
             <a href="/blog" className="hover:text-amber-700 transition-colors">Blog</a>
+            <a href="/docs/mcp" className="hover:text-amber-700 transition-colors">MCP / AI</a>
             <a
               href="https://github.com/Space-Raven/Smeltr"
               target="_blank"
@@ -209,14 +210,15 @@ function SiteFooter() {
               <a href="/blog" className="hover:text-amber-700 transition-colors no-underline">Blog</a>
               <a href="/about" className="hover:text-amber-700 transition-colors no-underline">About</a>
               <a href="/trust" className="hover:text-amber-700 transition-colors no-underline">Trust Center</a>
+              <a href="/docs/mcp" className="hover:text-amber-700 transition-colors no-underline">MCP / AI</a>
             </div>
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Extensions</p>
             <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="/blog/how-to-deploy-solana-token-2022-transfer-fee" className="hover:text-amber-700 transition-colors no-underline">Transfer Fee</a>
-              <a href="/blog/solana-soulbound-token-non-transferable-extension" className="hover:text-amber-700 transition-colors no-underline">Non-Transferable</a>
-              <a href="/blog/permanent-delegate-token-2022-explained" className="hover:text-amber-700 transition-colors no-underline">Permanent Delegate</a>
+              <a href="/modules/transfer-fee" className="hover:text-amber-700 transition-colors no-underline">Transfer Fee</a>
+              <a href="/modules/non-transferable" className="hover:text-amber-700 transition-colors no-underline">Non-Transferable</a>
+              <a href="/modules/permanent-delegate" className="hover:text-amber-700 transition-colors no-underline">Permanent Delegate</a>
             </div>
           </div>
           <div>

@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { articleJsonLd } from "../../../lib/articleJsonLd";
-export const metadata: Metadata = {
+import { blogPostMetadata } from "../../../lib/seo";
+
+export const metadata: Metadata = blogPostMetadata({
+  slug: "permanent-delegate-token-2022-explained",
   title: "Permanent Delegate: the most powerful (and misunderstood) Token-2022 extension",
-  description: "Permanent Delegate lets a single address transfer or burn tokens from any holder's account. Here's exactly what that means, when it's legitimate, and how to use it safely.",
-  openGraph: { title: "Permanent Delegate: the most powerful Token-2022 extension", description: "What Permanent Delegate is, when it's legitimate, and the risks of misusing it.", images: [{ url: "/og-image.svg", width: 1200, height: 630 }] },
-};
+  description:
+    "Permanent Delegate lets a single address transfer or burn tokens from any holder's account. Here's exactly what that means, when it's legitimate, and how to use it safely.",
+  ogDescription:
+    "What Permanent Delegate is, when it's legitimate, and the risks of misusing it.",
+});
 const jsonLd = articleJsonLd({
   slug: "permanent-delegate-token-2022-explained",
   headline: "Permanent Delegate: the most powerful (and misunderstood) Token-2022 extension",

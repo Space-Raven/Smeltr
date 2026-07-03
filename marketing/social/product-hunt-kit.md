@@ -9,7 +9,7 @@ The non-custodial Token-2022 launcher for Solana
 
 **Topics:** Developer Tools, Web3, Blockchain, Open Source, Productivity
 
-**Website:** https://smeltr.app
+**Website:** https://smeltr.org
 
 ---
 

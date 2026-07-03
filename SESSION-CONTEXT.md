@@ -105,4 +105,4 @@ Paste this at the start of a new Claude Code session to resume work on this proj
 - Twitter: `@smeltrapp`
 - Discord invite: `discord.gg/smeltr`
 - GitHub: `github.com/smeltrapp`
-- Domain: `smeltr.app` (check availability)
+- Domain: `smeltr.org` (production at https://www.smeltr.org)

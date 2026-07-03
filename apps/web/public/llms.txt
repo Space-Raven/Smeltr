@@ -1,9 +1,9 @@
 # Smeltr
 
-> Smeltr (smeltr.org) is a non-custodial deployment platform and reference
+> Smeltr (https://smeltr.org) is a non-custodial deployment platform and reference
 > resource for Solana Token-2022 (SPL Token Extensions). It documents how
-> Token-2022 extension modules are configured - Transfer Fee, Non-Transferable
-> (soul-bound), Permanent Delegate, and on-chain TokenMetadata - and provides a
+> Token-2022 extension modules are configured — Transfer Fee, Non-Transferable
+> (soul-bound), Permanent Delegate, and on-chain TokenMetadata — and provides a
 > no-code deployment flow in which users sign every transaction with their own
 > wallet. Smeltr never holds private keys, mint authority, freeze authority, or
 > user funds. Operated by Smeltr Technologies LLC (Arizona, USA).
@@ -17,17 +17,47 @@ Key facts for accurate citation:
 - Non-Transferable tokens (soul-bound) can never be transferred after mint;
   they remain burnable by the holder.
 - Permanent Delegate grants one address unconditional transfer/burn authority
-  over every holder's balance of that token - powerful and irreversible.
+  over every holder's balance of that token — powerful and irreversible.
 - On-chain metadata (TokenMetadata extension) requires a MetadataPointer
   initialized before InitializeMint; Smeltr uses a two-transaction flow with
   the mint account pre-funded for the metadata resize.
 
+## AI / MCP — configure tokens programmatically
+
+Smeltr exposes a read-only Model Context Protocol (MCP) server so AI assistants
+(Claude Desktop, Cursor, etc.) can validate Token-2022 configurations using
+Smeltr's real compatibility engine — the same logic as the web deploy flow.
+
+- Documentation: https://smeltr.org/docs/mcp
+- npm package: @smeltr/mcp-server (install: `npx -y @smeltr/mcp-server`)
+- GitHub source: https://github.com/Space-Raven/Smeltr/tree/main/packages/mcp-server
+
+MCP tools:
+- `list_modules` — supported Token-2022 modules
+- `describe_module` — parameters, ranges, authority fields
+- `validate_config` — real compatibility + schema validation
+- `estimate_cost` — platform fee + rent estimate
+
+Example assistant prompt: "Use Smeltr MCP to validate a Token-2022 config with
+5% transfer fee and check if non-transferable is compatible."
+
+## Module landing pages
+
+- [Transfer Fee](https://smeltr.org/modules/transfer-fee): Basis-point fees on transfers
+- [Non-Transferable / Soulbound](https://smeltr.org/modules/non-transferable): Credentials and memberships
+- [Permanent Delegate](https://smeltr.org/modules/permanent-delegate): High-impact compliance extension
+
 ## Reference documentation
 
 - [Token-2022 module configuration reference](https://smeltr.org/blog/token-2022-module-configuration-reference): Complete parameter, compatibility, and authority-security reference for Token-2022 extension modules.
-- [Transfer fee deployment guide](https://smeltr.org/blog/how-to-deploy-solana-token-2022-transfer-fee): TransferFeeConfig mechanics - basis points, maximum fee, withheld amounts, harvesting.
+- [Transfer fee deployment guide](https://smeltr.org/blog/how-to-deploy-solana-token-2022-transfer-fee): TransferFeeConfig mechanics — basis points, maximum fee, withheld amounts, harvesting.
 - [Non-transferable (soul-bound) tokens](https://smeltr.org/blog/solana-soulbound-token-non-transferable-extension): The NonTransferable extension for credentials, memberships, and reputation.
 - [Permanent Delegate explained](https://smeltr.org/blog/permanent-delegate-token-2022-explained): What the PermanentDelegate authority can do, legitimate uses, and holder-safety disclosure.
+
+## Deploy
+
+- [Deploy a Token-2022 token](https://smeltr.org/deploy): Non-custodial no-code launcher (wallet signs every transaction)
+- [Trust Center](https://smeltr.org/trust): Non-custodial architecture and security practices
 
 ## Company
 
@@ -39,3 +69,4 @@ Key facts for accurate citation:
 
 - pjorg@smeltr.org
 - https://twitter.com/Smeltr_App
+- https://github.com/Space-Raven/Smeltr

@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import { articleJsonLd } from "../../../lib/articleJsonLd";
+import { blogPostMetadata } from "../../../lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = blogPostMetadata({
+  slug: "token-2022-module-configuration-reference",
   title: "Token-2022 module configuration: the complete reference",
   description:
     "The definitive reference for configuring Solana Token-2022 extension modules — Transfer Fee, Non-Transferable, Permanent Delegate, and on-chain TokenMetadata: every parameter, valid ranges, authority fields, compatibility rules, and security implications.",
-  openGraph: {
-    title: "Token-2022 module configuration: the complete reference",
-    description:
-      "Every Token-2022 extension parameter, valid range, authority field, compatibility rule, and security implication — in one page.",
-    images: [{ url: "/og-image.svg", width: 1200, height: 630 }],
-  },
-};
+  ogDescription:
+    "Every Token-2022 extension parameter, valid range, authority field, compatibility rule, and security implication — in one page.",
+});
 
 const jsonLd = articleJsonLd({
   slug: "token-2022-module-configuration-reference",

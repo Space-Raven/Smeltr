@@ -111,7 +111,7 @@ Smeltr's analytics dashboard (coming) will show you your unharvested balance and
 **Tweet 8 — CTA**
 If you're building on Solana and need a token:
 
-→ smeltr.app — deploy in 5 minutes, no code, no custody
+→ smeltr.org — deploy in 5 minutes, no code, no custody
 
 If you're a dev and want to see how the transaction builder works:
 
@@ -182,7 +182,7 @@ Bronze/Silver/Gold tiers that:
 - Can only be earned through the programme
 - Live in the holder's wallet forever
 
-Deploy one in 3 minutes at smeltr.app 🌿
+Deploy one in 3 minutes at smeltr.org 🌿
 
 ---
 
@@ -212,10 +212,10 @@ All non-custodial. All Token-2022.
 ## 🎯 REPLY TEMPLATES (for common questions in the wild)
 
 **When someone asks "how do I add transfer fees to my Solana token?"**
-> Hey! You can do this with the Token-2022 TransferFeeConfig extension. If you want a no-code option, Smeltr (smeltr.app) lets you configure transfer fees, set a max cap, and deploy in two wallet clicks. Happy to explain the manual SDK approach too if you're going code-first.
+> Hey! You can do this with the Token-2022 TransferFeeConfig extension. If you want a no-code option, Smeltr (smeltr.org) lets you configure transfer fees, set a max cap, and deploy in two wallet clicks. Happy to explain the manual SDK approach too if you're going code-first.
 
 **When someone asks "what's the difference between Token and Token-2022?"**
-> Token-2022 is Solana's extended token standard — same foundation as SPL Token but with optional extensions you configure at mint creation (transfer fees, soul-bound restrictions, permanent delegates, etc). You can't add extensions after the fact, so choosing them upfront matters. We built Smeltr to make that choice easier: smeltr.app
+> Token-2022 is Solana's extended token standard — same foundation as SPL Token but with optional extensions you configure at mint creation (transfer fees, soul-bound restrictions, permanent delegates, etc). You can't add extensions after the fact, so choosing them upfront matters. We built Smeltr to make that choice easier: smeltr.org
 
 **When someone warns about a custodial launcher**
 > This is a real concern. Most launchers hold your mint authority between the time they build the transaction and when you receive the token — and some never fully relinquish it. Smeltr's source code has a runtime guard (`assertNoPlatformAuthority`) that throws if any platform address appears in an authority slot. Worth checking that for any launcher you use.

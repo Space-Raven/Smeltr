@@ -3,8 +3,8 @@ Allow: /
 Disallow: /api/
 Disallow: /dashboard
 
-# AI crawlers are explicitly welcome - the blog and about pages are reference
-# documentation for Solana Token-2022 module configuration.
+# Agent discovery: https://smeltr.org/llms.txt (MCP docs at /docs/mcp)
+# AI crawlers are explicitly welcome — reference docs for Solana Token-2022 configuration.
 User-agent: GPTBot
 Allow: /
 

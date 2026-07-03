@@ -37,6 +37,8 @@ const PUBLIC_PATHS = [
   "/blog",
   "/about",
   "/trust",
+  "/docs",
+  "/modules",
   "/llms.txt",
   "/api/health",
   // Vercel Cron ops endpoints — auth'd by CRON_SECRET, must bypass the mode gate

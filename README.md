@@ -38,6 +38,16 @@ npm run test:ci
 cd packages/tx-builder && npm run test:devnet
 ```
 
+## MCP server (AI assistants)
+
+Smeltr exposes its Token-2022 validation engine as an MCP server for Claude Desktop, Cursor, and other assistants.
+
+```bash
+npx -y @smeltr/mcp-server
+```
+
+Docs: **https://smeltr.org/docs/mcp** · Source: `packages/mcp-server` · Launch guide: `docs/MCP_LAUNCH.md`
+
 ## Status
 
 The core deploy flow (module selection -> metadata -> review -> sign ->

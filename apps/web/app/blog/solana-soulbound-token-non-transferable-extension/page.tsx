@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { articleJsonLd } from "../../../lib/articleJsonLd";
-export const metadata: Metadata = {
+import { blogPostMetadata } from "../../../lib/seo";
+
+export const metadata: Metadata = blogPostMetadata({
+  slug: "solana-soulbound-token-non-transferable-extension",
   title: "Soul-bound tokens on Solana: the Non-Transferable extension explained",
-  description: "What soul-bound tokens are, why they matter for credentials and loyalty, and how to deploy a Non-Transferable SPL token using Token-2022 without code.",
-  openGraph: { title: "Soul-bound tokens on Solana: the Non-Transferable extension", description: "Deploy non-transferable (soul-bound) tokens on Solana using Token-2022. No code required.", images: [{ url: "/og-image.svg", width: 1200, height: 630 }] },
-};
+  description:
+    "What soul-bound tokens are, why they matter for credentials and loyalty, and how to deploy a Non-Transferable SPL token using Token-2022 without code.",
+  ogDescription:
+    "Deploy non-transferable (soul-bound) tokens on Solana using Token-2022. No code required.",
+});
 const jsonLd = articleJsonLd({
   slug: "solana-soulbound-token-non-transferable-extension",
   headline: "Soul-bound tokens on Solana: the Non-Transferable extension explained",

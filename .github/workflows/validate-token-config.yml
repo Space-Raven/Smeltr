@@ -1,0 +1,32 @@
+name: Validate Token-2022 Config
+
+on:
+  pull_request:
+    paths:
+      - "packages/module-registry/**"
+      - "packages/mcp-server/**"
+      - "packages/tx-builder/**"
+      - ".github/workflows/validate-token-config.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci --legacy-peer-deps
+
+      - name: Run MCP server unit tests (validation engine)
+        run: npm run test:mcp
+
+      - name: Run module-registry integrity tests
+        run: npm run test:registry:unit
+
+      - name: Build MCP npm bundle
+        run: npm run build --workspace=@smeltr/mcp-server

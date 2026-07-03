@@ -14,7 +14,7 @@ Hey r/solana,
 I've been working on something for the past few months and it's finally ready to share publicly.
 
 **What it does:**
-Smeltr (smeltr.app) lets you deploy Solana Token-2022 tokens with real extension support — without writing any code.
+Smeltr (smeltr.org) lets you deploy Solana Token-2022 tokens with real extension support — without writing any code.
 
 The supported extensions right now:
 - **Transfer Fee** — collect a basis-point percentage on every token transfer, with a configurable max cap
@@ -38,7 +38,7 @@ The interesting parts are the `packages/tx-builder` and `packages/module-registr
 
 Happy to answer any questions — token deployment mechanics, Token-2022 extension specifics, the non-custodial architecture, whatever.
 
-**Link:** smeltr.app
+**Link:** smeltr.org
 
 ---
 
@@ -77,7 +77,7 @@ Then separately: `buildMetadataAttachmentInstructions` → just `createInitializ
 
 Source is at github.com/smeltrapp if you want to look at the actual implementation.
 
-Frontend is at smeltr.app — but the packages are the interesting part.
+Frontend is at smeltr.org — but the packages are the interesting part.
 
 ---
 

@@ -22,7 +22,7 @@ Hey [NAME],
 
 Big fan of [NEWSLETTER] — the [SPECIFIC RECENT PIECE] was particularly useful.
 
-I launched Smeltr this week (smeltr.app) — a no-code Token-2022 token launcher that I think your developer audience would find interesting, specifically because of how it handles the non-custodial guarantee.
+I launched Smeltr this week (smeltr.org) — a no-code Token-2022 token launcher that I think your developer audience would find interesting, specifically because of how it handles the non-custodial guarantee.
 
 Most launchers either don't support Token-2022 extensions or hold mint authority in some quiet way. Smeltr has a runtime guard in the codebase (`assertNoPlatformAuthority`) that throws an exception if a platform address appears in any token authority slot — it's verifiable in the source, not just a policy claim.
 
@@ -35,7 +35,7 @@ Happy to provide a draft blurb, screenshots, or a quick demo call if useful.
 
 Thanks,
 [YOUR NAME]
-smeltr.app | @smeltrapp
+smeltr.org | @smeltrapp
 
 ---
 
@@ -45,7 +45,7 @@ smeltr.app | @smeltrapp
 
 Hey [NAME],
 
-I recently launched Smeltr (smeltr.app) — a non-custodial Solana Token-2022 launcher and thought it might be relevant for [NEWSLETTER] readers.
+I recently launched Smeltr (smeltr.org) — a non-custodial Solana Token-2022 launcher and thought it might be relevant for [NEWSLETTER] readers.
 
 The core idea: most token launchers quietly hold your mint authority. Smeltr's source code has a hard guard that prevents this — it's not a policy, it's a thrown exception in the codebase.
 

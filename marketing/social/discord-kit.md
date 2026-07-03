@@ -41,8 +41,8 @@
 Smeltr is a non-custodial Token-2022 launcher for Solana.
 Deploy transfer fee tokens, soul-bound credentials, and permanent delegate tokens — no code, two wallet clicks.
 
-🔗 App: https://smeltr.app
-📖 Blog: https://smeltr.app/blog
+🔗 App: https://smeltr.org
+📖 Blog: https://smeltr.org/blog
 🐦 Twitter: https://twitter.com/smeltrapp
 
 **Quick rules:**
@@ -74,7 +74,7 @@ Deploy Solana Token-2022 tokens without writing code — and without surrenderin
 - Correct Token-2022 metadata pattern (most launchers get this wrong)
 - No account required — connect wallet, deploy, disconnect
 
-→ **https://smeltr.app**
+→ **https://smeltr.org**
 
 Questions? Ask in #deploy-help. Feedback in #feedback. Show us what you build in #showcase 🌿
 ```
@@ -85,7 +85,7 @@ Questions? Ask in #deploy-help. Feedback in #feedback. Show us what you build in
 
 **For Solana Tech / Foundation Discord:**
 ```
-Hey — I recently launched Smeltr (smeltr.app), a non-custodial Token-2022 launcher. 
+Hey — I recently launched Smeltr (smeltr.org), a non-custodial Token-2022 launcher. 
 It handles transfer fees, non-transferable, and permanent delegate extensions with 
 compatibility validation and correct instruction ordering. Happy to answer any 
 Token-2022 questions here or help troubleshoot deployments. Just dropping in!
@@ -93,7 +93,7 @@ Token-2022 questions here or help troubleshoot deployments. Just dropping in!
 
 **For Helius Discord:**
 ```
-Hi all — launched a Token-2022 deployment platform this week called Smeltr (smeltr.app).
+Hi all — launched a Token-2022 deployment platform this week called Smeltr (smeltr.org).
 Uses Helius-compatible RPC, built on @solana/spl-token 0.4.x. If anyone's working 
 on Token-2022 extension tooling or has questions about extension config, happy to chat.
 ```

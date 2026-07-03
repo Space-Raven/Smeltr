@@ -1,9 +1,18 @@
 import type { Metadata } from "next";
+import { OG_IMAGE, SITE_URL } from "../../lib/seo";
 
 export const metadata: Metadata = {
   title: "Blog — Token-2022 Guides & Tutorials",
   description:
     "Deep dives on Solana Token-2022 extensions: transfer fees, soul-bound tokens, permanent delegate, and more.",
+  alternates: { canonical: `${SITE_URL}/blog` },
+  openGraph: {
+    url: `${SITE_URL}/blog`,
+    title: "Smeltr Blog — Token-2022 Guides",
+    description:
+      "Deep dives on Solana Token-2022 extensions: transfer fees, soul-bound tokens, permanent delegate, and more.",
+    images: [{ ...OG_IMAGE }],
+  },
 };
 
 const posts = [

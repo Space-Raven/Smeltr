@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import { articleJsonLd } from "../../../lib/articleJsonLd";
+import { blogPostMetadata } from "../../../lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = blogPostMetadata({
+  slug: "how-to-deploy-solana-token-2022-transfer-fee",
   title: "How to deploy a Solana Token-2022 token with transfer fees",
   description:
     "A complete guide to the Token-2022 TransferFeeConfig extension — what it does, how the fee mechanics work, and how to deploy a transfer-fee token without writing code.",
-  openGraph: {
-    title: "How to deploy a Solana Token-2022 token with transfer fees",
-    description: "Complete guide to TransferFeeConfig: mechanics, parameters, and no-code deployment.",
-    images: [{ url: "/og-image.svg", width: 1200, height: 630 }],
-  },
-};
+  ogDescription:
+    "Complete guide to TransferFeeConfig: mechanics, parameters, and no-code deployment.",
+});
 
 const jsonLd = articleJsonLd({
   slug: "how-to-deploy-solana-token-2022-transfer-fee",
