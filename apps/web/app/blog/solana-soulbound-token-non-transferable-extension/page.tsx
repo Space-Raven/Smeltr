@@ -46,7 +46,7 @@ export default function Post2() {
         <p>Operationally, this means your distribution system needs mint authority access. Design your authority structure accordingly — consider a programmatic multisig or a DAO-controlled mint authority for large-scale credential issuance.</p>
         <h2 className="text-xl font-bold text-gray-900 mt-8">Deploy a non-transferable token with Smeltr</h2>
         <ol className="list-decimal list-inside space-y-3 pl-2">
-          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.app/deploy</a> and connect your wallet.</li>
+          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.org/deploy</a> and connect your wallet.</li>
           <li>Toggle on <strong>Non-Transferable</strong> in the module selection. No parameters needed — it's a flag.</li>
           <li>Add metadata (name, symbol, image) to make it recognisable in wallets.</li>
           <li>Review and sign. The mint is live in two transactions.</li>

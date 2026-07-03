@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { WalletProviders } from "@/components/WalletProviders";
+import { RpcConfigGuard } from "@/components/RpcConfigGuard";
+import { NetworkBadge } from "@/components/NetworkBadge";
 import { WalletButton } from "@/components/WalletButton";
 
 const SITE_URL = "https://smeltr.org";
 const SITE_NAME = "Smeltr";
 const SITE_DESCRIPTION =
-  "Deploy Solana Token-2022 tokens without writing code. Transfer fees, soul-bound locks, permanent delegate — composable, non-custodial, two wallet clicks.";
+  "Deploy Solana Token-2022 tokens without writing code. Transfer fees, soul-bound locks, permanent delegate — composable, schema-validated, non-custodial. Your wallet signs every step.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -109,14 +111,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <WalletProviders>
-          <div className="min-h-screen flex flex-col">
-            <SiteHeader />
-            <BetaBanner />
-            <main className="flex-1">{children}</main>
-            <SiteFooter />
-          </div>
-        </WalletProviders>
+        <RpcConfigGuard>
+          <WalletProviders>
+            <div className="min-h-screen flex flex-col">
+              <SiteHeader />
+              <BetaBanner />
+              <main className="flex-1">{children}</main>
+              <SiteFooter />
+            </div>
+          </WalletProviders>
+        </RpcConfigGuard>
       </body>
     </html>
   );
@@ -170,6 +174,7 @@ function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <NetworkBadge />
             <WalletButton />
           </div>
         </div>
@@ -203,6 +208,7 @@ function SiteFooter() {
               <a href="/dashboard" className="hover:text-amber-700 transition-colors no-underline">Dashboard</a>
               <a href="/blog" className="hover:text-amber-700 transition-colors no-underline">Blog</a>
               <a href="/about" className="hover:text-amber-700 transition-colors no-underline">About</a>
+              <a href="/trust" className="hover:text-amber-700 transition-colors no-underline">Trust Center</a>
             </div>
           </div>
           <div>

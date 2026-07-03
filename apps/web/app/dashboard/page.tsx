@@ -8,6 +8,8 @@ import { buildMetadataAttachmentInstructions } from "@platform/tx-builder";
 import { useSiwsAuth } from "../../hooks/useSiwsAuth";
 import { useSubscription } from "../../hooks/useSubscription";
 import { useBetaDisclaimer } from "../../components/BetaDisclaimerModal";
+import { SmeltrPlusComingSoonBanner } from "../../components/SmeltrPlusUpgradeModal";
+import { isSmeltrPlusLiveClient } from "../../lib/smeltrPlusClient";
 import { submitTransaction } from "../../lib/submitTransaction";
 import { API_ENDPOINTS, EXPLORER } from "../../lib/constants";
 import { explorerClusterParam } from "../../lib/explorer";
@@ -30,7 +32,8 @@ export default function DashboardPage() {
   const wallet = useWallet();
   const siws = useSiwsAuth();
   const subscriptionStatus = useSubscription();
-  const isPremium = subscriptionStatus === "premium";
+  const isPremium = isSmeltrPlusLiveClient() && subscriptionStatus === "premium";
+  const smeltrPlusLive = isSmeltrPlusLiveClient();
 
   const [deployments, setDeployments] = useState<DeploymentRecord[]>([]);
   const [loading, setLoading] = useState(false);
@@ -121,6 +124,17 @@ export default function DashboardPage() {
     }
   };
 
+  // While restoring an existing session, show a neutral loading state rather
+  // than flashing the "sign in" prompt to an already-authenticated user.
+  if (siws.status === "restoring") {
+    return (
+      <div className="max-w-xl mx-auto p-6">
+        <h2 className="text-xl font-semibold mb-2">My Tokens</h2>
+        <p className="text-sm text-gray-500">Checking your session…</p>
+      </div>
+    );
+  }
+
   if (siws.status !== "authenticated") {
     return (
       <div className="max-w-xl mx-auto p-6 space-y-4">
@@ -150,7 +164,7 @@ export default function DashboardPage() {
           <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
             ★ Premium
           </span>
-        ) : (
+        ) : smeltrPlusLive ? (
           <button
             onClick={() => gateDisclaimer(handleUpgrade)}
             disabled={upgrading}
@@ -158,11 +172,12 @@ export default function DashboardPage() {
           >
             {upgrading ? "Redirecting…" : "Upgrade — $19/mo"}
           </button>
-        )}
+        ) : null}
       </div>
 
-      {/* Premium feature callout for free users */}
-      {subscriptionStatus === "free" && (
+      {!smeltrPlusLive && <SmeltrPlusComingSoonBanner />}
+
+      {subscriptionStatus === "free" && smeltrPlusLive && (
         <div className="rounded-md border border-amber-100 bg-amber-50 p-3 text-sm text-amber-800 space-y-1">
           <p className="font-medium">Smeltr+</p>
           <p>

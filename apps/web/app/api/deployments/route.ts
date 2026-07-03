@@ -65,13 +65,34 @@ export async function POST(req: Request) {
   // --- On-chain attribution (Audit-1 TOB-03) -------------------------------
   // Prove the session wallet actually deployed this mint before recording it,
   // so a signed-in user cannot claim a mint they did not create.
-  let tx;
-  try {
-    const connection = new Connection(RPC_URL, "confirmed");
-    tx = await connection.getParsedTransaction(validated.signature, {
-      maxSupportedTransactionVersion: 0,
-    });
-  } catch {
+  //
+  // The client fires this POST the instant confirmTransaction resolves at
+  // "confirmed". The server's RPC node may not have the transaction indexed
+  // yet (propagation lag / load-balanced endpoints), so a single
+  // getParsedTransaction often returns null and the deployment never gets
+  // recorded — the "minted but not in my dashboard" bug. Poll briefly before
+  // giving up.
+  const connection = new Connection(RPC_URL, "confirmed");
+  let tx = null;
+  let reachedNetwork = false;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      tx = await connection.getParsedTransaction(validated.signature, {
+        commitment: "confirmed",
+        maxSupportedTransactionVersion: 0,
+      });
+      reachedNetwork = true;
+    } catch {
+      // transient RPC error — retry
+    }
+    if (tx) break;
+    if (attempt < 4) await new Promise((r) => setTimeout(r, 1500));
+  }
+
+  // Only report a network failure if we never reached the RPC at all. If we
+  // reached it but the tx isn't visible yet, fall through to checkMintCreation,
+  // which returns a 409 the client treats as "try again / not yet confirmed".
+  if (!tx && !reachedNetwork) {
     return NextResponse.json(
       { error: "Could not reach the network to verify the deployment. Try again shortly." },
       { status: 503 }
@@ -113,6 +134,11 @@ export async function POST(req: Request) {
       uri: validated.metadata?.uri,
     },
   });
+
+  // NOTE(post-beta): Smeltr+ benefit-usage recording (fee waiver / premium
+  // module tracking) ships with the SubscriptionBenefitUsage migration on the
+  // full feat/post-beta-rollout branch — intentionally excluded from this
+  // beta hotfix.
 
   return NextResponse.json({ deployment });
 }

@@ -57,7 +57,7 @@ export default function Post3() {
         <h2 className="text-xl font-bold text-gray-900 mt-8">Deploy with Smeltr — the acknowledgement gate</h2>
         <p>Smeltr requires a mandatory acknowledgement checkbox before any deployment including Permanent Delegate can proceed. The confirmation is re-checked in the transaction builder as a defence-in-depth measure — the UI cannot bypass it.</p>
         <ol className="list-decimal list-inside space-y-3 pl-2">
-          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.app/deploy</a>.</li>
+          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.org/deploy</a>.</li>
           <li>Toggle on <strong>Permanent Delegate</strong> and enter the delegate address (recommend a multisig, not your hot wallet).</li>
           <li>In the Review panel, check the acknowledgement confirming you understand the implications.</li>
           <li>Sign and deploy.</li>

@@ -1,10 +1,10 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import type { SolanaSignInInput, SolanaSignInOutput } from "@solana/wallet-standard-features";
 import { toWireOutput } from "../lib/siws";
 
-type Status = "idle" | "signing" | "verifying" | "authenticated" | "error";
+type Status = "restoring" | "idle" | "signing" | "verifying" | "authenticated" | "error";
 
 interface SignInAdapter {
   signIn(input: SolanaSignInInput): Promise<SolanaSignInOutput>;
@@ -27,8 +27,37 @@ interface SignInAdapter {
 export function useSiwsAuth() {
   const wallet = useWallet();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [status, setStatus] = useState<Status>("idle");
+  // Start in "restoring" — we check for an existing session on mount before
+  // showing any "sign in" prompt, so a valid httpOnly cookie doesn't force a
+  // needless re-sign on every page navigation.
+  const [status, setStatus] = useState<Status>("restoring");
   const [error, setError] = useState<string | null>(null);
+
+  // --- Restore an existing session on mount --------------------------------
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/session", { credentials: "same-origin" });
+        const data = (await res.json().catch(() => ({}))) as {
+          authenticated?: boolean;
+          walletAddress?: string;
+        };
+        if (cancelled) return;
+        if (data.authenticated && data.walletAddress) {
+          setWalletAddress(data.walletAddress);
+          setStatus("authenticated");
+        } else {
+          setStatus("idle");
+        }
+      } catch {
+        if (!cancelled) setStatus("idle"); // treat a failed check as signed-out
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const signIn = useCallback(async () => {
     const adapter = wallet.wallet?.adapter as unknown as SignInAdapter | undefined;
@@ -70,5 +99,16 @@ export function useSiwsAuth() {
     }
   }, [wallet.wallet]);
 
-  return { walletAddress, status, error, signIn };
+  const signOut = useCallback(async () => {
+    try {
+      await fetch("/api/auth/signout", { method: "POST", credentials: "same-origin" });
+    } catch {
+      // best-effort — clear local state regardless
+    }
+    setWalletAddress(null);
+    setError(null);
+    setStatus("idle");
+  }, []);
+
+  return { walletAddress, status, error, signIn, signOut };
 }

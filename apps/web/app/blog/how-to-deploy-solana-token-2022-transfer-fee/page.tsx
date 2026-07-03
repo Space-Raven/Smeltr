@@ -100,7 +100,7 @@ export default function Post1() {
           Smeltr handles the TransferFeeConfig extension as one of its core modules. You don't need to write any transaction code — the platform constructs the correctly ordered instruction set and your wallet signs it.
         </p>
         <ol className="list-decimal list-inside space-y-3 pl-2">
-          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.app/deploy</a> and connect your wallet.</li>
+          <li>Go to <a href="/deploy" className="text-amber-600">smeltr.org/deploy</a> and connect your wallet.</li>
           <li>In the Module Selection section, toggle on <strong>Transfer Fee</strong>.</li>
           <li>Enter your basis points (e.g., <code className="address inline-block">50</code> for 0.5%), your maximum fee, and the two authority addresses (default: your connected wallet).</li>
           <li>Optionally fill in the Metadata section with a name, symbol, and image.</li>

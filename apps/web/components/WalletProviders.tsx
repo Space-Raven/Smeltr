@@ -2,9 +2,7 @@
 
 import { useMemo } from "react";
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
-
-const RPC_URL =
-  process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? "https://api.devnet.solana.com";
+import { resolveClientRpcUrl } from "../lib/rpcEndpoint";
 
 /**
  * Wraps the app with ConnectionProvider + WalletProvider.
@@ -12,16 +10,19 @@ const RPC_URL =
  * Wallet Standard wallets (Phantom, Solflare, Backpack, etc.) are detected
  * automatically — no explicit adapter list needed for v0.15+.
  *
- * autoConnect is intentionally false: we don't want to silently re-connect
- * on page load without the user's awareness.
+ * autoConnect is true: the adapter only reconnects a wallet the user has
+ * already trusted for this origin (it reads the wallet's own trusted-connection
+ * state, never prompts for fresh approval). Without it the wallet disconnects
+ * on every client navigation, which — combined with SIWS session restore —
+ * was the "have to reconnect and re-sign on every page" friction.
  */
 export function WalletProviders({ children }: { children: React.ReactNode }) {
-  // Empty adapter list — Wallet Standard wallets register themselves.
   const adapters = useMemo(() => [], []);
+  const endpoint = useMemo(() => resolveClientRpcUrl(), []);
 
   return (
-    <ConnectionProvider endpoint={RPC_URL}>
-      <WalletProvider wallets={adapters} autoConnect={false}>
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={adapters} autoConnect>
         {children}
       </WalletProvider>
     </ConnectionProvider>

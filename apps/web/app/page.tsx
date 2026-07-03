@@ -23,7 +23,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
               </span>
-              Token-2022 · Non-custodial · Two signatures
+              Token-2022 · Non-custodial · Your wallet signs every step
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6" style={{ color: "#FEF3C7" }}>
@@ -33,7 +33,8 @@ export default function HomePage() {
 
             <p className="text-lg sm:text-xl mb-10 max-w-xl leading-relaxed" style={{ color: "#D97706" }}>
               Compose Token-2022 extension modules — transfer fees, soulbound locks,
-              permanent delegates — and deploy in two wallet clicks. Your keys, your token.
+              permanent delegates — with schema-validated configs. Your keys, your token;
+              Smeltr builds instructions, you sign.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -49,7 +50,7 @@ export default function HomePage() {
                 className="inline-flex items-center justify-center rounded-xl border font-semibold px-8 py-3.5 text-base transition-colors"
                 style={{ borderColor: "#92400E", color: "#FCD34D", background: "rgba(255,255,255,0.05)" }}
               >
-                Smeltr+ — $19/mo
+                Smeltr+ — coming soon
               </a>
             </div>
           </div>
@@ -62,8 +63,9 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold mb-3" style={{ color: "#1A0C05" }}>Composable extension modules</h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Each module wraps an extension of the independently audited SPL Token-2022 program. Mix and match —
-              compatibility is checked before you sign anything.
+              Each module wraps a native Token-2022 extension, validated against the SPL
+              Token-2022 spec before you sign. Mix and match — compatibility is checked
+              automatically.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -133,16 +135,20 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto mb-10">
             {[
               {
+                title: "Permanent Delegate access",
+                body: "Deploy and manage professional compliance instruments — irrevocable delegate authority with explicit risk acknowledgments.",
+              },
+              {
                 title: "Platform-funded uploads",
-                body: "Metadata and images go straight to Arweave. No separate funding transaction, no SOL required for storage.",
+                body: "Metadata and images go straight to Arweave. No separate Irys funding transaction from your wallet.",
               },
               {
-                title: "Larger uploads",
-                body: "Free deployments cover compact metadata; Smeltr+ raises the storage limits for bigger images and richer token pages.",
+                title: "Fee waivers (after trial period)",
+                body: "Up to 5 fee-waived deploys per month after your first 7 days — not during the refund window.",
               },
               {
-                title: "Early access to new modules",
-                body: "Transfer Hook, Interest-Bearing, Confidential Transfers — premium subscribers get new modules first as they ship.",
+                title: "Early access modules",
+                body: "Transfer Hook and future extensions ship to Smeltr+ subscribers first.",
               },
             ].map(({ title, body }) => (
               <div key={title} className="rounded-xl p-5 border" style={{ background: "rgba(245,158,11,0.06)", borderColor: "#92400E" }}>
@@ -158,13 +164,13 @@ export default function HomePage() {
               <span className="text-sm" style={{ color: "#B45309" }}>per month · cancel anytime</span>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/dashboard"
-                className="inline-flex items-center justify-center rounded-xl font-bold px-8 py-3.5 text-base transition-colors"
-                style={{ background: "#F59E0B", color: "#1A0C05" }}
+              <span
+                className="inline-flex items-center justify-center rounded-xl font-bold px-8 py-3.5 text-base opacity-80 cursor-not-allowed"
+                style={{ background: "#78350F", color: "#FCD34D" }}
+                title="Available after legal review and Stripe setup"
               >
-                Get Smeltr+ →
-              </a>
+                Smeltr+ — coming after beta
+              </span>
               <a
                 href="/deploy"
                 className="inline-flex items-center justify-center rounded-xl border font-semibold px-8 py-3.5 text-base transition-colors"
@@ -174,7 +180,7 @@ export default function HomePage() {
               </a>
             </div>
             <p className="mt-4 text-xs" style={{ color: "#78350F" }}>
-              Sign in with your wallet on the dashboard to upgrade. No KYC, no email required.
+              All Token-2022 modules are free during the public beta. Smeltr+ subscriptions open later.
             </p>
           </div>
         </div>
