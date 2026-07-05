@@ -44,6 +44,10 @@ const PUBLIC_PATHS = [
   // Vercel Cron ops endpoints — auth'd by CRON_SECRET, must bypass the mode gate
   // so a scheduled GET isn't redirected before reaching the handler.
   "/api/ops",
+  // Admin mint-review console + its API — reachable in any mode; the real gate
+  // is the admin-wallet check inside the handlers, not the mode redirect.
+  "/admin",
+  "/api/admin",
   // TOB-01 ops diagnostics — non-production only (pubkey prefixes/counts).
   ...(process.env.NODE_ENV !== "production" ? ["/api/debug/denylist"] : []),
   "/favicon.ico",
