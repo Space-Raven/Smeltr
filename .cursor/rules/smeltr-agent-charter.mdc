@@ -1,0 +1,28 @@
+---
+description: THE RULES pointer — master in smeltr_tech/prototypes/agent-ops; sync daily or ad hoc
+alwaysApply: true
+---
+
+# THE RULES (pointer — not canonical)
+
+**Master copy always wins:**  
+`C:\Users\joshk\Desktop\smeltr_tech\prototypes\agent-ops\`
+
+Start with **`THE_RULES.md`**, then **`SMELTR_AGENT_CHARTER.md`**.
+
+**Sync:** Daily (first session) or operator ad hoc. If this pointer or local docs disagree with master, re-read master before acting.
+
+Also read from master:
+
+- `CORPORATE_GUIDANCE.md` — profitability /10, bottom-line EV, banish verdicts
+- `BRAND_GUIDANCE.md`, `PROJECT_REGISTRY.md`, `FOLDER_LAYOUT.md`
+- `profitability/` — initiative analyses
+
+**Company vs product:** **Smeltr Technologies LLC** ≠ **smeltr.org**. This repo is the Token Platform only. Other projects (e.g. FolioScript) are secret per registry.
+
+**Local only (never git push):** `corporate/engineering-roadmap.md`  
+**Repo index:** `PROJECT.md` · **Architecture:** `CLAUDE.md` · **Agents:** `.cursor/rules/agent-routing.mdc`
+
+**Corporate:** Major bets need profitability score + EV (see master). Banished ideas stay off roadmap unless operator overrides.
+
+**Overrides:** Explicit per-action operator approval (charter §9).

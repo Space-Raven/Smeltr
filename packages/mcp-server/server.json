@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.space-raven/smeltr-token2022",
+  "name": "io.github.Space-Raven/smeltr-token2022",
   "title": "Smeltr Token-2022",
-  "description": "Validate and explain Solana Token-2022 module configurations (transfer fee, soulbound, permanent delegate) using Smeltr's real compatibility engine. Read-only — no keys, no on-chain actions.",
-  "version": "0.1.0",
+  "description": "Validate Token-2022 configs (transfer fee, soulbound, delegate). Read-only — no keys or RPC.",
+  "version": "0.1.1",
   "websiteUrl": "https://smeltr.org/docs/mcp",
   "repository": {
     "url": "https://github.com/Space-Raven/Smeltr",
@@ -14,7 +14,7 @@
     {
       "registryType": "npm",
       "identifier": "@smeltr/mcp-server",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       }

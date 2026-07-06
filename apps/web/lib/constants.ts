@@ -38,3 +38,6 @@ export const EXPLORER = {
  */
 export const PLATFORM_FEE_LAMPORTS = 30_000_000; // 0.03 SOL
 export const PLATFORM_FEE_RECIPIENT = process.env.NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT ?? "";
+
+/** Default Prisma/API chain id for Solana mainnet deployments */
+export const DEFAULT_CHAIN_ID = "solana-mainnet";

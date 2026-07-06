@@ -3,18 +3,21 @@
 import { useEffect, useState, useCallback } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { Token2022NativeMetadataProvider } from "@platform/module-registry";
-import { buildMetadataAttachmentInstructions } from "@platform/tx-builder";
+import { Token2022NativeMetadataProvider, MetaplexLegacyMetadataProvider } from "@platform/module-registry";
+import { resolveSolanaContext, getDeploymentCapabilities } from "@platform/tx-builder";
 import { useSiwsAuth } from "../../hooks/useSiwsAuth";
 import { useSubscription } from "../../hooks/useSubscription";
 import { useBetaDisclaimer } from "../../components/BetaDisclaimerModal";
 import { SmeltrPlusComingSoonBanner } from "../../components/SmeltrPlusUpgradeModal";
 import { isSmeltrPlusLiveClient } from "../../lib/smeltrPlusClient";
 import { submitTransaction } from "../../lib/submitTransaction";
-import { API_ENDPOINTS, EXPLORER } from "../../lib/constants";
+import { API_ENDPOINTS, EXPLORER, DEFAULT_CHAIN_ID } from "../../lib/constants";
 import { explorerClusterParam } from "../../lib/explorer";
+import { solanaTargetFromRecord } from "../../lib/deploymentTarget";
 
 interface DeploymentRecord {
+  chainId: string;
+  tokenStandard: string;
   mintAddress: string;
   decimals: number;
   hasMetadata: boolean;
@@ -88,26 +91,46 @@ export default function DashboardPage() {
   const handleAddMetadata = async (deployment: DeploymentRecord) => {
     if (!wallet.publicKey || !deployment.uri || !deployment.name || !deployment.symbol) return;
 
-    setAttaching(deployment.mintAddress);
+    const recordKey = `${deployment.chainId}:${deployment.mintAddress}`;
+    setAttaching(recordKey);
     setError(null);
     try {
-      const instructions = buildMetadataAttachmentInstructions({
-        mint: new PublicKey(deployment.mintAddress),
-        payer: wallet.publicKey,
-        userWallet: wallet.publicKey,
-        decimals: deployment.decimals,
-        provider: Token2022NativeMetadataProvider,
-        input: { name: deployment.name, symbol: deployment.symbol, uri: deployment.uri },
-      });
+      const target = solanaTargetFromRecord(deployment.chainId, deployment.tokenStandard);
+      const caps = getDeploymentCapabilities(target);
+      if (!caps.nativeTokenMetadata && !caps.metaplexMetadata) {
+        throw new Error("Metadata attachment is not available for this token type.");
+      }
+
+      const provider =
+        deployment.tokenStandard === "spl-legacy"
+          ? MetaplexLegacyMetadataProvider
+          : Token2022NativeMetadataProvider;
+
+      const { adapter, chainRecordId } = resolveSolanaContext(target);
+      const instructions = await adapter.buildMetadataAttachmentInstructions(
+        { chainRecordId, connection },
+        {
+          mint: new PublicKey(deployment.mintAddress),
+          payer: wallet.publicKey,
+          userWallet: wallet.publicKey,
+          decimals: deployment.decimals,
+          provider,
+          input: { name: deployment.name, symbol: deployment.symbol, uri: deployment.uri },
+        }
+      );
 
       const sig = await submitTransaction({ connection, wallet, instructions });
 
-      const patchRes = await fetch(`/api/deployments/${deployment.mintAddress}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
-        body: JSON.stringify({ metadataSignature: sig }),
-      });
+      const chainId = deployment.chainId || DEFAULT_CHAIN_ID;
+      const patchRes = await fetch(
+        `/api/deployments/${deployment.mintAddress}?chainId=${encodeURIComponent(chainId)}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ metadataSignature: sig }),
+        }
+      );
       if (!patchRes.ok) {
         const body = await patchRes.json().catch(() => ({}));
         throw new Error(
@@ -124,8 +147,6 @@ export default function DashboardPage() {
     }
   };
 
-  // While restoring an existing session, show a neutral loading state rather
-  // than flashing the "sign in" prompt to an already-authenticated user.
   if (siws.status === "restoring") {
     return (
       <div className="max-w-xl mx-auto p-6">
@@ -190,7 +211,6 @@ export default function DashboardPage() {
       {loading && <p className="text-sm text-gray-500">Loading…</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      {/* Empty state — a first-time user's very first impression of the dashboard */}
       {!loading && !error && siws.status === "authenticated" && deployments.length === 0 && (
         <div
           className="rounded-xl border border-amber-200 p-8 text-center"
@@ -213,38 +233,50 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {deployments.map((d) => (
-        <div key={d.mintAddress} className="rounded-md border border-gray-200 p-3 text-sm">
-          <p className="font-mono text-xs text-gray-500">{d.mintAddress}</p>
-          {d.name && (
-            <p className="font-medium mt-0.5">
-              {d.name}{" "}
-              <span className="text-gray-500 font-normal">({d.symbol})</span>
-            </p>
-          )}
-          <a
-            className="text-amber-700 underline text-xs"
-            href={`${EXPLORER.BASE_URL}/address/${d.mintAddress}${explorerClusterParam(connection.rpcEndpoint)}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            View on Explorer
-          </a>
+      {deployments.map((d) => {
+        const recordKey = `${d.chainId}:${d.mintAddress}`;
+        const caps = getDeploymentCapabilities(solanaTargetFromRecord(d.chainId, d.tokenStandard));
+        const showMetadataResume =
+          d.hasMetadata &&
+          !d.metadataAttached &&
+          (caps.nativeTokenMetadata || caps.metaplexMetadata);
 
-          {d.hasMetadata && !d.metadataAttached && (
-            <div className="mt-2">
-              <p className="text-amber-700 text-xs">Metadata not yet attached.</p>
-              <button
-                onClick={() => handleAddMetadata(d)}
-                disabled={attaching === d.mintAddress}
-                className="mt-1 rounded-md bg-amber-600 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50"
-              >
-                {attaching === d.mintAddress ? "Adding metadata…" : "Add Metadata"}
-              </button>
-            </div>
-          )}
-        </div>
-      ))}
+        return (
+          <div key={recordKey} className="rounded-md border border-gray-200 p-3 text-sm">
+            <p className="font-mono text-xs text-gray-500">{d.mintAddress}</p>
+            {d.tokenStandard === "spl-legacy" && (
+              <p className="text-xs text-gray-400 mt-0.5">Classic SPL</p>
+            )}
+            {d.name && (
+              <p className="font-medium mt-0.5">
+                {d.name}{" "}
+                <span className="text-gray-500 font-normal">({d.symbol})</span>
+              </p>
+            )}
+            <a
+              className="text-amber-700 underline text-xs"
+              href={`${EXPLORER.BASE_URL}/address/${d.mintAddress}${explorerClusterParam(connection.rpcEndpoint)}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View on Explorer
+            </a>
+
+            {showMetadataResume && (
+              <div className="mt-2">
+                <p className="text-amber-700 text-xs">Metadata not yet attached.</p>
+                <button
+                  onClick={() => handleAddMetadata(d)}
+                  disabled={attaching === recordKey}
+                  className="mt-1 rounded-md bg-amber-600 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50"
+                >
+                  {attaching === recordKey ? "Adding metadata…" : "Add Metadata"}
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })}
 
       {deployments.length === 0 && !loading && (
         <p className="text-sm text-gray-500">No deployments yet.</p>

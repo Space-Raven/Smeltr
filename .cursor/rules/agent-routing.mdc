@@ -1,0 +1,70 @@
+---
+description: Dom/sub agent routing — Cursor vs Codex vs human; override only with explicit per-action approval
+alwaysApply: true
+---
+
+# Agent routing (Cursor, Codex, human)
+
+**Enforcement:** Follow this rule-set by default. To violate any rule below, stop and get **explicit per-action user approval** — name the rule being broken and the exact action. Do not infer override from vague task wording. One approval = one action.
+
+**Default Dom:** Human for brand taste, merge/ship decisions, and secrets. Agents are Sub unless this doc assigns Dom.
+
+## Role assignments
+
+| Domain | Dom | Sub | Notes |
+|--------|-----|-----|-------|
+| Repo ship (edit, test, git, PR, MCP/SEO) | **Cursor** | Codex `exec` for review | Cursor owns ground truth in this monorepo |
+| Raw codegen in existing codebase | **Cursor** | Codex on stuck/isolated logic | Match module-registry / tx-builder patterns first |
+| Creative / complex assessment | **Codex** | Cursor to verify in tree | Audits, 10×, GTM critique, ambiguous tradeoffs |
+| Greenfield architecture / spikes | **Codex** (draft) | **Cursor** (apply) | Codex must not commit; Cursor reconciles with branches |
+| P0 security / non-custodial | **Cursor** implements | **Separate** reviewer Sub | Reviewer ≠ same thread that wrote the code |
+| Social / marketing copy | **Cursor** orchestrator | Copywriter + SMM Subs; optional Codex pass | Log in `marketing/social/posting-log.md` |
+| Brand / UX / Figma | **Human + Figma** | Agents | SVG/export/copy only — no AI-generated brand marks |
+| Roadmap | **Codex draft → Cursor reconcile** | Human approves | Roadmap must match git reality (merged vs branch-only) |
+
+## Codex invocation (Sub)
+
+Use non-interactive exec from repo root when Sub role is assigned:
+
+```powershell
+codex exec -C "C:\Users\joshk\Token-Platform-Merged" -o .cursor/codex-last-output.md "<prompt>"
+```
+
+Prefer `-s workspace-write` only when Codex must edit files; default read-only review. Write output to a tracked path so Cursor Dom can merge findings.
+
+CLI: `C:\Users\joshk\AppData\Local\OpenAI\Codex\bin\ea1c60319a1dcb19\codex.exe` (or `codex` on PATH).
+
+## Cursor subagents (Sub under Cursor Dom)
+
+| Subagent | Use |
+|----------|-----|
+| `explore` | Read-only repo discovery |
+| `shell` | Git/CI commands |
+| `bugbot` / `security-review` | Review only — user must ask |
+| `composer-2.5-fast` | Parallel copy/drafts |
+
+Cursor parent **synthesizes** Sub outputs; Subs do not ship conflicting changes without Dom merge.
+
+## Hard rules (require explicit approval to break)
+
+1. **Single Dom per branch/session** — never two agents both committing/editing the same branch without one orchestrator.
+2. **No self-review on P0** — implementer and security reviewer must be separate passes (Codex `exec review` or dedicated review subagent).
+3. **Codex Dom without Cursor apply** — architecture drafts may not land as commits until Cursor reconciles against the repo.
+4. **No Codex for brand assets** — logos, marks, mocks stay SVG pipeline / Figma; agents supply copy and diagrams only.
+5. **No silent `codex exec`** — tell the user when invoking Codex; show output path.
+6. **Human Dom** — force-push, secret rotation, production env, and public Pjorg lore beyond deadpan social lines.
+
+## When to escalate to human (never auto-override)
+
+- Destructive git (force-push, history rewrite)
+- `.env` / credentials / Stripe live keys
+- Publishing npm, MCP registry, or social posts (deliver copy; user posts)
+- Violating non-custodial positioning (memecoin hype, custodial flows)
+
+## Override prompt template
+
+Before breaking a rule, ask:
+
+> This action would violate **\<rule N / name\>**: \<what you want to do\>. Approve this single override? (yes/no)
+
+Proceed only on clear **yes** for that specific action.

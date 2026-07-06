@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd apps/web && npx prisma migrate deploy && npx prisma generate && npm run build",
+  "buildCommand": "bash apps/web/scripts/vercel-build.sh",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci --legacy-peer-deps",
   "framework": "nextjs",

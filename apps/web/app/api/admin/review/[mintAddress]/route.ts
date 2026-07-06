@@ -32,13 +32,21 @@ export async function PATCH(
   }
   const note = typeof body.note === "string" ? body.note.slice(0, 500) : null;
 
-  try {
-    const deployment = await prisma.deployment.update({
-      where: { mintAddress: params.mintAddress },
-      data: { reviewStatus: body.status, reviewedAt: new Date(), reviewNote: note },
-    });
-    return NextResponse.json({ deployment });
-  } catch {
+  const existing = await prisma.deployment.findFirst({
+    where: { mintAddress: params.mintAddress },
+  });
+  if (!existing) {
     return NextResponse.json({ error: "Mint not found" }, { status: 404 });
   }
+
+  const deployment = await prisma.deployment.update({
+    where: {
+      chainId_mintAddress: {
+        chainId: existing.chainId,
+        mintAddress: existing.mintAddress,
+      },
+    },
+    data: { reviewStatus: body.status, reviewedAt: new Date(), reviewNote: note },
+  });
+  return NextResponse.json({ deployment });
 }

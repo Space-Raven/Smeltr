@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CANONICAL Smeltr S mark - geometric Cool S path (from brand/source/master/s-mark-filled.png).
+  Render: double stroke (black outer, amber inner), no fill - gradient shows through center.
+  DO NOT edit the path d= attribute in derived assets.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="markBg" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="55%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#C2410C"/>
+    </linearGradient>
+  </defs>
+  <!-- Canonical path -->
+  <path
+    id="s-silhouette"
+    d="M 35 10 L 65 10 L 65 30 L 50 45 L 65 60 L 65 80 L 35 80 L 35 60 L 50 45 L 35 30 Z"
+    fill="none"
+    stroke="#171717"
+    stroke-width="2.4"
+    stroke-linejoin="miter"
+    stroke-linecap="butt"
+  />
+  <path
+    id="s-silhouette-inner"
+    d="M 35 10 L 65 10 L 65 30 L 50 45 L 65 60 L 65 80 L 35 80 L 35 60 L 50 45 L 35 30 Z"
+    fill="none"
+    stroke="#FACC15"
+    stroke-width="1.15"
+    stroke-linejoin="miter"
+    stroke-linecap="butt"
+  />
+  <!-- 6 sparks - positions from s-mark-filled.png -->
+  <g id="s-sparks">
+    <circle cx="74" cy="12" r="3" fill="#F5F5F4" opacity="0.95"/>
+    <circle cx="80" cy="8" r="2.2" fill="#FAFAF9" opacity="0.92"/>
+    <circle cx="77" cy="18" r="1.6" fill="#E7E5E4" opacity="0.88"/>
+    <circle cx="26" cy="82" r="2.6" fill="#F5F5F4" opacity="0.92"/>
+    <circle cx="20" cy="76" r="2" fill="#FAFAF9" opacity="0.88"/>
+    <circle cx="30" cy="78" r="1.5" fill="#E7E5E4" opacity="0.85"/>
+  </g>
+</svg>

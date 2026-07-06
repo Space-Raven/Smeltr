@@ -1,9 +1,10 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import {
-  buildMintInstructions,
   BuildMintInstructionsResult,
   ModuleSelection,
   PlatformFeeConfig,
+  resolveSolanaContext,
+  type DeploymentTarget,
 } from "@platform/tx-builder";
 import { ModuleId, MetadataProvider, TokenMetadataInput } from "@platform/module-registry";
 import { HIGH_IMPACT_MODULES } from "./risk";
@@ -12,9 +13,11 @@ import { PLATFORM_FEE_LAMPORTS, PLATFORM_FEE_RECIPIENT } from "./constants";
 export interface DeploymentPlan extends BuildMintInstructionsResult {
   highImpactModules: ModuleId[];
   requiresExplicitConfirmation: boolean;
+  target: DeploymentTarget;
 }
 
 export interface BuildDeploymentPlanArgs {
+  target: DeploymentTarget;
   connection: Connection;
   payer: PublicKey;
   mint: PublicKey;
@@ -30,16 +33,12 @@ export interface BuildDeploymentPlanArgs {
 }
 
 /**
- * Thin wrapper over `buildMintInstructions` that additionally flags any
- * selected modules requiring explicit user acknowledgment before the
- * frontend proceeds to the sign/submit step.
+ * Builds a deployment plan via the Solana mint adapter for `target.tokenStandard`.
+ * Flags high-impact modules for explicit acknowledgment before signing.
  */
 export async function buildDeploymentPlan(
   args: BuildDeploymentPlanArgs
 ): Promise<DeploymentPlan> {
-  // Apply the platform protocol fee when a recipient wallet is configured.
-  // Left undefined (no fee) when PLATFORM_FEE_RECIPIENT is unset — e.g. local
-  // dev or any environment where fee capture is intentionally disabled.
   let platformFee: PlatformFeeConfig | undefined;
   if (PLATFORM_FEE_RECIPIENT) {
     platformFee = {
@@ -48,7 +47,11 @@ export async function buildDeploymentPlan(
     };
   }
 
-  const result = await buildMintInstructions({ ...args, platformFee });
+  const { adapter, chainRecordId } = resolveSolanaContext(args.target);
+  const result = await adapter.buildMintInstructions(
+    { chainRecordId, connection: args.connection },
+    { ...args, platformFee }
+  );
 
   const highImpactModules = args.modules
     .map((m) => m.id)
@@ -58,5 +61,6 @@ export async function buildDeploymentPlan(
     ...result,
     highImpactModules,
     requiresExplicitConfirmation: highImpactModules.length > 0,
+    target: args.target,
   };
 }

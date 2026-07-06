@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-label="Smeltr Token">
+  <defs>
+    <radialGradient id="coinBg" cx="50%" cy="55%" r="55%">
+      <stop offset="0%" stop-color="#2D1507"/>
+      <stop offset="100%" stop-color="#1A0C05"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="sFill" x1="256" y1="160" x2="256" y2="352" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <pattern id="ribs" width="512" height="6" patternUnits="userSpaceOnUse">
+      <rect width="512" height="3" fill="#92400E" opacity="0.45"/>
+      <rect y="3" width="512" height="3" fill="transparent"/>
+    </pattern>
+    <clipPath id="sClip">
+      <path d="M 226 176 L 292 176 L 292 218 L 259 251 L 292 284 L 292 326 L 226 326 L 226 284 L 259 251 L 226 218 Z"/>
+    </clipPath>
+    <filter id="spark" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <circle cx="256" cy="256" r="240" fill="url(#coinBg)"/>
+  <circle cx="256" cy="256" r="240" fill="none" stroke="url(#ring)" stroke-width="20"/>
+  <circle cx="256" cy="256" r="218" fill="none" stroke="#92400E" stroke-width="2" opacity="0.6"/>
+  <g clip-path="url(#sClip)">
+    <rect x="210" y="160" width="100" height="180" fill="url(#sFill)"/>
+    <rect x="210" y="160" width="100" height="180" fill="url(#ribs)"/>
+  </g>
+  <path d="M 226 176 L 292 176 L 292 218 L 259 251 L 292 284 L 292 326 L 226 326 L 226 284 L 259 251 L 226 218 Z" fill="none" stroke="#FEF3C7" stroke-width="2" opacity="0.18"/>
+  <circle cx="302" cy="168" r="6" fill="#FDE68A" filter="url(#spark)"/>
+  <circle cx="316" cy="156" r="3.5" fill="#FBBF24" filter="url(#spark)"/>
+  <text x="256" y="420" font-family="system-ui,sans-serif" font-size="28" font-weight="700" fill="#FEF3C7" text-anchor="middle" letter-spacing="6" opacity="0.85">SMELTR</text>
+</svg>

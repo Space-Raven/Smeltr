@@ -28,6 +28,48 @@ import path from "path";
 
 export const LOCALNET_URL = process.env.SOLANA_TEST_RPC ?? "http://127.0.0.1:8899";
 
+const VALIDATOR_START_HINT =
+  "Start a local validator in another terminal:\n" +
+  "  Windows: npm run validator:local:wsl\n" +
+  "  Linux/macOS: npm run validator:local\n" +
+  "  Or auto-start + test: npm run test:a2:integration\n" +
+  "  Devnet (no validator): npm run test:a2:integration:devnet";
+
+/** Race getSlot against a timeout; always clears the timer to avoid Jest open handles. */
+async function getSlotWithTimeout(
+  connection: Connection,
+  timeoutMs: number
+): Promise<number> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      connection.getSlot(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error("getSlot timeout")), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
+}
+
+/** Quick probe — returns false if nothing listens within maxWaitMs (default 3s). */
+export async function isValidatorReachable(
+  connection: Connection,
+  maxWaitMs = 3000
+): Promise<boolean> {
+  const deadline = Date.now() + maxWaitMs;
+  while (Date.now() < deadline) {
+    try {
+      await getSlotWithTimeout(connection, 800);
+      return true;
+    } catch {
+      await new Promise((r) => setTimeout(r, 200));
+    }
+  }
+  return false;
+}
+
 export function localnetConnection(): Connection {
   return new Connection(LOCALNET_URL, "confirmed");
 }
@@ -69,25 +111,20 @@ const MIN_BALANCE = 0.05 * LAMPORTS_PER_SOL; // test costs ~0.003 SOL; 0.05 is a
 /** Wait for the validator to be reachable before issuing requests. */
 async function waitForValidator(
   connection: Connection,
-  retries = 20,
-  delayMs = 1000
+  retries = 6,
+  delayMs = 500
 ): Promise<void> {
   for (let i = 0; i < retries; i++) {
     try {
-      // Use a short per-attempt timeout so the fetch doesn't outlive the test
-      // suite and trigger Jest's open handle warning.
-      await Promise.race([
-        connection.getSlot(),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("getSlot timeout")), delayMs - 1)
-        ),
-      ]);
+      await getSlotWithTimeout(connection, delayMs - 1);
       return;
     } catch {
       await new Promise((r) => setTimeout(r, delayMs));
     }
   }
-  throw new Error(`Validator at ${LOCALNET_URL} did not respond after ${retries}s`);
+  throw new Error(
+    `Validator at ${LOCALNET_URL} did not respond after ~${Math.ceil((retries * delayMs) / 1000)}s.\n${VALIDATOR_START_HINT}`
+  );
 }
 
 export async function ensureFunded(
@@ -141,13 +178,30 @@ export function setupLocalnet() {
   const ctx: {
     connection: Connection;
     payer: Keypair;
-  } = {} as any;
+    /** False when integration tests should no-op (validator intentionally skipped). */
+    available: boolean;
+  } = { available: false } as any;
 
   beforeAll(async () => {
     ctx.connection = localnetConnection();
+
+    if (process.env.SKIP_INTEGRATION === "1") {
+      ctx.available = false;
+      console.warn("[integration] SKIP_INTEGRATION=1 — on-chain tests skipped");
+      return;
+    }
+
+    const up = await isValidatorReachable(ctx.connection);
+    if (!up) {
+      throw new Error(
+        `[integration] No validator at ${LOCALNET_URL}.\n${VALIDATOR_START_HINT}`
+      );
+    }
+
+    ctx.available = true;
     ctx.payer = payerKeypair();
     await ensureFunded(ctx.connection, ctx.payer);
-  }, 90_000); // 90s: covers validator cold-start + airdrop confirmation
+  }, 90_000);
 
   return ctx;
 }

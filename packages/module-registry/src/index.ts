@@ -35,3 +35,4 @@ export * from "./modules/non-transferable";
 export * from "./modules/permanent-delegate";
 export * from "./metadata/types";
 export * from "./metadata/token2022-native";
+export * from "./metadata/metaplex-legacy";

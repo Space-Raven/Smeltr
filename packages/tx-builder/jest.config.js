@@ -2,6 +2,7 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   // Only pick up *.test.ts files — excludes fixtures/, helpers, etc.
   testMatch: ["**/__tests__/**/*.test.ts"],
   transform: {

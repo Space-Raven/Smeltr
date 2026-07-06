@@ -47,7 +47,9 @@ model Subscription {
 // --- Deployment index (dashboard / resumability) ---------------------------
 
 model Deployment {
-  mintAddress       String    @id
+  chainId           String    @default("solana-mainnet")
+  tokenStandard     String    @default("token-2022") // "token-2022" | "spl-legacy"
+  mintAddress       String
   walletAddress     String
   decimals          Int
   hasMetadata       Boolean   @default(false)
@@ -69,6 +71,7 @@ model Deployment {
   reviewedAt        DateTime?
   reviewNote        String?
 
+  @@id([chainId, mintAddress])
   @@index([walletAddress])
   @@index([reviewStatus, createdAt])
 }

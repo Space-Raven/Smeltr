@@ -1,6 +1,6 @@
 {
   "name": "@smeltr/mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Smeltr MCP server — validate Solana Token-2022 configs in Claude Desktop, Cursor, and other AI assistants",
   "keywords": [
     "mcp",
@@ -13,7 +13,7 @@
     "cursor",
     "token creation"
   ],
-  "mcpName": "io.github.space-raven/smeltr-token2022",
+  "mcpName": "io.github.Space-Raven/smeltr-token2022",
   "license": "MIT",
   "repository": {
     "type": "git",

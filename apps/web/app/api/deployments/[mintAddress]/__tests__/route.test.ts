@@ -20,20 +20,24 @@ const mockUpdate = prisma.deployment.update as jest.Mock;
 const mockGetSessionWallet = getSessionWallet as jest.Mock;
 
 const MINT_ADDRESS = "MintAddress1111111111111111111111111111111";
+const CHAIN_ID = "solana-mainnet";
 const SESSION_WALLET = "SessionWallet11111111111111111111111111111";
 const OTHER_WALLET = "OtherWallet111111111111111111111111111111";
-/** Matches PatchDeploymentSchema — base58 charset, uppercase letters only. */
 const VALID_SIG = "3ABCDEFGHJKLMNPQRSTUVWXYZ23456789ABCDE";
 
-function makeRequest(body: unknown): Request {
-  return new Request(`http://localhost/api/deployments/${MINT_ADDRESS}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+function makeRequest(body: unknown, chainId = CHAIN_ID): Request {
+  return new Request(
+    `http://localhost/api/deployments/${MINT_ADDRESS}?chainId=${encodeURIComponent(chainId)}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }
+  );
 }
 
 const params = { params: { mintAddress: MINT_ADDRESS } };
+const recordKey = { chainId: CHAIN_ID, mintAddress: MINT_ADDRESS };
 
 describe("PATCH /api/deployments/[mintAddress]", () => {
   beforeEach(() => {
@@ -65,7 +69,7 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
   it("returns 404 (not 403) when the record exists but belongs to a different wallet", async () => {
     mockGetSessionWallet.mockResolvedValue(SESSION_WALLET);
     mockFindUnique.mockResolvedValue({
-      mintAddress: MINT_ADDRESS,
+      ...recordKey,
       walletAddress: OTHER_WALLET,
       metadataAttached: false,
     });
@@ -78,13 +82,6 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
-  /**
-   * The core anti-enumeration property: "doesn't exist" and "exists but
-   * isn't yours" must be byte-for-byte indistinguishable responses. If a
-   * future change makes these diverge (different message, different
-   * status, an extra header, etc.), an attacker could use this endpoint to
-   * enumerate which mint addresses other wallets have deployed.
-   */
   it("produces an identical response for 'not found' and 'not yours'", async () => {
     mockGetSessionWallet.mockResolvedValue(SESSION_WALLET);
 
@@ -92,7 +89,7 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
     const notFoundRes = await PATCH(makeRequest({ metadataSignature: VALID_SIG }), params);
 
     mockFindUnique.mockResolvedValueOnce({
-      mintAddress: MINT_ADDRESS,
+      ...recordKey,
       walletAddress: OTHER_WALLET,
       metadataAttached: false,
     });
@@ -105,12 +102,12 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
   it("updates the record when the session wallet owns it", async () => {
     mockGetSessionWallet.mockResolvedValue(SESSION_WALLET);
     mockFindUnique.mockResolvedValue({
-      mintAddress: MINT_ADDRESS,
+      ...recordKey,
       walletAddress: SESSION_WALLET,
       metadataAttached: false,
     });
     mockUpdate.mockResolvedValue({
-      mintAddress: MINT_ADDRESS,
+      ...recordKey,
       walletAddress: SESSION_WALLET,
       metadataAttached: true,
       metadataSignature: VALID_SIG,
@@ -121,9 +118,37 @@ describe("PATCH /api/deployments/[mintAddress]", () => {
 
     expect(res.status).toBe(200);
     expect(mockUpdate).toHaveBeenCalledWith({
-      where: { mintAddress: MINT_ADDRESS },
+      where: { chainId_mintAddress: recordKey },
       data: { metadataAttached: true, metadataSignature: VALID_SIG },
     });
     expect(body.deployment.metadataAttached).toBe(true);
+  });
+
+  it("defaults chainId to solana-mainnet when query param is omitted", async () => {
+    mockGetSessionWallet.mockResolvedValue(SESSION_WALLET);
+    mockFindUnique.mockResolvedValue({
+      ...recordKey,
+      walletAddress: SESSION_WALLET,
+      metadataAttached: false,
+    });
+    mockUpdate.mockResolvedValue({
+      ...recordKey,
+      walletAddress: SESSION_WALLET,
+      metadataAttached: true,
+      metadataSignature: VALID_SIG,
+    });
+
+    const req = new Request(`http://localhost/api/deployments/${MINT_ADDRESS}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ metadataSignature: VALID_SIG }),
+    });
+
+    const res = await PATCH(req, params);
+
+    expect(res.status).toBe(200);
+    expect(mockFindUnique).toHaveBeenCalledWith({
+      where: { chainId_mintAddress: recordKey },
+    });
   });
 });
