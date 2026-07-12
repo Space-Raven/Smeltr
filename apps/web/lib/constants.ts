@@ -25,7 +25,7 @@ export const EXPLORER = {
  * Platform protocol fee (per-mint), captured in transaction 1.
  *
  * Canonical pricing: 0.03–0.05 SOL (corporate/monetization-strategy.md §1).
- * Set to 0.03 SOL — the cost-efficient entry point that undercuts competitors
+ * Set to 0.04 SOL — cost-efficient entry point that still undercuts competitors
  * (typically 0.05–0.1 SOL). Adjust here as the competitive benchmark settles.
  *
  * The fee only applies when PLATFORM_FEE_RECIPIENT is configured; if unset, no
@@ -36,7 +36,7 @@ export const EXPLORER = {
  * follow-up — wire it where the plan is prepared once the subscription check is
  * available, by overriding feeLamports (e.g. 0) for active subscribers.
  */
-export const PLATFORM_FEE_LAMPORTS = 30_000_000; // 0.03 SOL
+export const PLATFORM_FEE_LAMPORTS = 40_000_000; // 0.04 SOL
 export const PLATFORM_FEE_RECIPIENT = process.env.NEXT_PUBLIC_PLATFORM_FEE_RECIPIENT ?? "";
 
 /** Default Prisma/API chain id for Solana mainnet deployments */
