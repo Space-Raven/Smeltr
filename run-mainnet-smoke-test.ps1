@@ -1,13 +1,13 @@
-# Smeltr mainnet smoke test — full path including Irys upload
-# Cost: ~0.002-0.003 SOL (mint rent + 2x tx fees). Irys upload is free under 100KB.
+# Smeltr mainnet smoke test — full deploy path (Token-2022 + optional Classic SPL)
+# Cost: ~0.03 SOL platform fee + mint rent + Metaplex/native metadata rent. Irys free <100KB.
 # Does NOT modify .env — passes mainnet RPC as a process env var.
 #
-# Usage: C:\Users\joshk\Token-Platform-Merged\run-mainnet-smoke-test.ps1
+# Usage: npm run smoke:mainnet
+# Checklist: docs/BETA_LAUNCH_CHECKLIST.md § Blocker 3
 
 $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $webDir = Join-Path $repoRoot "apps\web"
 
-# Kill any process already holding port 3000 so the correct dev server starts cleanly.
 $existing = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue
 if ($existing) {
     Write-Host "Killing existing process on port 3000 (PID $($existing.OwningProcess))..." -ForegroundColor Yellow
@@ -17,48 +17,36 @@ if ($existing) {
 
 Write-Host ""
 Write-Host "=== Smeltr MAINNET smoke test ===" -ForegroundColor Magenta
-Write-Host "RPC: https://solana.drpc.org" -ForegroundColor White
-Write-Host "Irys: https://uploader.irys.xyz (mainnet bundler)" -ForegroundColor White
+Write-Host "RPC: https://solana.drpc.org (local dev only — production uses Vercel NEXT_PUBLIC_SOLANA_RPC_URL)" -ForegroundColor White
+Write-Host "Checklist: docs/BETA_LAUNCH_CHECKLIST.md" -ForegroundColor White
 Write-Host ""
-Write-Host "COST: ~0.002-0.003 real SOL for mint rent + fees." -ForegroundColor Yellow
-Write-Host "      Irys image + JSON upload is free (under 100KB threshold)." -ForegroundColor Yellow
+Write-Host "COST: ~0.03 SOL platform fee + rent (real mainnet SOL)." -ForegroundColor Yellow
 Write-Host ""
 
-# Check uploader.irys.xyz is reachable
-Write-Host "Checking uploader.irys.xyz..." -ForegroundColor Yellow
-try {
-    $null = Invoke-WebRequest -Uri "https://uploader.irys.xyz" -Method GET -TimeoutSec 5 -UseBasicParsing 2>$null
-    Write-Host "  uploader.irys.xyz reachable" -ForegroundColor Green
-} catch {
-    $msg = $_.Exception.Message
-    if ($msg -match "timed out|timeout|Unable to connect") {
-        Write-Host "  uploader.irys.xyz not reachable - check internet connection" -ForegroundColor Red
-        exit 1
-    }
-    Write-Host "  uploader.irys.xyz reachable (HTTP error fine)" -ForegroundColor Green
-}
-
-Write-Host ""
 Write-Host "CHECKLIST:" -ForegroundColor Cyan
-Write-Host "  [1] Phantom set to MAINNET" -ForegroundColor White
-Write-Host "  [2] Phantom has >= 0.01 SOL (mainnet)" -ForegroundColor White
-Write-Host "  [3] Have a small image ready (<95KB recommended)" -ForegroundColor White
+Write-Host "  [1] Phantom/Solflare set to MAINNET" -ForegroundColor White
+Write-Host "  [2] Wallet has >= 0.05 SOL on mainnet" -ForegroundColor White
+Write-Host "  [3] Small image ready (<95KB)" -ForegroundColor White
 Write-Host ""
-Write-Host "WHAT TO TEST:" -ForegroundColor Cyan
-Write-Host "  1. Connect Phantom (top-right)" -ForegroundColor White
-Write-Host "  2. Fill token name + symbol + upload image" -ForegroundColor White
-Write-Host "  3. Click 'Upload metadata' -- Phantom will prompt to sign (not pay)" -ForegroundColor White
-Write-Host "  4. Once uploaded, click 'Review Deployment'" -ForegroundColor White
-Write-Host "  5. Confirm Tx1 in Phantom (CreateAccount + InitializeMint)" -ForegroundColor White
-Write-Host "  6. Click 'Add Metadata', confirm Tx2 in Phantom" -ForegroundColor White
-Write-Host "  7. Verify success screen shows mint address + metadata confirmed" -ForegroundColor White
+Write-Host "TOKEN-2022 PATH:" -ForegroundColor Cyan
+Write-Host "  1. Connect wallet" -ForegroundColor White
+Write-Host "  2. Token type: Token-2022 (default)" -ForegroundColor White
+Write-Host "  3. Name + symbol + logo -> Review Deployment" -ForegroundColor White
+Write-Host "  4. Sign tx1 in wallet (create mint)" -ForegroundColor White
+Write-Host "  5. Approve auto tx2 OR click Add Metadata if prompted" -ForegroundColor White
+Write-Host "  6. Success screen: mint address + metadata attached" -ForegroundColor White
+Write-Host "  7. Explorer shows name/symbol (not Unknown)" -ForegroundColor White
+Write-Host "  8. SIWS sign-in -> Dashboard row metadataAttached: true" -ForegroundColor White
+Write-Host ""
+Write-Host "CLASSIC SPL REGRESSION (optional):" -ForegroundColor Cyan
+Write-Host "  9. Select Classic SPL -> metadata form -> both txs -> Metaplex on explorer" -ForegroundColor White
 Write-Host ""
 Write-Host "Starting dev server with mainnet RPC..." -ForegroundColor Yellow
-Write-Host "Opens at: http://localhost:3000/deploy" -ForegroundColor Cyan
-Write-Host "Press Ctrl+C when done." -ForegroundColor Gray
+Write-Host "Opens: http://localhost:3000/deploy" -ForegroundColor Cyan
+Write-Host "Press Ctrl+C when done. Record PASS/FAIL in docs/BETA_LAUNCH_CHECKLIST.md" -ForegroundColor Gray
 Write-Host ""
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 Start-Process "http://localhost:3000/deploy"
 
 Set-Location $webDir
