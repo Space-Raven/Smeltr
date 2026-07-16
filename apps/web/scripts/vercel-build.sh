@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Vercel build entrypoint. Resolves DATABASE_URL from Vercel Storage Postgres
 # env vars when DATABASE_URL is unset/empty (common after Storage → Connect).
-set -euo pipefail
+set -eu
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 WEB="$REPO_ROOT/apps/web"
@@ -44,5 +44,5 @@ if [ ! -e "node_modules/@platform/module-registry" ]; then
   exit 1
 fi
 
-echo "Next build: monorepo root → build:apps"
+echo "Next build: monorepo root -> build:apps"
 npm run build:apps

@@ -13,7 +13,8 @@
     "brand:export-mocks": "node ../../brand/scripts/export-mocks.mjs",
     "brand:check": "node scripts/brand-check.mjs",
     "usage:summary": "node scripts/usage-summary.mjs",
-    "usage:summary:prod": "vercel env pull .env.production.local --environment=production --yes && node scripts/usage-summary.mjs --env-file .env.production.local"
+    "usage:summary:prod:pull": "vercel env pull .env.production.local --environment=production --yes",
+    "usage:summary:prod": "node scripts/usage-summary.mjs --env-file .env.production.local"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

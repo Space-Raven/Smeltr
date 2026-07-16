@@ -2,11 +2,17 @@
  * Usage summary — aggregates funnel proxies from Postgres.
  *
  * Usage:
- *   node scripts/usage-summary.mjs                    # apps/web/.env (local dev)
+ *   node scripts/usage-summary.mjs                         # apps/web/.env (local dev)
  *   node scripts/usage-summary.mjs --env-file .env.production.local
- *   npm run usage:summary:prod                      # pulls prod env then runs
  *
- * Does not print secrets; shows a redacted DB host so you know which DB you hit.
+ * Production (Vercel env pull does NOT include Storage Postgres secrets — they are empty in the file):
+ *   1. Vercel → Storage → Postgres → Connect → copy PRISMA_DATABASE_URL
+ *   2. PowerShell:
+ *        $env:DATABASE_URL = "postgresql://..."
+ *        cd apps/web
+ *        npm run usage:summary:prod
+ *
+ * Shell DATABASE_URL wins over empty values in the env file.
  */
 import { readFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
@@ -25,11 +31,31 @@ function parseArgs(argv) {
   return { envFile };
 }
 
-function loadEnv(envPath) {
-  if (!existsSync(envPath)) {
-    console.error(`Env file not found: ${envPath}`);
-    return false;
+function normalizeUrl(raw) {
+  if (!raw) return undefined;
+  const v = raw.trim().replace(/^"|"$/g, "");
+  if (!v) return undefined;
+  if (!/^postgres(ql)?:\/\//i.test(v)) return undefined;
+  return v;
+}
+
+function resolveDatabaseUrl() {
+  const direct = normalizeUrl(process.env.DATABASE_URL);
+  if (direct) return { url: direct, source: "DATABASE_URL" };
+  for (const key of [
+    "POSTGRES_URL_NON_POOLING",
+    "PRISMA_DATABASE_URL",
+    "POSTGRES_PRISMA_URL",
+    "POSTGRES_URL",
+  ]) {
+    const v = normalizeUrl(process.env[key]);
+    if (v) return { url: v, source: key };
   }
+  return undefined;
+}
+
+function loadEnvFile(envPath) {
+  if (!existsSync(envPath)) return false;
   for (const line of readFileSync(envPath, "utf8").split(/\r?\n/)) {
     const t = line.trim();
     if (!t || t.startsWith("#")) continue;
@@ -40,26 +66,13 @@ function loadEnv(envPath) {
     if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
       v = v.slice(1, -1);
     }
+    // Skip empty — Vercel env pull leaves Storage secrets as DATABASE_URL=""
+    if (!v) continue;
+    // Shell env wins (lets you pass DATABASE_URL without saving to disk)
+    if (process.env[k] !== undefined && process.env[k] !== "") continue;
     process.env[k] = v;
   }
-  const url = resolveDatabaseUrl();
-  if (url) process.env.DATABASE_URL = url;
-  return !!url;
-}
-
-function resolveDatabaseUrl() {
-  const direct = process.env.DATABASE_URL?.trim();
-  if (direct) return direct;
-  for (const key of [
-    "PRISMA_DATABASE_URL",
-    "POSTGRES_PRISMA_URL",
-    "POSTGRES_URL",
-    "POSTGRES_URL_NON_POOLING",
-  ]) {
-    const v = process.env[key]?.trim();
-    if (v) return v;
-  }
-  return undefined;
+  return true;
 }
 
 function redactDbUrl(url) {
@@ -74,18 +87,28 @@ function redactDbUrl(url) {
 }
 
 const { envFile } = parseArgs(process.argv);
+loadEnvFile(envFile);
 
-if (!loadEnv(envFile)) {
+const resolved = resolveDatabaseUrl();
+if (!resolved) {
   console.error(
-    "No database URL (DATABASE_URL empty; no PRISMA_DATABASE_URL / POSTGRES_URL from Vercel Storage).\n" +
-      "  Local dev:  npm run usage:summary\n" +
-      "  Production: npm run usage:summary:prod"
+    "No production database URL available.\n\n" +
+      "vercel env pull cannot download Storage Postgres connection strings (they show as empty).\n\n" +
+      "Do this instead:\n" +
+      "  1. Vercel → smeltrweb → Storage → your Postgres → Connect\n" +
+      "  2. Copy PRISMA_DATABASE_URL (or POSTGRES_URL_NON_POOLING)\n" +
+      "  3. PowerShell:\n" +
+      '       $env:DATABASE_URL = "postgresql://..."\n' +
+      "       npm run usage:summary:prod\n\n" +
+      "  Local dev only: npm run usage:summary"
   );
   process.exit(1);
 }
 
+process.env.DATABASE_URL = resolved.url;
+
 const prisma = new PrismaClient();
-const dbInfo = redactDbUrl(process.env.DATABASE_URL);
+const dbInfo = redactDbUrl(resolved.url);
 
 function weekAgo(n) {
   const d = new Date();
@@ -161,9 +184,9 @@ async function main() {
     JSON.stringify(
       {
         generatedAt: now.toISOString(),
-        envFile,
-        database: dbInfo,
-        feeRecipientConfigured: !!feeRecipient,
+        envFile: existsSync(envFile) ? envFile : null,
+        database: { ...dbInfo, urlSource: resolved.source },
+        feeRecipientConfigured: !!feeRecipient?.trim(),
         feeRecipientPrefix: feeRecipient ? feeRecipient.slice(0, 6) + "…" : null,
         deployments: {
           total: deploymentsTotal,
@@ -200,6 +223,20 @@ async function main() {
 
 main()
   .catch((e) => {
+    const msg = String(e?.message ?? e);
+    if (msg.includes("Can't reach database server")) {
+      console.error(
+        "\nLocal connection failed (P1001) — production DB is likely fine; your network cannot reach :5432.\n\n" +
+          "Try:\n" +
+          "  • Use PRISMA_DATABASE_URL (pooled) from Vercel Storage → Connect, not the non-pooling URL\n" +
+          "  • Ensure the URL ends with ?sslmode=require\n" +
+          "  • Test: Test-NetConnection <host> -Port 5432\n\n" +
+          "If still blocked (ISP/corporate firewall), query prod without local TCP:\n" +
+          "  • Vercel → Storage → Postgres → Data / Query tab\n" +
+          "  • Or verify live: https://www.smeltr.org/dashboard (SIWS sign-in)\n" +
+          "  • Fee-wallet mint count remains the ground-truth conversion metric\n"
+      );
+    }
     console.error(e);
     process.exit(1);
   })

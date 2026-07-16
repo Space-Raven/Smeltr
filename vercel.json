@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "bash apps/web/scripts/vercel-build.sh",
+  "buildCommand": "node apps/web/scripts/vercel-build.mjs",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm ci --legacy-peer-deps",
   "framework": "nextjs",
