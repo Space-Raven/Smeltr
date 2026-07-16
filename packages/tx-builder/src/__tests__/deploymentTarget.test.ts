@@ -23,6 +23,7 @@ describe("deploymentTarget", () => {
     expect(caps.nativeTokenMetadata).toBe(false);
     expect(caps.metaplexMetadata).toBe(true);
     expect(caps.twoStepMetadataFlow).toBe(true);
+    expect(caps.mcpModuleValidation).toBe(true);
     expect(caps.protocolFeeSol).toBe(true);
   });
 

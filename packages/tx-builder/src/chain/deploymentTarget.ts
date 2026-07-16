@@ -70,7 +70,7 @@ export function getDeploymentCapabilities(target: DeploymentTarget): DeploymentC
       nativeTokenMetadata: false,
       metaplexMetadata: true,
       twoStepMetadataFlow: true,
-      mcpModuleValidation: false, // A3
+      mcpModuleValidation: true,
       protocolFeeSol: true,
     };
   }

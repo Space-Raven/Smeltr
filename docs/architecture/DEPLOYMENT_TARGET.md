@@ -245,8 +245,8 @@ Same fee-payer + initializeMint logic; different `programId` check. Unit tests i
 - [x] A1 — Deploy UI token-type picker + capability gating
 - [x] A1b — `verifyDeployment` program-aware
 - [x] A1c — Prisma migration + API body fields
-- [ ] A2 — Metaplex metadata provider → [`SMOKE_TESTS_A2_A3.md`](SMOKE_TESTS_A2_A3.md#a2--metaplex-metadata-for-classic-spl)
-- [ ] A3 — MCP branch → [`SMOKE_TESTS_A2_A3.md`](SMOKE_TESTS_A2_A3.md#a3--mcp-tokenstandard-branch)
+- [x] A2 — Metaplex metadata provider → [`SMOKE_TESTS_A2_A3.md`](SMOKE_TESTS_A2_A3.md#a2--metaplex-metadata-for-classic-spl) (automated ✅; manual smokes open)
+- [x] A3 — MCP branch → [`SMOKE_TESTS_A2_A3.md`](SMOKE_TESTS_A2_A3.md#a3--mcp-tokenstandard-branch) (automated ✅; manual smokes open)
 - [ ] B1 — EVM adapter spike (doc + empty module)
 
 ---

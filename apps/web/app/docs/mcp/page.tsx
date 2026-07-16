@@ -91,11 +91,11 @@ export default function McpDocsPage() {
               },
               {
                 name: "validate_config",
-                desc: "Run the real compatibility engine + Zod schemas. Returns errors, warnings, and parameter issues.",
+                desc: "Run the real compatibility engine + Zod schemas (Token-2022), or mint-level validation for Classic SPL via tokenStandard: \"spl-legacy\".",
               },
               {
                 name: "estimate_cost",
-                desc: "Platform fee (0.03 SOL) plus estimated mint rent for a module selection.",
+                desc: "Platform fee (0.04 SOL) plus estimated mint rent. Pass tokenStandard spl-legacy for Classic SPL (no extension rent bump).",
               },
             ].map(({ name, desc }) => (
               <div key={name} className="rounded-lg border border-gray-100 bg-gray-50 p-3">
@@ -177,10 +177,13 @@ export default function McpDocsPage() {
         </section>
 
         <section className="rounded-xl border border-amber-100 bg-amber-50 p-4 text-sm text-amber-900">
-          <p className="font-semibold mb-1">Example prompt for your assistant</p>
-          <p className="text-amber-800 italic">
+          <p className="font-semibold mb-1">Example prompts for your assistant</p>
+          <p className="text-amber-800 italic mb-2">
             &quot;Use Smeltr to validate a Token-2022 config with 250 basis-point transfer fee,
             max fee 1M base units, and check compatibility if I also add non-transferable.&quot;
+          </p>
+          <p className="text-amber-800 italic">
+            &quot;Validate a Classic SPL mint with tokenStandard spl-legacy — no extension modules.&quot;
           </p>
         </section>
 

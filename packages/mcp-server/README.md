@@ -20,8 +20,8 @@ npx -y @smeltr/mcp-server
 |------|---------|
 | `list_modules` | Supported modules (Transfer Fee, Non-Transferable, Permanent Delegate) with high-impact flags |
 | `describe_module` | Parameters, ranges, authority fields, security notes |
-| `validate_config` | Real compatibility engine + Zod schema validation |
-| `estimate_cost` | Platform fee (0.03 SOL) + rent estimate |
+| `validate_config` | Real compatibility engine + Zod schema validation. Optional `tokenStandard`: `"token-2022"` (default) or `"spl-legacy"` for Classic SPL mint-only validation |
+| `estimate_cost` | Platform fee (0.03 SOL) + rent estimate. Pass `tokenStandard: "spl-legacy"` for Classic SPL (no extension rent bump) |
 
 ## Claude Desktop
 
@@ -67,12 +67,17 @@ npx tsx packages/mcp-server/src/server.ts
 > Use Smeltr to validate a Token-2022 config with 250 basis-point transfer fee
 > and check compatibility with non-transferable.
 
+Classic SPL (no extension modules):
+
+> Use Smeltr with `tokenStandard: "spl-legacy"` to validate a Classic SPL mint config.
+
 ## Tests
 
 From the repo root:
 
 ```bash
 npm run test:mcp
+npm run test:a3:unit
 ```
 
 ## License
