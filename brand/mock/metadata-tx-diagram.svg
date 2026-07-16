@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Token-2022 metadata tx pattern: wrong vs correct (social x-2 asset) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" fill="none" role="img" aria-label="Token-2022 metadata transaction patterns compared">
+  <defs>
+    <linearGradient id="pageBg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#120804"/>
+      <stop offset="50%" stop-color="#1A0C05"/>
+      <stop offset="100%" stop-color="#120804"/>
+    </linearGradient>
+    <linearGradient id="headerGlow" x1="800" y1="0" x2="800" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="panelShadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <marker id="arrowDown" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#78716C"/>
+    </marker>
+    <marker id="arrowDownGreen" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#A3E635"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#pageBg)"/>
+  <rect width="1600" height="220" fill="url(#headerGlow)"/>
+
+  <!-- Header -->
+  <text x="800" y="72" text-anchor="middle" fill="#FDE68A" font-family="Segoe UI, system-ui, sans-serif" font-size="42" font-weight="700">
+    Token-2022 metadata: two transaction patterns
+  </text>
+  <text x="800" y="118" text-anchor="middle" fill="#A8A29E" font-family="Segoe UI, system-ui, sans-serif" font-size="22">
+    Most launch failures happen on tx 2 because tx 1 was sized wrong
+  </text>
+
+  <!-- LEFT PANEL: WRONG -->
+  <g filter="url(#panelShadow)">
+    <rect x="48" y="160" width="744" height="660" rx="20" fill="#1C1008" stroke="#7F1D1D" stroke-width="2"/>
+  </g>
+  <rect x="48" y="160" width="744" height="64" rx="20" fill="#450A0A"/>
+  <rect x="48" y="204" width="744" height="20" fill="#450A0A"/>
+  <text x="88" y="204" fill="#FCA5A5" font-family="Segoe UI, system-ui, sans-serif" font-size="28" font-weight="700">
+    WRONG (still common)
+  </text>
+
+  <!-- TX1 wrong -->
+  <text x="88" y="268" fill="#78716C" font-family="Segoe UI, system-ui, sans-serif" font-size="18" font-weight="600" letter-spacing="0.08em">TX 1</text>
+  <rect x="88" y="284" width="664" height="72" rx="10" fill="#292524" stroke="#57534E" stroke-width="1.5"/>
+  <text x="112" y="318" fill="#E7E5E4" font-family="Consolas, monospace" font-size="20">CreateAccount (mint space only)</text>
+  <text x="112" y="344" fill="#E7E5E4" font-family="Consolas, monospace" font-size="20">InitializeMint</text>
+
+  <path d="M 420 368 L 420 396" stroke="#78716C" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+  <!-- TX2 wrong -->
+  <text x="88" y="428" fill="#78716C" font-family="Segoe UI, system-ui, sans-serif" font-size="18" font-weight="600" letter-spacing="0.08em">TX 2</text>
+  <rect x="88" y="444" width="664" height="120" rx="10" fill="#292524" stroke="#DC2626" stroke-width="2"/>
+  <text x="112" y="478" fill="#FCA5A5" font-family="Consolas, monospace" font-size="20">createReallocateInstruction</text>
+  <text x="112" y="504" fill="#FCA5A5" font-family="Consolas, monospace" font-size="20">+ lamport transfer</text>
+  <text x="112" y="530" fill="#FCA5A5" font-family="Consolas, monospace" font-size="20">+ InitializeTokenMetadata</text>
+  <text x="112" y="556" fill="#78716C" font-family="Consolas, monospace" font-size="16">(account still underfunded)</text>
+
+  <!-- Result wrong -->
+  <rect x="88" y="600" width="664" height="88" rx="10" fill="#450A0A" stroke="#EF4444" stroke-width="2"/>
+  <text x="112" y="638" fill="#FECACA" font-family="Segoe UI, system-ui, sans-serif" font-size="24" font-weight="700">Looks fine in the UI</text>
+  <text x="112" y="672" fill="#FCA5A5" font-family="Segoe UI, system-ui, sans-serif" font-size="22">Fails at sign or sim (rent / sizing)</text>
+
+  <!-- RIGHT PANEL: CORRECT -->
+  <g filter="url(#panelShadow)">
+    <rect x="808" y="160" width="744" height="660" rx="20" fill="#1C1008" stroke="#B45309" stroke-width="2"/>
+  </g>
+  <rect x="808" y="160" width="744" height="64" rx="20" fill="#422006"/>
+  <rect x="808" y="204" width="744" height="20" fill="#422006"/>
+  <text x="848" y="204" fill="#FDE68A" font-family="Segoe UI, system-ui, sans-serif" font-size="28" font-weight="700">
+    CORRECT (Smeltr default)
+  </text>
+
+  <!-- TX1 correct -->
+  <text x="848" y="268" fill="#78716C" font-family="Segoe UI, system-ui, sans-serif" font-size="18" font-weight="600" letter-spacing="0.08em">TX 1</text>
+  <rect x="848" y="284" width="664" height="148" rx="10" fill="#292524" stroke="#F59E0B" stroke-width="2"/>
+  <text x="872" y="318" fill="#FDE68A" font-family="Consolas, monospace" font-size="20">CreateAccount (overfunded rent)</text>
+  <text x="872" y="344" fill="#E7E5E4" font-family="Consolas, monospace" font-size="20">+ module extension inits</text>
+  <text x="872" y="370" fill="#E7E5E4" font-family="Consolas, monospace" font-size="20">+ InitializeMetadataPointer</text>
+  <text x="872" y="396" fill="#E7E5E4" font-family="Consolas, monospace" font-size="20">+ InitializeMint</text>
+  <text x="872" y="422" fill="#A8A29E" font-family="Consolas, monospace" font-size="16">space covers TokenMetadata TLV upfront</text>
+
+  <path d="M 1180 448 L 1180 476" stroke="#A3E635" stroke-width="2" marker-end="url(#arrowDownGreen)"/>
+
+  <!-- TX2 correct -->
+  <text x="848" y="508" fill="#78716C" font-family="Segoe UI, system-ui, sans-serif" font-size="18" font-weight="600" letter-spacing="0.08em">TX 2</text>
+  <rect x="848" y="524" width="664" height="72" rx="10" fill="#292524" stroke="#84CC16" stroke-width="2"/>
+  <text x="872" y="558" fill="#BEF264" font-family="Consolas, monospace" font-size="22" font-weight="600">InitializeTokenMetadata only</text>
+  <text x="872" y="584" fill="#A8A29E" font-family="Consolas, monospace" font-size="16">no reallocate, no extra lamport transfer</text>
+
+  <!-- Result correct -->
+  <rect x="848" y="620" width="664" height="88" rx="10" fill="#422006" stroke="#F59E0B" stroke-width="2"/>
+  <text x="872" y="658" fill="#FDE68A" font-family="Segoe UI, system-ui, sans-serif" font-size="24" font-weight="700">Two signatures, by design</text>
+  <text x="872" y="692" fill="#FCD34D" font-family="Segoe UI, system-ui, sans-serif" font-size="22">Consent before metadata attaches</text>
+
+  <!-- Footer -->
+  <text x="800" y="862" text-anchor="middle" fill="#78716C" font-family="Segoe UI, system-ui, sans-serif" font-size="20">
+    smeltr.org/deploy | open source tx-builder
+  </text>
+</svg>

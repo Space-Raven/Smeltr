@@ -4,12 +4,15 @@ dist/
 .env
 .env.local
 .env.production
+.env.production.local
+.vercel/
 .turbo/
 *.log
 
 # Anchor / Solana
 target/
 test-ledger/
+.localnet-ledger/
 
 # Test fixture keypair cache (contains private keys — never commit)
 packages/tx-builder/src/__tests__/fixtures/.cache/
@@ -30,3 +33,5 @@ Smeltr-*.docx
 
 # TypeScript incremental build cache (regenerated on every typecheck)
 *.tsbuildinfo
+.vercel
+.env*

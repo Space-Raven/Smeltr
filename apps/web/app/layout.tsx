@@ -141,7 +141,12 @@ function BetaBanner() {
 
 function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-sm">
+    <header
+      className="sticky top-0 z-50 border-b border-amber-900/40 backdrop-blur-sm"
+      style={{
+        background: "linear-gradient(135deg, var(--forge-bg-deep) 0%, var(--forge-bg-mid) 70%, var(--forge-bg-light) 100%)",
+      }}
+    >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <a href="/" className="flex items-center gap-2.5 no-underline group">
@@ -153,22 +158,24 @@ function SiteHeader() {
               height={32}
               className="transition-transform duration-200 group-hover:scale-105"
             />
-            <span className="text-lg font-bold tracking-tight text-amber-900">Smeltr</span>
-            <span className="text-[10px] font-semibold tracking-widest uppercase text-amber-600 bg-amber-100 border border-amber-200 rounded px-1.5 py-0.5 leading-none">
+            <span className="text-lg font-bold tracking-tight" style={{ color: "var(--forge-text-heading)" }}>
+              Smeltr
+            </span>
+            <span className="text-[10px] font-semibold tracking-widest uppercase text-amber-200 bg-amber-900/50 border border-amber-700/60 rounded px-1.5 py-0.5 leading-none">
               beta
             </span>
           </a>
 
-          <nav className="hidden sm:flex items-center gap-6 text-sm font-medium text-gray-600">
-            <a href="/deploy" className="hover:text-amber-700 transition-colors">Deploy</a>
-            <a href="/dashboard" className="hover:text-amber-700 transition-colors">Dashboard</a>
-            <a href="/blog" className="hover:text-amber-700 transition-colors">Blog</a>
-            <a href="/docs/mcp" className="hover:text-amber-700 transition-colors">MCP / AI</a>
+          <nav className="hidden sm:flex items-center gap-6 text-sm font-medium" style={{ color: "var(--forge-text)" }}>
+            <a href="/deploy" className="hover:text-amber-200 transition-colors opacity-90 hover:opacity-100">Deploy</a>
+            <a href="/dashboard" className="hover:text-amber-200 transition-colors opacity-90 hover:opacity-100">Dashboard</a>
+            <a href="/blog" className="hover:text-amber-200 transition-colors opacity-90 hover:opacity-100">Blog</a>
+            <a href="/docs/mcp" className="hover:text-amber-200 transition-colors opacity-90 hover:opacity-100">MCP / AI</a>
             <a
               href="https://github.com/Space-Raven/Smeltr"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-amber-700 transition-colors"
+              className="hover:text-amber-200 transition-colors opacity-90 hover:opacity-100"
             >
               GitHub ↗
             </a>
@@ -186,61 +193,66 @@ function SiteHeader() {
 
 function SiteFooter() {
   return (
-    <footer className="border-t border-gray-100 bg-white py-10 mt-16">
+    <footer
+      className="border-t border-amber-900/30 py-10 mt-16"
+      style={{
+        background: "linear-gradient(180deg, var(--forge-bg-mid) 0%, var(--forge-bg-deep) 100%)",
+      }}
+    >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-8 mb-10">
           <div>
             <div className="flex items-center gap-2 mb-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo-mark.svg" alt="Smeltr" width={22} height={22} />
-              <span className="font-bold text-amber-900">Smeltr</span>
-              <span className="text-[9px] font-semibold tracking-widest uppercase text-amber-600 bg-amber-100 border border-amber-200 rounded px-1 py-0.5 leading-none">
+              <span className="font-bold" style={{ color: "var(--forge-text-heading)" }}>Smeltr</span>
+              <span className="text-[9px] font-semibold tracking-widest uppercase text-amber-200 bg-amber-900/50 border border-amber-700/60 rounded px-1 py-0.5 leading-none">
                 beta
               </span>
             </div>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Non-custodial Token-2022 deployment. Your keys, your token.
+            <p className="text-xs leading-relaxed opacity-80" style={{ color: "var(--forge-text)" }}>
+              Non-custodial token deployment. Your keys, your token.
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Product</p>
-            <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="/deploy" className="hover:text-amber-700 transition-colors no-underline">Deploy a token</a>
-              <a href="/dashboard" className="hover:text-amber-700 transition-colors no-underline">Dashboard</a>
-              <a href="/blog" className="hover:text-amber-700 transition-colors no-underline">Blog</a>
-              <a href="/about" className="hover:text-amber-700 transition-colors no-underline">About</a>
-              <a href="/trust" className="hover:text-amber-700 transition-colors no-underline">Trust Center</a>
-              <a href="/docs/mcp" className="hover:text-amber-700 transition-colors no-underline">MCP / AI</a>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-3 opacity-70" style={{ color: "var(--forge-text-muted)" }}>Product</p>
+            <div className="flex flex-col gap-2 text-sm opacity-85" style={{ color: "var(--forge-text)" }}>
+              <a href="/deploy" className="hover:text-amber-200 transition-colors no-underline">Deploy a token</a>
+              <a href="/dashboard" className="hover:text-amber-200 transition-colors no-underline">Dashboard</a>
+              <a href="/blog" className="hover:text-amber-200 transition-colors no-underline">Blog</a>
+              <a href="/about" className="hover:text-amber-200 transition-colors no-underline">About</a>
+              <a href="/trust" className="hover:text-amber-200 transition-colors no-underline">Trust Center</a>
+              <a href="/docs/mcp" className="hover:text-amber-200 transition-colors no-underline">MCP / AI</a>
             </div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Extensions</p>
-            <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="/modules/transfer-fee" className="hover:text-amber-700 transition-colors no-underline">Transfer Fee</a>
-              <a href="/modules/non-transferable" className="hover:text-amber-700 transition-colors no-underline">Non-Transferable</a>
-              <a href="/modules/permanent-delegate" className="hover:text-amber-700 transition-colors no-underline">Permanent Delegate</a>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-3 opacity-70" style={{ color: "var(--forge-text-muted)" }}>Extensions</p>
+            <div className="flex flex-col gap-2 text-sm opacity-85" style={{ color: "var(--forge-text)" }}>
+              <a href="/modules/transfer-fee" className="hover:text-amber-200 transition-colors no-underline">Transfer Fee</a>
+              <a href="/modules/non-transferable" className="hover:text-amber-200 transition-colors no-underline">Non-Transferable</a>
+              <a href="/modules/permanent-delegate" className="hover:text-amber-200 transition-colors no-underline">Permanent Delegate</a>
             </div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Community</p>
-            <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="https://twitter.com/Smeltr_App" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">Twitter / X ↗</a>
-              <a href="mailto:pjorg@smeltr.org" className="hover:text-amber-700 transition-colors no-underline">Contact ↗</a>
-              <a href="https://github.com/Space-Raven/Smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-700 transition-colors no-underline">GitHub ↗</a>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-3 opacity-70" style={{ color: "var(--forge-text-muted)" }}>Community</p>
+            <div className="flex flex-col gap-2 text-sm opacity-85" style={{ color: "var(--forge-text)" }}>
+              <a href="https://twitter.com/Smeltr_App" target="_blank" rel="noreferrer" className="hover:text-amber-200 transition-colors no-underline">Twitter / X ↗</a>
+              <a href="mailto:pjorg@smeltr.org" className="hover:text-amber-200 transition-colors no-underline">Contact ↗</a>
+              <a href="https://github.com/Space-Raven/Smeltr" target="_blank" rel="noreferrer" className="hover:text-amber-200 transition-colors no-underline">GitHub ↗</a>
             </div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Legal</p>
-            <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="/terms" className="hover:text-amber-700 transition-colors no-underline">Terms of Service</a>
-              <a href="/privacy" className="hover:text-amber-700 transition-colors no-underline">Privacy Policy</a>
-              <a href="/refunds" className="hover:text-amber-700 transition-colors no-underline">Refund Policy</a>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-3 opacity-70" style={{ color: "var(--forge-text-muted)" }}>Legal</p>
+            <div className="flex flex-col gap-2 text-sm opacity-85" style={{ color: "var(--forge-text)" }}>
+              <a href="/terms" className="hover:text-amber-200 transition-colors no-underline">Terms of Service</a>
+              <a href="/privacy" className="hover:text-amber-200 transition-colors no-underline">Privacy Policy</a>
+              <a href="/refunds" className="hover:text-amber-200 transition-colors no-underline">Refund Policy</a>
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
-          <span>© 2026 Smeltr Technologies LLC. Non-custodial infrastructure. Built on Solana Token-2022.</span>
-          <span>Not financial advice. Always verify transaction details before signing.</span>
+        <div className="border-t border-amber-900/40 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs opacity-75" style={{ color: "var(--forge-text)" }}>
+          <span>© 2026 Smeltr Technologies LLC. Non-custodial infrastructure.</span>
+          <span>Not financial advice. Verify transactions before signing.</span>
         </div>
       </div>
     </footer>

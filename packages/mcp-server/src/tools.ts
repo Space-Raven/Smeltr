@@ -13,9 +13,12 @@ import {
   getModule,
   validateModuleSelection,
   ModuleId,
+  PublicKeyStringSchema,
 } from "@platform/module-registry";
 
 export const PLATFORM_FEE_SOL = 0.03;
+
+export type SolanaTokenStandard = "token-2022" | "spl-legacy";
 
 export interface ParamSpec {
   name: string;
@@ -24,6 +27,12 @@ export interface ParamSpec {
   authority: boolean;
   notes: string;
 }
+
+const LEGACY_MODULES_ERROR =
+  "Extension modules require Token-2022. Classic SPL mints do not support composable extension modules.";
+
+const LEGACY_VALIDATION_NOTE =
+  "Classic SPL: mint-level validation only. Extension modules are not available on this token type.";
 
 /**
  * Curated per-module parameter specs (mirrors the on-chain program behavior
@@ -67,7 +76,46 @@ export function describeModule(id: string) {
 }
 
 export interface ValidateInput {
+  /** Defaults to `"token-2022"` for backward compatibility. */
+  tokenStandard?: SolanaTokenStandard;
   modules: Array<{ id: string; params?: unknown }>;
+  /** Optional mint-level field — validated on legacy path when provided. */
+  decimals?: number;
+  mintAuthority?: string;
+  freezeAuthority?: string | null;
+}
+
+function resolveTokenStandard(input: ValidateInput): SolanaTokenStandard {
+  return input.tokenStandard ?? "token-2022";
+}
+
+function validateLegacyMintFields(input: ValidateInput): Array<{ field: string; issues: unknown }> {
+  const issues: Array<{ field: string; issues: unknown }> = [];
+
+  if (input.decimals !== undefined) {
+    if (!Number.isInteger(input.decimals) || input.decimals < 0 || input.decimals > 9) {
+      issues.push({
+        field: "decimals",
+        issues: [{ message: "Must be an integer from 0 to 9" }],
+      });
+    }
+  }
+
+  if (input.mintAuthority !== undefined) {
+    const parsed = PublicKeyStringSchema.safeParse(input.mintAuthority);
+    if (!parsed.success) {
+      issues.push({ field: "mintAuthority", issues: parsed.error.issues });
+    }
+  }
+
+  if (input.freezeAuthority != null && input.freezeAuthority !== undefined) {
+    const parsed = PublicKeyStringSchema.safeParse(input.freezeAuthority);
+    if (!parsed.success) {
+      issues.push({ field: "freezeAuthority", issues: parsed.error.issues });
+    }
+  }
+
+  return issues;
 }
 
 /**
@@ -76,6 +124,33 @@ export interface ValidateInput {
  * warnings) AND per-module parameter validation from each module's Zod schema.
  */
 export function validateConfig(input: ValidateInput) {
+  const tokenStandard = resolveTokenStandard(input);
+
+  if (tokenStandard === "spl-legacy") {
+    if (input.modules.length > 0) {
+      return {
+        valid: false,
+        tokenStandard,
+        compatibilityErrors: [LEGACY_MODULES_ERROR],
+        warnings: [] as string[],
+        parameterIssues: [] as Array<{ moduleId: string; issues: unknown }>,
+        mintFieldIssues: [] as Array<{ field: string; issues: unknown }>,
+        note: LEGACY_VALIDATION_NOTE,
+      };
+    }
+
+    const mintFieldIssues = validateLegacyMintFields(input);
+    return {
+      valid: mintFieldIssues.length === 0,
+      tokenStandard,
+      compatibilityErrors: [] as string[],
+      warnings: [] as string[],
+      parameterIssues: [] as Array<{ moduleId: string; issues: unknown }>,
+      mintFieldIssues,
+      note: LEGACY_VALIDATION_NOTE,
+    };
+  }
+
   const ids = input.modules.map((m) => m.id as ModuleId);
   const compatibility = validateModuleSelection(ids);
 
@@ -91,6 +166,7 @@ export function validateConfig(input: ValidateInput) {
   const valid = compatibility.valid && parameterIssues.length === 0;
   return {
     valid,
+    tokenStandard,
     compatibilityErrors: compatibility.errors,
     warnings: compatibility.warnings,
     parameterIssues,
@@ -103,10 +179,27 @@ export function validateConfig(input: ValidateInput) {
  * it is given as a documented range rather than a false-precision number.
  */
 export function estimateCost(input: ValidateInput) {
+  const tokenStandard = resolveTokenStandard(input);
+
+  if (tokenStandard === "spl-legacy") {
+    return {
+      tokenStandard,
+      platformFeeSol: PLATFORM_FEE_SOL,
+      estimatedRentSolRange: [0.0015, 0.002] as [number, number],
+      networkFeeSol: 0.00001,
+      note:
+        "Classic SPL mint with no extension modules. Platform fee is exact. Rent " +
+        "covers a standard SPL mint account only — Metaplex metadata (name/symbol/logo) " +
+        "is a separate transaction with its own rent. Deploy at smeltr.org/deploy for " +
+        "exact figures before you sign.",
+    };
+  }
+
   const known = input.modules.filter((m) => m.id in MODULE_REGISTRY).length;
   const rentLow = 0.0015;
   const rentHigh = 0.002 + known * 0.0008;
   return {
+    tokenStandard,
     platformFeeSol: PLATFORM_FEE_SOL,
     estimatedRentSolRange: [Number(rentLow.toFixed(4)), Number(rentHigh.toFixed(4))],
     networkFeeSol: 0.00001,

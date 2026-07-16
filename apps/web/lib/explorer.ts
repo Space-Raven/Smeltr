@@ -16,3 +16,7 @@ export function explorerClusterParam(rpcEndpoint: string): string {
 export function explorerTxUrl(signature: string, rpcEndpoint: string): string {
   return `https://explorer.solana.com/tx/${signature}${explorerClusterParam(rpcEndpoint)}`;
 }
+
+export function explorerAddressUrl(address: string, rpcEndpoint: string): string {
+  return `https://explorer.solana.com/address/${address}${explorerClusterParam(rpcEndpoint)}`;
+}

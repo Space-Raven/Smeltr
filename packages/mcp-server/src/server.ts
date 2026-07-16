@@ -22,10 +22,36 @@ import {
   type ValidateInput,
 } from "./tools";
 
-const moduleSelectionShape = {
+const tokenStandardSchema = z
+  .enum(["token-2022", "spl-legacy"])
+  .optional()
+  .describe(
+    'Solana mint program variant. Defaults to "token-2022". Use "spl-legacy" for Classic SPL (no extension modules).'
+  );
+
+const validateConfigShape = {
+  tokenStandard: tokenStandardSchema,
   modules: z
     .array(z.object({ id: z.string(), params: z.unknown().optional() }))
-    .describe("The Token-2022 modules to configure, each with optional params."),
+    .describe(
+      "Token-2022 extension modules to configure. Must be empty when tokenStandard is spl-legacy."
+    ),
+  decimals: z
+    .number()
+    .int()
+    .min(0)
+    .max(9)
+    .optional()
+    .describe("Mint decimals (0–9). Validated on the legacy path when provided."),
+  mintAuthority: z
+    .string()
+    .optional()
+    .describe("Base58 mint authority pubkey. Validated on the legacy path when provided."),
+  freezeAuthority: z
+    .string()
+    .nullable()
+    .optional()
+    .describe("Base58 freeze authority pubkey, or null. Legacy path only when provided."),
 };
 
 function json(data: unknown) {
@@ -51,15 +77,15 @@ export function createServer(): McpServer {
 
   server.tool(
     "validate_config",
-    "Validate a proposed Token-2022 module selection and parameters against Smeltr's real compatibility engine and each module's schema. Returns hard-conflict errors, soft-conflict warnings, and per-parameter validation issues.",
-    moduleSelectionShape,
+    "Validate a proposed Solana token configuration against Smeltr's real engine. Token-2022: module compatibility + Zod schemas. Classic SPL (spl-legacy): mint-level fields only — modules are rejected.",
+    validateConfigShape,
     async (args) => json(validateConfig(args as ValidateInput))
   );
 
   server.tool(
     "estimate_cost",
-    "Estimate the SOL cost to deploy a Token-2022 token with the given modules: exact Smeltr platform fee plus an estimated rent range.",
-    moduleSelectionShape,
+    "Estimate SOL cost to deploy: exact Smeltr platform fee (0.03 SOL) plus an estimated mint rent range. Pass tokenStandard spl-legacy for Classic SPL (no extension rent bump).",
+    validateConfigShape,
     async (args) => json(estimateCost(args as ValidateInput))
   );
 

@@ -14,6 +14,8 @@ export interface BuildMetadataAttachmentInstructionsParams {
   decimals: number;
   provider: MetadataProvider;
   input: unknown;
+  /** Mint program id — TOKEN_2022 for native metadata, TOKEN_PROGRAM_ID for legacy Metaplex. */
+  mintProgramId?: PublicKey;
 }
 
 /**
@@ -37,7 +39,7 @@ export function buildMetadataAttachmentInstructions(
     payer: args.payer,
     userWallet: args.userWallet,
     decimals: args.decimals,
-    programId: TOKEN_2022_PROGRAM_ID,
+    programId: args.mintProgramId ?? TOKEN_2022_PROGRAM_ID,
   };
 
   return args.provider.buildPostInitInstructions(ctx, parsed.data);

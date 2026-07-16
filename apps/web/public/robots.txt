@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /dashboard
+Disallow: /admin
 
 # Agent discovery: https://smeltr.org/llms.txt (MCP docs at /docs/mcp)
 # AI crawlers are explicitly welcome — reference docs for Solana Token-2022 configuration.

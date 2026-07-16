@@ -1,22 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none" role="img" aria-label="Minty">
-  <defs>
-    <linearGradient id="coin" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#6366F1"/>
-      <stop offset="100%" stop-color="#4338CA"/>
-    </linearGradient>
-    <linearGradient id="leaf" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0%" stop-color="#10B981"/>
-      <stop offset="100%" stop-color="#6EE7B7"/>
-    </linearGradient>
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#4F46E5" flood-opacity="0.3"/>
-    </filter>
-  </defs>
-  <!-- Coin -->
-  <circle cx="20" cy="26" r="13" fill="url(#coin)" filter="url(#shadow)"/>
-  <circle cx="20" cy="26" r="9.5" fill="none" stroke="#A5B4FC" stroke-width="1.2" opacity="0.6"/>
-  <text x="20" y="31" font-family="system-ui" font-size="10" font-weight="700" fill="#E0E7FF" text-anchor="middle">T</text>
-  <!-- Leaf -->
-  <path d="M20 13 C20 13 13 7 13 13 C13 18 20 17 20 17 C20 17 27 18 27 13 C27 7 20 13 20 13z" fill="url(#leaf)"/>
-  <line x1="20" y1="13" x2="20" y2="18" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none" role="img" aria-label="Smeltr">
+  <rect width="40" height="40" rx="8" fill="#1A0C05"/>
+  <path
+    fill="#F59E0B"
+    d="M 11 9 L 29 9 L 29 14 L 20 18.5 L 29 23 L 29 28 L 11 28 L 11 23 L 20 18.5 L 11 14 Z"
+  />
 </svg>

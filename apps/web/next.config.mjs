@@ -1,3 +1,9 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const packagesDir = path.resolve(__dirname, "../../packages");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Compile workspace packages (they ship raw TypeScript, not built JS)
@@ -22,6 +28,10 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
+      // Monorepo fallback when Vercel/webpack does not hoist workspace symlinks
+      "@platform/module-registry": path.join(packagesDir, "module-registry"),
+      "@platform/tx-builder": path.join(packagesDir, "tx-builder"),
+      "@platform/core-schemas": path.join(packagesDir, "core-schemas"),
       "react-native$": false,
     };
     return config;

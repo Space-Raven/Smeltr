@@ -4,8 +4,12 @@ import { Suspense, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { explorerTxUrl } from "../../lib/explorer";
-import { ModuleSelection } from "@platform/tx-builder";
-import { Token2022NativeMetadataProvider, TokenMetadataInput } from "@platform/module-registry";
+import { ModuleSelection, type SolanaTokenStandard } from "@platform/tx-builder";
+import { Token2022NativeMetadataProvider, MetaplexLegacyMetadataProvider, TokenMetadataInput } from "@platform/module-registry";
+import {
+  getDeploymentCapabilities,
+  solanaTargetFromConnection,
+} from "../../lib/deploymentTarget";
 import { ModuleConfigSection } from "../../components/module-config/ModuleConfigSection";
 import { MetadataForm } from "../../components/MetadataForm";
 import { DeploymentReviewPanel } from "../../components/DeploymentReviewPanel";
@@ -33,10 +37,25 @@ function DeployPageInner() {
   const siws = useSiwsAuth();
 
   const [decimals, setDecimals] = useState(9);
+  const [tokenStandard, setTokenStandard] = useState<SolanaTokenStandard>("token-2022");
   const [modules, setModules] = useState<ModuleSelection[]>([]);
   const [modulesValid, setModulesValid] = useState(true);
   const [includeMetadata, setIncludeMetadata] = useState(true);
   const [metadataInput, setMetadataInput] = useState<TokenMetadataInput | undefined>();
+
+  const deploymentTarget = solanaTargetFromConnection(connection, tokenStandard);
+  const capabilities = getDeploymentCapabilities(deploymentTarget);
+
+  const handleTokenStandardChange = (standard: SolanaTokenStandard) => {
+    setTokenStandard(standard);
+    if (standard === "spl-legacy") {
+      setModules([]);
+      setModulesValid(true);
+      setIncludeMetadata(true);
+    } else {
+      setIncludeMetadata(true);
+    }
+  };
 
   // Memoized — ModuleConfigSection uses this in a useEffect dependency array.
   // An inline function would create a new reference every render, causing an
@@ -46,19 +65,30 @@ function DeployPageInner() {
     setModulesValid(valid);
   }, []);
 
+  const metadataCapable = capabilities.nativeTokenMetadata || capabilities.metaplexMetadata;
+
   const canReview =
-    wallet.connected && modulesValid && (!includeMetadata || metadataInput !== undefined);
+    wallet.connected &&
+    modulesValid &&
+    (!includeMetadata || !metadataCapable || metadataInput !== undefined);
 
   const handlePrepare = () => {
     if (!wallet.publicKey) return;
     deployment.prepare({
+      target: deploymentTarget,
       decimals,
       mintAuthority: wallet.publicKey.toBase58(),
       freezeAuthority: null,
-      modules,
+      modules: capabilities.extensionModules ? modules : [],
       metadata:
-        includeMetadata && metadataInput
-          ? { provider: Token2022NativeMetadataProvider, input: metadataInput }
+        includeMetadata && metadataCapable && metadataInput
+          ? {
+              provider:
+                tokenStandard === "spl-legacy"
+                  ? MetaplexLegacyMetadataProvider
+                  : Token2022NativeMetadataProvider,
+              input: metadataInput,
+            }
           : undefined,
     });
   };
@@ -87,6 +117,14 @@ function DeployPageInner() {
             View on Solana Explorer ↗
           </a>
         </p>
+        {deployment.mintAddress && (
+          <p className="text-sm text-gray-600">
+            Public page:{" "}
+            <a className="text-amber-700 underline" href={`/t/${deployment.mintAddress}`}>
+              /t/{deployment.mintAddress.slice(0, 4)}…{deployment.mintAddress.slice(-4)} — share it ↗
+            </a>
+          </p>
+        )}
 
         {/* Sign-in nudge: shown when the indexing POST returned 401.
             The token is on-chain regardless -- this only affects dashboard
@@ -216,6 +254,41 @@ function DeployPageInner() {
 
       {showDenylistDebug && <DenylistDebugPanel />}
 
+      <div className="rounded-md border border-gray-200 p-3 space-y-3">
+        <p className="text-sm font-medium">Token type</p>
+        <div className="space-y-2">
+          <label className="flex items-start gap-2 text-sm cursor-pointer">
+            <input
+              type="radio"
+              name="tokenStandard"
+              checked={tokenStandard === "token-2022"}
+              onChange={() => handleTokenStandardChange("token-2022")}
+              className="mt-0.5"
+            />
+            <span>
+              <span className="font-medium">Token-2022</span>
+              <span className="text-gray-500"> — recommended. Extension modules and native on-chain metadata.</span>
+            </span>
+          </label>
+          <label className="flex items-start gap-2 text-sm cursor-pointer">
+            <input
+              type="radio"
+              name="tokenStandard"
+              checked={tokenStandard === "spl-legacy"}
+              onChange={() => handleTokenStandardChange("spl-legacy")}
+              className="mt-0.5"
+            />
+            <span>
+              <span className="font-medium">Classic SPL</span>
+              <span className="text-gray-500">
+                {" "}
+                — widest legacy wallet support. No extension modules. On-chain metadata via Metaplex.
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+
       <div>
         <label className="block text-sm font-medium">Decimals</label>
         <input
@@ -228,8 +301,11 @@ function DeployPageInner() {
         />
       </div>
 
-      <ModuleConfigSection onChange={handleModulesChange} />
+      {capabilities.extensionModules && (
+        <ModuleConfigSection onChange={handleModulesChange} />
+      )}
 
+      {(capabilities.nativeTokenMetadata || capabilities.metaplexMetadata) && (
       <div className="rounded-md border border-gray-200 p-3">
         <label className="flex items-center gap-2 text-sm font-medium">
           <input
@@ -245,6 +321,7 @@ function DeployPageInner() {
           </div>
         )}
       </div>
+      )}
 
       {deployment.error && <p className="text-sm text-red-600">{deployment.error}</p>}
 

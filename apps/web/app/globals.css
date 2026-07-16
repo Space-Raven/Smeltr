@@ -6,8 +6,13 @@
 /*  Design tokens                                                       */
 /* ------------------------------------------------------------------ */
 :root {
-  /* Brand */
-  /* Forge amber — brand palette (gold/coffee/orange) */
+  /* Forge dark surfaces (brand/README.md) */
+  --forge-bg-deep: #1A0C05;
+  --forge-bg-mid: #2D1507;
+  --forge-bg-light: #3D1F08;
+  --forge-text: #FDE68A;
+  --forge-text-heading: #FEF3C7;
+  --forge-text-muted: #D97706;
   --color-brand-50:  #FFFBEB;
   --color-brand-100: #FEF3C7;
   --color-brand-200: #FDE68A;

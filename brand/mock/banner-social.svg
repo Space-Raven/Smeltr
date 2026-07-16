@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MOCK banner 1500x500 - mark from brand/source/master/s-mark-filled.png -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" fill="none" role="img" aria-label="Smeltr banner">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1500" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1A0C05"/>
+      <stop offset="50%" stop-color="#2D1507"/>
+      <stop offset="100%" stop-color="#1A0C05"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="18%" cy="50%" r="42%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="iconBg" x1="226" y1="96" x2="226" y2="404" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="55%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#C2410C"/>
+    </linearGradient>
+  </defs>
+  <rect width="1500" height="500" fill="url(#bg)"/>
+  <rect width="1500" height="500" fill="url(#glow)"/>
+  <rect x="72" y="96" width="308" height="308" rx="24" fill="url(#iconBg)"/>
+  <circle cx="226" cy="250" r="128" fill="none" stroke="#171717" stroke-width="3"/>
+  <g transform="translate(226 250) scale(2.05) translate(-50 -50)">
+    <path d="M 35 10 L 65 10 L 65 30 L 50 45 L 65 60 L 65 80 L 35 80 L 35 60 L 50 45 L 35 30 Z" fill="none" stroke="#171717" stroke-width="2.4" stroke-linejoin="miter"/>
+    <path d="M 35 10 L 65 10 L 65 30 L 50 45 L 65 60 L 65 80 L 35 80 L 35 60 L 50 45 L 35 30 Z" fill="none" stroke="#FACC15" stroke-width="1.15" stroke-linejoin="miter"/>
+    <circle cx="74" cy="12" r="3" fill="#F5F5F4" opacity="0.95"/>
+    <circle cx="80" cy="8" r="2.2" fill="#FAFAF9" opacity="0.92"/>
+    <circle cx="77" cy="18" r="1.6" fill="#E7E5E4" opacity="0.88"/>
+    <circle cx="26" cy="82" r="2.6" fill="#F5F5F4" opacity="0.92"/>
+    <circle cx="20" cy="76" r="2" fill="#FAFAF9" opacity="0.88"/>
+    <circle cx="30" cy="78" r="1.5" fill="#E7E5E4" opacity="0.85"/>
+  </g>
+  <line x1="430" y1="120" x2="430" y2="380" stroke="#3D1F08" stroke-width="2"/>
+  <text x="470" y="268" font-family="system-ui,sans-serif" font-size="112" font-weight="800" fill="#FEF3C7" letter-spacing="-2">Smeltr</text>
+  <text x="476" y="330" font-family="system-ui,sans-serif" font-size="28" font-weight="500" fill="#D97706" opacity="0.9">Non-custodial Token-2022 infrastructure</text>
+</svg>

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "../../../../lib/prisma";
 import { getSessionWallet } from "../../../../lib/session";
+import { DEFAULT_CHAIN_ID } from "../../../../lib/constants";
 
 const PatchDeploymentSchema = z.object({
   metadataSignature: z.string().regex(/^[1-9A-HJ-NP-Z]+$/, "Invalid signature"),
@@ -16,8 +17,12 @@ export async function PATCH(
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
+  const url = new URL(req.url);
+  const chainId = url.searchParams.get("chainId") ?? DEFAULT_CHAIN_ID;
+  const recordKey = { chainId, mintAddress: params.mintAddress };
+
   const existing = await prisma.deployment.findUnique({
-    where: { mintAddress: params.mintAddress },
+    where: { chainId_mintAddress: recordKey },
   });
   if (!existing || existing.walletAddress !== walletAddress) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -39,7 +44,7 @@ export async function PATCH(
   }
 
   const updated = await prisma.deployment.update({
-    where: { mintAddress: params.mintAddress },
+    where: { chainId_mintAddress: recordKey },
     data: { metadataAttached: true, metadataSignature: validation.data.metadataSignature },
   });
 

@@ -47,7 +47,9 @@ model Subscription {
 // --- Deployment index (dashboard / resumability) ---------------------------
 
 model Deployment {
-  mintAddress       String    @id
+  chainId           String    @default("solana-mainnet")
+  tokenStandard     String    @default("token-2022") // "token-2022" | "spl-legacy"
+  mintAddress       String
   walletAddress     String
   decimals          Int
   hasMetadata       Boolean   @default(false)
@@ -60,7 +62,18 @@ model Deployment {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
+  // --- Curation / review (for the "Created on Smeltr" explorer) ------------
+  // Every mint indexed here is a review candidate. The founder reviews the
+  // weekly stream and sets reviewStatus; only "approved"/"featured" ever
+  // surface in the public /created explorer (curated, opt-in showcase — never
+  // an open feed). See corporate/market-expansion-roadmap.md.
+  reviewStatus      String    @default("pending") // pending | approved | rejected | featured | hidden
+  reviewedAt        DateTime?
+  reviewNote        String?
+
+  @@id([chainId, mintAddress])
   @@index([walletAddress])
+  @@index([reviewStatus, createdAt])
 }
 
 // --- Platform-funded upload quotas (Audit-1 TOB-04) ------------------------

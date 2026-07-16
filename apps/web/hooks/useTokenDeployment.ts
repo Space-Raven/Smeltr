@@ -1,13 +1,20 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { ModuleId, MetadataProvider, TokenMetadataInput } from "@platform/module-registry";
-import { ModuleSelection, buildMetadataAttachmentInstructions } from "@platform/tx-builder";
+import {
+  ModuleSelection,
+  resolveSolanaContext,
+  chainRecordKey,
+  type DeploymentTarget,
+  type SolanaDeploymentTarget,
+} from "@platform/tx-builder";
 import { buildDeploymentPlan, DeploymentPlan } from "../lib/buildDeploymentPlan";
 import { submitTransaction } from "../lib/submitTransaction";
 
 export interface TokenConfig {
+  target: DeploymentTarget;
   decimals: number;
   mintAuthority: string;
   freezeAuthority: string | null;
@@ -21,34 +28,8 @@ export interface TokenConfig {
 type Status = "idle" | "planning" | "ready" | "submitting" | "success" | "error";
 type MetadataStatus = "idle" | "ready" | "submitting" | "success" | "error";
 
-/**
- * Reflects the state of the best-effort POST /api/deployments indexing call.
- *   untracked   - not yet attempted (initial state, or after reset)
- *   tracked     - server acknowledged the record (2xx)
- *   needs-sign-in - server returned 401; user has no SIWS session. The
- *                   on-chain tx succeeded -- this only affects dashboard
- *                   visibility. The UI can offer a sign-in prompt.
- */
 type IndexingStatus = "untracked" | "tracked" | "needs-sign-in";
 
-/**
- * Two-step deployment flow:
- *   1. prepare(config) -- builds and validates the deployment plan
- *      (instructions, size, warnings, high-impact flags) WITHOUT
- *      prompting the wallet. The UI should render plan for review.
- *   2. confirm() -- only called after the user has reviewed plan and
- *      acknowledged any highImpactModules warnings. Submits
- *      transaction 1 (mint creation).
- *
- * After confirm() succeeds, attachMetadata() submits transaction 2
- * (TokenMetadata initialization) if metadata was configured. Both
- * transactions reuse the SAME mint keypair / metadata config captured in
- * prepare() -- never regenerated.
- *
- * Both successful transactions are recorded via best-effort, non-blocking
- * calls to /api/deployments -- failure to record does NOT surface as a
- * deployment error, since the on-chain transaction already succeeded.
- */
 export function useTokenDeployment() {
   const { connection } = useConnection();
   const wallet = useWallet();
@@ -61,6 +42,7 @@ export function useTokenDeployment() {
   const [acknowledgedModules, setAcknowledgedModules] = useState<Set<ModuleId>>(new Set());
 
   const [decimals, setDecimals] = useState(0);
+  const [deploymentTarget, setDeploymentTarget] = useState<SolanaDeploymentTarget | null>(null);
   const [metadataConfig, setMetadataConfig] = useState<{
     provider: MetadataProvider;
     input: TokenMetadataInput;
@@ -97,6 +79,7 @@ export function useTokenDeployment() {
       try {
         const newMint = Keypair.generate();
         const newPlan = await buildDeploymentPlan({
+          target: config.target,
           connection,
           payer: wallet.publicKey,
           mint: newMint.publicKey,
@@ -111,6 +94,7 @@ export function useTokenDeployment() {
         setMintKeypair(newMint);
         setPlan(newPlan);
         setDecimals(config.decimals);
+        setDeploymentTarget(config.target.chain === "solana" ? config.target : null);
         setMetadataConfig(config.metadata ?? null);
         if (config.metadata) setMetadataStatus("ready");
         setStatus("ready");
@@ -123,14 +107,12 @@ export function useTokenDeployment() {
   );
 
   const confirm = useCallback(async () => {
-    if (!plan || !mintKeypair) {
+    if (!plan || !mintKeypair || !deploymentTarget) {
       setError("No deployment plan prepared.");
       setStatus("error");
       return;
     }
 
-    // Defense-in-depth: re-check acknowledgments here even though the UI
-    // should already disable the confirm action until these are all true.
     const unacknowledged = plan.highImpactModules.filter((id) => !acknowledgedModules.has(id));
     if (unacknowledged.length > 0) {
       setError(
@@ -144,15 +126,9 @@ export function useTokenDeployment() {
     setError(null);
 
     try {
-      // --- Pre-flight: friendly funds check BEFORE the wallet prompt --------
-      // An underfunded wallet fails the wallet's own simulation, which surfaces
-      // as an intimidating "possibly malicious" warning. Catch it here with a
-      // plain-language message instead. This also catches the wrong-network
-      // case (wallet funded on mainnet while the app runs on devnet, or vice
-      // versa) — the balance on THIS app's network would read 0.
       if (!wallet.publicKey) throw new Error("Wallet disconnected — reconnect and try again.");
       const feeLamports = plan.platformFee?.feeLamports ?? 0;
-      const txFeeBufferLamports = 100_000; // covers tx1 + tx2 network fees
+      const txFeeBufferLamports = 100_000;
       const requiredLamports = plan.rentExemptLamports + feeLamports + txFeeBufferLamports;
       const balance = await connection.getBalance(wallet.publicKey);
       if (balance < requiredLamports) {
@@ -178,15 +154,15 @@ export function useTokenDeployment() {
       setSignature(sig);
       setStatus("success");
 
-      // Best-effort dashboard indexing -- failure must NOT surface as a
-      // deployment error; the on-chain transaction already succeeded.
-      // 401 means no SIWS session -- expose via indexingStatus so the UI
-      // can prompt the user to sign in without blocking the success screen.
+      const chainId = chainRecordKey(deploymentTarget);
+
       void fetch("/api/deployments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
         body: JSON.stringify({
+          chainId,
+          tokenStandard: deploymentTarget.tokenStandard,
           mintAddress: mintKeypair.publicKey.toBase58(),
           decimals,
           signature: sig,
@@ -208,10 +184,19 @@ export function useTokenDeployment() {
       setError(err instanceof Error ? err.message : String(err));
       setStatus("error");
     }
-  }, [connection, wallet, plan, mintKeypair, acknowledgedModules, decimals, metadataConfig]);
+  }, [
+    connection,
+    wallet,
+    plan,
+    mintKeypair,
+    deploymentTarget,
+    acknowledgedModules,
+    decimals,
+    metadataConfig,
+  ]);
 
   const attachMetadata = useCallback(async () => {
-    if (!mintKeypair || !metadataConfig || !wallet.publicKey) {
+    if (!mintKeypair || !metadataConfig || !wallet.publicKey || !deploymentTarget) {
       setMetadataError("Nothing to attach -- was metadata configured for this deployment?");
       setMetadataStatus("error");
       return;
@@ -221,25 +206,33 @@ export function useTokenDeployment() {
     setMetadataError(null);
 
     try {
-      const instructions = buildMetadataAttachmentInstructions({
-        mint: mintKeypair.publicKey,
-        payer: wallet.publicKey,
-        userWallet: wallet.publicKey,
-        decimals,
-        provider: metadataConfig.provider,
-        input: metadataConfig.input,
-      });
+      const { adapter, chainRecordId } = resolveSolanaContext(deploymentTarget);
+      const instructions = await adapter.buildMetadataAttachmentInstructions(
+        { chainRecordId, connection },
+        {
+          mint: mintKeypair.publicKey,
+          payer: wallet.publicKey,
+          userWallet: wallet.publicKey,
+          decimals,
+          provider: metadataConfig.provider,
+          input: metadataConfig.input,
+        }
+      );
 
       const sig = await submitTransaction({ connection, wallet, instructions });
       setMetadataSignature(sig);
       setMetadataStatus("success");
 
-      void fetch(`/api/deployments/${mintKeypair.publicKey.toBase58()}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
-        body: JSON.stringify({ metadataSignature: sig }),
-      })
+      const chainId = chainRecordKey(deploymentTarget);
+      void fetch(
+        `/api/deployments/${mintKeypair.publicKey.toBase58()}?chainId=${encodeURIComponent(chainId)}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ metadataSignature: sig }),
+        }
+      )
         .then((res) => {
           if (res.status === 401) setIndexingStatus("needs-sign-in");
           else if (res.ok) setIndexingStatus("tracked");
@@ -249,34 +242,16 @@ export function useTokenDeployment() {
       setMetadataError(err instanceof Error ? err.message : String(err));
       setMetadataStatus("error");
     }
-  }, [connection, wallet, mintKeypair, metadataConfig, decimals]);
-
-  // --- Auto-run the metadata step (signature 2) ------------------------------
-  // Users expect the flow to continue after the mint is created, not to hunt
-  // for an "Add Metadata" button. Trigger attachMetadata once when tx1
-  // succeeds; the wallet still prompts (that IS the second signature), and on
-  // failure the manual retry button on the success screen remains available.
-  const autoMetadataStarted = useRef(false);
-  useEffect(() => {
-    if (
-      status === "success" &&
-      metadataStatus === "ready" &&
-      metadataConfig &&
-      !autoMetadataStarted.current
-    ) {
-      autoMetadataStarted.current = true;
-      void attachMetadata();
-    }
-  }, [status, metadataStatus, metadataConfig, attachMetadata]);
+  }, [connection, wallet, mintKeypair, metadataConfig, decimals, deploymentTarget]);
 
   const reset = useCallback(() => {
-    autoMetadataStarted.current = false;
     setStatus("idle");
     setPlan(null);
     setMintKeypair(null);
     setSignature(null);
     setError(null);
     setAcknowledgedModules(new Set());
+    setDeploymentTarget(null);
     setMetadataConfig(null);
     setMetadataStatus("idle");
     setMetadataSignature(null);
@@ -292,6 +267,7 @@ export function useTokenDeployment() {
     acknowledgedModules,
     acknowledgeModule,
     mintAddress: mintKeypair?.publicKey.toBase58() ?? null,
+    tokenStandard: deploymentTarget?.tokenStandard ?? null,
     metadataStatus,
     metadataSignature,
     metadataError,

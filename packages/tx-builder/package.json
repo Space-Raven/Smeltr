@@ -7,8 +7,9 @@
   "scripts": {
     "test": "npm run test:unit",
     "test:all": "jest --detectOpenHandles",
-    "test:unit": "jest --detectOpenHandles --testPathPattern=\"extensionCollision|platformAuthorityDenylist|moduleIntegrity\"",
-    "test:devnet": "jest --detectOpenHandles --runInBand --testPathPattern=\"metadata.devnet\""
+    "test:unit": "jest --detectOpenHandles --testPathPattern=\"extensionCollision|platformAuthorityDenylist|moduleIntegrity|legacySplAdapter|deploymentTarget\"",
+    "test:devnet": "jest --detectOpenHandles --runInBand --testPathPattern=\"metadata.devnet\"",
+    "test:integration": "jest --detectOpenHandles --runInBand --testPathPattern=\"metadata.devnet|legacyMetaplex\""
   },
   "dependencies": {
     "@platform/module-registry": "*",

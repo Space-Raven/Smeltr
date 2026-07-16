@@ -11,17 +11,21 @@ The non-custodial Token-2022 launcher for Solana
 
 **Website:** https://smeltr.org
 
+**Profile photo:** `apps/web/public/profile-photo.png` — master: `brand/source/mark.svg` (see `brand/README.md`)
+
+Regenerate: `cd apps/web && npm run brand:export`
+
 ---
 
 ## Description (500 chars max)
 
 Deploy Solana Token-2022 tokens without writing code — and without surrendering your mint authority.
 
-Pick from composable extension modules (transfer fees, soul-bound locks, permanent delegate), upload metadata to Arweave, and sign two wallet transactions. That's it.
+Pick from composable extension modules (transfer fees, soul-bound locks, permanent delegate), upload metadata to Arweave, and sign with your wallet — mint creation plus optional metadata attachment.
 
 No account needed. No custody. Your mint authority is yours from block one.
 
-Built on Solana's native Token-2022 program — no third-party smart contracts.
+Built on Solana's native Token-2022 program — no third-party smart contracts. Includes an MCP server for AI-assisted config validation.
 
 ---
 
@@ -51,8 +55,9 @@ Happy to answer any questions about the technical implementation, the non-custod
 
 ## Gallery Image Captions (5 images recommended)
 
-1. `og-image.svg` — **Hero: Deploy Token-2022 tokens without writing code**
-2. Deploy flow screenshot — **Five steps. Two wallet signatures. Done.**
+1. `profile-photo.png` — **Profile / avatar (icon mark)**
+2. `og-image.png` — **Hero: Deploy Token-2022 tokens without writing code**
+3. Deploy flow screenshot — **Compose modules → validate → review → sign**
 3. Module picker screenshot — **Pick your extensions. Compatibility checked instantly.**
 4. Review panel screenshot — **See exactly what you're signing before you sign it.**
 5. Dashboard screenshot — **Track every deployment. Resume metadata attachment anytime.**
