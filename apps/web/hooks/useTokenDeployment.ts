@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { ModuleId, MetadataProvider, TokenMetadataInput } from "@platform/module-registry";
@@ -244,21 +244,7 @@ export function useTokenDeployment() {
     }
   }, [connection, wallet, mintKeypair, metadataConfig, decimals, deploymentTarget]);
 
-  const autoMetadataStarted = useRef(false);
-  useEffect(() => {
-    if (
-      status === "success" &&
-      metadataStatus === "ready" &&
-      metadataConfig &&
-      !autoMetadataStarted.current
-    ) {
-      autoMetadataStarted.current = true;
-      void attachMetadata();
-    }
-  }, [status, metadataStatus, metadataConfig, attachMetadata]);
-
   const reset = useCallback(() => {
-    autoMetadataStarted.current = false;
     setStatus("idle");
     setPlan(null);
     setMintKeypair(null);
