@@ -39,6 +39,10 @@ const PUBLIC_PATHS = [
   "/trust",
   "/docs",
   "/modules",
+  // Result-layer public surfaces (Phase B): token pages + curated explorer are
+  // SEO/share surfaces and must stay reachable in every mode.
+  "/t",
+  "/created",
   "/llms.txt",
   "/api/health",
   // Vercel Cron ops endpoints — auth'd by CRON_SECRET, must bypass the mode gate

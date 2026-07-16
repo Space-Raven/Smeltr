@@ -37,7 +37,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   if (mode === "live") {
-    return [entry("/", 1.0, "weekly"), entry("/deploy", 0.95), ...content];
+    return [
+      entry("/", 1.0, "weekly"),
+      entry("/create", 0.95, "weekly"),
+      entry("/deploy", 0.95),
+      // Curated explorer — the hub linking every public /t/<mint> token page.
+      entry("/created", 0.9, "daily"),
+      ...content,
+    ];
   }
 
   // coming-soon: don't advertise gated routes that redirect to a placeholder.

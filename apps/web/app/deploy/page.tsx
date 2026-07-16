@@ -117,6 +117,14 @@ function DeployPageInner() {
             View on Solana Explorer ↗
           </a>
         </p>
+        {deployment.mintAddress && (
+          <p className="text-sm text-gray-600">
+            Public page:{" "}
+            <a className="text-amber-700 underline" href={`/t/${deployment.mintAddress}`}>
+              /t/{deployment.mintAddress.slice(0, 4)}…{deployment.mintAddress.slice(-4)} — share it ↗
+            </a>
+          </p>
+        )}
 
         {/* Sign-in nudge: shown when the indexing POST returned 401.
             The token is on-chain regardless -- this only affects dashboard
