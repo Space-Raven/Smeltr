@@ -21,6 +21,21 @@ const NONCE_TTL_MS = 5 * 60 * 1000; // 5 minutes
  * reaches the site via www., a preview URL, or any redirect variant.
  */
 export async function POST() {
+  try {
+    return await issueNonce();
+  } catch (err) {
+    console.error("[auth/nonce] failed to issue nonce:", err);
+    return NextResponse.json(
+      {
+        error:
+          "Sign-in is temporarily unavailable. The server could not create a nonce.",
+      },
+      { status: 503 }
+    );
+  }
+}
+
+async function issueNonce() {
   const headersList = headers();
   const host = headersList.get("host") ?? process.env.NEXT_PUBLIC_APP_DOMAIN;
   if (!host) {

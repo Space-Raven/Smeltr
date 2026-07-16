@@ -71,8 +71,16 @@ export function useSiwsAuth() {
     setError(null);
 
     try {
-      const nonceRes = await fetch("/api/auth/nonce", { method: "POST" });
-      if (!nonceRes.ok) throw new Error("Failed to obtain sign-in nonce.");
+      const nonceRes = await fetch("/api/auth/nonce", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+      if (!nonceRes.ok) {
+        const body = (await nonceRes.json().catch(() => ({}))) as { error?: string };
+        throw new Error(
+          body.error ?? `Failed to obtain sign-in nonce (HTTP ${nonceRes.status}).`
+        );
+      }
       const { input } = (await nonceRes.json()) as { input: SolanaSignInInput };
 
       const output = await adapter.signIn(input);
