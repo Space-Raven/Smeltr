@@ -253,14 +253,22 @@ export default function DashboardPage() {
                 <span className="text-gray-500 font-normal">({d.symbol})</span>
               </p>
             )}
-            <a
-              className="text-amber-700 underline text-xs"
-              href={`${EXPLORER.BASE_URL}/address/${d.mintAddress}${explorerClusterParam(connection.rpcEndpoint)}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View on Explorer
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a
+                className="text-amber-700 underline text-xs"
+                href={`${EXPLORER.BASE_URL}/address/${d.mintAddress}${explorerClusterParam(connection.rpcEndpoint)}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View on Explorer
+              </a>
+              <a className="text-amber-700 underline text-xs" href={`/t/${d.mintAddress}`}>
+                Public page
+              </a>
+              <a className="text-amber-700 underline text-xs font-medium" href={`/manage/${d.mintAddress}`}>
+                Manage
+              </a>
+            </div>
 
             {showMetadataResume && (
               <div className="mt-2">

@@ -23,6 +23,7 @@
     }
   ],
   "crons": [
-    { "path": "/api/ops/sweep-irys", "schedule": "0 0 * * *" }
+    { "path": "/api/ops/sweep-irys", "schedule": "0 0 * * *" },
+    { "path": "/api/ops/check-milestones", "schedule": "30 1 * * *" }
   ]
 }

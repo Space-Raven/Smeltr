@@ -76,6 +76,31 @@ model Deployment {
   @@index([reviewStatus, createdAt])
 }
 
+// --- Holder-milestone alerts (Phase D retention loop) -----------------------
+// The ONLY table linking an email address to a wallet. Deliberately separate
+// and deletable: unsubscribing DELETES the row, fully severing the
+// email↔wallet link ("delete = gone" — operator PII posture, 2026-07-17).
+// Double-opt-in: verifiedAt is null until the emailed verify link is clicked;
+// the cron only ever sends to verified rows.
+
+model AlertSubscription {
+  id            String    @id @default(cuid())
+  chainId       String
+  mintAddress   String
+  walletAddress String    // session wallet that owns the Deployment record
+  email         String
+  verifyToken   String    @unique
+  verifiedAt    DateTime?
+  unsubToken    String    @unique
+  // Highest milestone already announced (holder count); prevents re-sends.
+  lastMilestone Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([chainId, mintAddress, email])
+  @@index([verifiedAt])
+}
+
 // --- Platform-funded upload quotas (Audit-1 TOB-04) ------------------------
 // Per-wallet, per-UTC-day usage counters for the platform-funded Irys upload
 // endpoint. Prevents a single premium (or forged) session from draining the

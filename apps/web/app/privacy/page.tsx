@@ -38,6 +38,17 @@ export default function PrivacyPage() {
         required to use the core deployment features of the Platform.
       </p>
       <p>
+        <strong>Holder-milestone alerts (optional).</strong> If you opt in to milestone alerts for
+        a token you created, we store your email address together with the token and the wallet
+        address that created it. This is the only place the Platform links an email address to a
+        wallet address. Alerts are double opt-in: no alert is sent until you click the
+        verification link we email you. Emails are delivered through Resend (resend.com), which
+        acts as a transmission processor only — your address is stored in our database, not in a
+        marketing list, and contains no tracking pixels. Every alert email includes a one-click
+        unsubscribe link; unsubscribing <em>deletes</em> the stored email address and its link to
+        your wallet immediately and permanently.
+      </p>
+      <p>
         <strong>Payment information.</strong> Smeltr+ subscription payments are processed by
         Stripe. We do not receive or store your credit card number, bank account details, or other
         payment credentials. Stripe handles all payment data subject to their Privacy Policy
