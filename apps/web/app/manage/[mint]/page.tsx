@@ -5,6 +5,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import Link from "next/link";
 import { WalletButton } from "../../../components/WalletButton";
+import { useSiwsAuth } from "../../../hooks/useSiwsAuth";
 import { submitTransaction } from "../../../lib/submitTransaction";
 import { explorerTxUrl } from "../../../lib/explorer";
 import { isValidWalletAddress } from "../../../lib/solanaAddress";
@@ -285,6 +286,8 @@ export default function ManageTokenPage({ params }: { params: { mint: string } }
             </div>
           )}
 
+          <AlertsCard mintAddress={params.mint} isCreatorCandidate={holdsAnyAuthority || wallet.connected} />
+
           {lastSig && (
             <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 mb-4">
               Done ✓ —{" "}
@@ -313,6 +316,147 @@ export default function ManageTokenPage({ params }: { params: { mint: string } }
         authority over your token.
       </p>
     </Shell>
+  );
+}
+
+interface AlertSubscriptionStatus {
+  email: string;
+  verified: boolean;
+  lastMilestone: number;
+}
+
+/**
+ * Opt-in holder-milestone alerts (Phase D). Requires SIWS — the email may
+ * only be attached by the wallet that owns the deployment record. Double
+ * opt-in; unsubscribing (from any alert email) deletes the address entirely.
+ */
+function AlertsCard({
+  mintAddress,
+  isCreatorCandidate,
+}: {
+  mintAddress: string;
+  isCreatorCandidate: boolean;
+}) {
+  const siws = useSiwsAuth();
+  const wallet = useWallet();
+  const [subs, setSubs] = useState<AlertSubscriptionStatus[] | null>(null);
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
+  const [noteKind, setNoteKind] = useState<"ok" | "err">("ok");
+
+  const loadStatus = useCallback(async () => {
+    if (siws.status !== "authenticated") return;
+    try {
+      const res = await fetch(
+        `/api/alerts/status?mint=${encodeURIComponent(mintAddress)}`,
+        { credentials: "same-origin" }
+      );
+      if (!res.ok) return;
+      const data = (await res.json()) as { subscriptions?: AlertSubscriptionStatus[] };
+      setSubs(Array.isArray(data.subscriptions) ? data.subscriptions : []);
+    } catch {
+      // Status is a nicety — the card still works without it.
+    }
+  }, [mintAddress, siws.status]);
+
+  useEffect(() => {
+    void loadStatus();
+  }, [loadStatus]);
+
+  async function subscribe() {
+    setBusy(true);
+    setNote(null);
+    try {
+      const res = await fetch("/api/alerts/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ mintAddress, email }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { status?: string; error?: string; note?: string };
+      if (res.ok || res.status === 429) {
+        setNoteKind("ok");
+        setNote(
+          data.status === "active"
+            ? "Alerts are already active for this email."
+            : data.note ?? "Check your inbox — click the verification link to switch alerts on."
+        );
+        setEmail("");
+        await loadStatus();
+      } else {
+        setNoteKind("err");
+        setNote(data.error ?? "Could not subscribe right now.");
+      }
+    } catch {
+      setNoteKind("err");
+      setNote("Could not subscribe right now.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!isCreatorCandidate) return null;
+
+  return (
+    <div className="rounded-xl border border-amber-200 bg-white p-4 mb-4">
+      <h3 className="font-semibold mb-1" style={{ color: "#1A0C05" }}>Holder-milestone alerts</h3>
+      <p className="text-sm text-gray-600 mb-3">
+        Get an email when this token crosses holder milestones (10, 25, 50, 100…). Double
+        opt-in; unsubscribing deletes your email from Smeltr entirely.
+      </p>
+
+      {siws.status !== "authenticated" ? (
+        <button
+          onClick={siws.signIn}
+          disabled={!wallet.connected || siws.status === "signing" || siws.status === "verifying"}
+          className="rounded-lg border border-amber-300 px-4 py-2 text-sm font-medium text-amber-800 hover:bg-amber-50 disabled:opacity-40"
+        >
+          {siws.status === "signing" || siws.status === "verifying"
+            ? "Signing in…"
+            : "Sign in with your wallet to enable"}
+        </button>
+      ) : (
+        <>
+          {subs && subs.length > 0 && (
+            <ul className="mb-3 space-y-1 text-sm text-gray-700">
+              {subs.map((s) => (
+                <li key={s.email}>
+                  {s.email} —{" "}
+                  {s.verified ? (
+                    <span className="text-emerald-700">
+                      active{s.lastMilestone > 0 ? ` · last milestone: ${s.lastMilestone} holders` : ""}
+                    </span>
+                  ) : (
+                    <span className="text-amber-700">awaiting email verification</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="flex flex-wrap gap-2">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm flex-1 min-w-[200px]"
+            />
+            <button
+              onClick={subscribe}
+              disabled={busy || email.length < 6}
+              className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-500 disabled:opacity-40"
+            >
+              {busy ? "Sending…" : "Enable alerts"}
+            </button>
+          </div>
+        </>
+      )}
+
+      {note && (
+        <p className={`mt-2 text-sm ${noteKind === "ok" ? "text-emerald-700" : "text-red-600"}`}>{note}</p>
+      )}
+    </div>
   );
 }
 
