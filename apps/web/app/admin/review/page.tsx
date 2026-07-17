@@ -5,6 +5,7 @@ import { WalletButton } from "../../../components/WalletButton";
 import { useSiwsAuth } from "../../../hooks/useSiwsAuth";
 
 interface Row {
+  chainId: string;
   mintAddress: string;
   walletAddress: string;
   name: string | null;
@@ -50,9 +51,9 @@ export default function AdminReviewPage() {
     if (siws.status === "authenticated") void load();
   }, [siws.status, load]);
 
-  async function flag(mint: string, next: string) {
+  async function flag(mint: string, chainId: string, next: string) {
     const note = window.prompt(`Note for ${next} (optional):`) ?? undefined;
-    const res = await fetch(`/api/admin/review/${mint}`, {
+    const res = await fetch(`/api/admin/review/${mint}?chainId=${encodeURIComponent(chainId)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "same-origin",
@@ -157,9 +158,9 @@ export default function AdminReviewPage() {
                 {r.reviewNote && <p className="text-xs text-amber-800 mt-1">📝 {r.reviewNote}</p>}
               </div>
               <div className="flex shrink-0 flex-col gap-1">
-                <button onClick={() => flag(r.mintAddress, "featured")} className="rounded bg-amber-600 px-2 py-1 text-xs font-medium text-white hover:bg-amber-500">★ Feature</button>
-                <button onClick={() => flag(r.mintAddress, "approved")} className="rounded bg-emerald-600 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500">✓ Approve</button>
-                <button onClick={() => flag(r.mintAddress, "rejected")} className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50">✕ Reject</button>
+                <button onClick={() => flag(r.mintAddress, r.chainId, "featured")} className="rounded bg-amber-600 px-2 py-1 text-xs font-medium text-white hover:bg-amber-500">★ Feature</button>
+                <button onClick={() => flag(r.mintAddress, r.chainId, "approved")} className="rounded bg-emerald-600 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-500">✓ Approve</button>
+                <button onClick={() => flag(r.mintAddress, r.chainId, "rejected")} className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50">✕ Reject</button>
               </div>
             </div>
           </div>

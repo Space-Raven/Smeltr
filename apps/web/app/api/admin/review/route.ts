@@ -46,9 +46,10 @@ export async function GET(req: Request) {
   });
 
   if (format === "csv") {
-    const header = "mintAddress,walletAddress,name,symbol,uri,createdAt,reviewStatus,reviewNote";
+    const header = "chainId,mintAddress,walletAddress,name,symbol,uri,createdAt,reviewStatus,reviewNote";
     const rows = deployments.map((d) =>
       [
+        d.chainId,
         d.mintAddress,
         d.walletAddress,
         JSON.stringify(d.name ?? ""),

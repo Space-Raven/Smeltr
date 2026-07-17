@@ -9,7 +9,7 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import bs58 from "bs58";
-import { computeSweepLamports } from "../../../../lib/sweep";
+import { computeSweepLamports, resolveSweepRpc } from "../../../../lib/sweep";
 
 /**
  * GET /api/ops/sweep-irys  (Vercel Cron, daily)
@@ -82,11 +82,13 @@ export async function GET(req: Request) {
     );
   }
 
-  const rpc =
-    process.env.PLATFORM_RPC_URL ??
-    process.env.NEXT_PUBLIC_SOLANA_RPC_URL ??
-    "https://api.devnet.solana.com";
-  const connection = new Connection(rpc, "confirmed");
+  // Audit-2 Medium-3: hot-wallet operation — no silent devnet fallback in
+  // production, and the URL must match the expected cluster.
+  const rpcResolution = resolveSweepRpc();
+  if (rpcResolution.ok === false) {
+    return NextResponse.json({ error: rpcResolution.reason }, { status: 500 });
+  }
+  const connection = new Connection(rpcResolution.url, "confirmed");
 
   let balance: number;
   try {

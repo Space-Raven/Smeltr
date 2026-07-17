@@ -34,3 +34,23 @@ export function clusterLabel(cluster: SolanaCluster): string {
 export function isProductionDeployTarget(cluster: SolanaCluster): boolean {
   return cluster === "mainnet";
 }
+
+/**
+ * Chain record ids the deployment index accepts (Audit-2 High-3).
+ * Solana-only until a real second-chain adapter ships — EVM/Cosmos ids are
+ * rejected at the API boundary so chain separation can't be corrupted early.
+ * Mirrors `chainRecordKey` in @platform/tx-builder (solana-mainnet | solana-devnet).
+ */
+export const SUPPORTED_CHAIN_IDS = ["solana-mainnet", "solana-devnet"] as const;
+export type SupportedChainId = (typeof SUPPORTED_CHAIN_IDS)[number];
+
+/**
+ * The chain record id a given RPC cluster is authoritative for, or null when
+ * the cluster gives no signal (localnet, unknown/custom hostnames) — callers
+ * skip the consistency check rather than guessing.
+ */
+export function chainIdForCluster(cluster: SolanaCluster): SupportedChainId | null {
+  if (cluster === "mainnet") return "solana-mainnet";
+  if (cluster === "devnet") return "solana-devnet";
+  return null;
+}
