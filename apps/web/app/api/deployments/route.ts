@@ -10,7 +10,11 @@ import { getSessionWallet } from "../../../lib/session";
 
 import { checkMintCreation, mintProgramIdForTokenStandard } from "../../../lib/verifyDeployment";
 
+import { fetchParsedTransactionWithRetry } from "../../../lib/fetchParsedTransaction";
+
 import { DEFAULT_CHAIN_ID } from "../../../lib/constants";
+
+import { SUPPORTED_CHAIN_IDS, chainIdForCluster, clusterFromRpcUrl } from "../../../lib/cluster";
 
 
 
@@ -22,7 +26,9 @@ const BASE58_SIGNATURE = /^[1-9A-HJ-NP-Za-km-z]{64,88}$/;
 
 const CreateDeploymentSchema = z.object({
 
-  chainId: z.string().min(1).default(DEFAULT_CHAIN_ID),
+  // Audit-2 High-3: chain identity is an allowlist, not free text. Solana-only
+  // until a real second-chain adapter ships.
+  chainId: z.enum(SUPPORTED_CHAIN_IDS).default(DEFAULT_CHAIN_ID as (typeof SUPPORTED_CHAIN_IDS)[number]),
 
   tokenStandard: z.enum(["token-2022", "spl-legacy"]).default("token-2022"),
 
@@ -130,37 +136,33 @@ export async function POST(req: Request) {
 
 
 
-  const connection = new Connection(RPC_URL, "confirmed");
+  // Audit-2 High-3: the claimed chainId must match the network this server
 
-  let tx = null;
+  // actually verifies against. When the RPC cluster is recognizable, a
 
-  let reachedNetwork = false;
+  // mismatched chainId (e.g. "solana-devnet" records via a mainnet RPC) is
 
-  for (let attempt = 0; attempt < 5; attempt++) {
+  // rejected instead of persisted.
 
-    try {
+  const authoritativeChainId = chainIdForCluster(clusterFromRpcUrl(RPC_URL));
 
-      tx = await connection.getParsedTransaction(validated.signature, {
+  if (authoritativeChainId && validated.chainId !== authoritativeChainId) {
 
-        commitment: "confirmed",
+    return NextResponse.json(
 
-        maxSupportedTransactionVersion: 0,
+      { error: `chainId must be "${authoritativeChainId}" — it is derived from the network deployments are verified on, not caller input.` },
 
-      });
+      { status: 400 }
 
-      reachedNetwork = true;
-
-    } catch {
-
-      // transient RPC error — retry
-
-    }
-
-    if (tx) break;
-
-    if (attempt < 4) await new Promise((r) => setTimeout(r, 1500));
+    );
 
   }
+
+
+
+  const connection = new Connection(RPC_URL, "confirmed");
+
+  const { tx, reachedNetwork } = await fetchParsedTransactionWithRetry(connection, validated.signature);
 
 
 

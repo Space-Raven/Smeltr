@@ -3,7 +3,7 @@
 Date: 2026-07-07
 Reviewer: Codex, adversarial new-dev review
 Scope: Token deployment platform repo, with emphasis on non-custodial guarantees, Solana transaction integrity, SIWS/session APIs, admin/review surfaces, premium upload/ops routes, and beta-readiness controls.
-Status: Active audit. Findings below are not remediated in this report unless explicitly marked fixed.
+Status: Remediated 2026-07-16 — all seven findings fixed (markers inline below). Adversarial CI coverage (report Phase 3) remains open.
 
 ## Executive Summary
 
@@ -38,6 +38,8 @@ Trust boundaries:
 
 ### High 1: Metadata transaction auto-submits, bypassing the two-step consent invariant
 
+**FIXED 2026-07-16** (commit aba722c): auto-start useEffect + ref removed; tx2 is user-initiated via the explicit "Add name & logo" / "Add Metadata" action.
+
 Reference: `apps/web/hooks/useTokenDeployment.ts:247`
 
 `useTokenDeployment` starts `attachMetadata()` automatically once transaction 1 succeeds and metadata is ready. This violates the project invariant that metadata attachment is always a separate user-initiated step for consent and recoverability. The wallet still prompts, but the product no longer provides an intentional "Add Metadata" decision point after mint creation.
@@ -53,6 +55,8 @@ Remediation:
 - Add a client/hook test that transaction 1 success does not call `attachMetadata()`.
 
 ### High 2: Metadata attachment persistence trusts an arbitrary signature
+
+**FIXED 2026-07-16**: PATCH now fetches the parsed transaction and runs `checkMetadataAttachment` (pure, unit-tested — success, fee payer = session wallet, metadata program instruction targeting the mint, per token standard); signature regex tightened to 64-88 base58. Route + lib tests added.
 
 Reference: `apps/web/app/api/deployments/[mintAddress]/route.ts:7`
 Reference: `apps/web/app/api/deployments/[mintAddress]/route.ts:46`
@@ -73,6 +77,8 @@ Remediation:
 
 ### High 3: Deployment registration accepts caller-controlled chain IDs
 
+**FIXED 2026-07-16**: `chainId` is a zod enum (`solana-mainnet`|`solana-devnet`), and when the server RPC cluster is recognizable the claimed chainId must match (`chainIdForCluster`). Non-Solana ids rejected until a real second-chain adapter ships. Unit tests added.
+
 Reference: `apps/web/app/api/deployments/route.ts:25`
 Reference: `apps/web/app/api/deployments/route.ts:53`
 Reference: `apps/web/app/api/deployments/route.ts:197`
@@ -92,6 +98,8 @@ Remediation:
 
 ### Medium 1: Admin review mutation is ambiguous across chains
 
+**FIXED 2026-07-16**: admin PATCH resolves the composite key — explicit `?chainId=` preferred; without it, multi-chain ambiguity returns 409 with the candidate chainIds instead of updating the first match. Console passes chainId; CSV export includes it.
+
 Reference: `apps/web/app/api/admin/review/[mintAddress]/route.ts:35`
 
 The admin PATCH route finds the target by `mintAddress` only, then updates the first matching deployment. The schema has a composite primary key `(chainId, mintAddress)`, and the rest of the code is moving toward multi-chain/multi-standard records.
@@ -108,6 +116,8 @@ Remediation:
 
 ### Medium 2: SIWS verify route can 500 on malformed JSON/body shape
 
+**FIXED 2026-07-16**: verify route wraps JSON parsing (400 on malformed) and validates the body with a bounded zod schema (nonce ≤256, address 32-44, byte arrays bounded: publicKey ≤64, signature ≤256, signedMessage ≤16KB).
+
 Reference: `apps/web/app/api/auth/verify/route.ts:16`
 
 The verify route destructures `await req.json()` without a parse guard. Malformed JSON or unexpected shapes can throw before the route returns a controlled 400.
@@ -121,6 +131,8 @@ Remediation:
 - Add tests for malformed JSON, missing output, oversized arrays, and stale nonce behavior.
 
 ### Medium 3: Irys sweeper can silently fall back to devnet RPC
+
+**FIXED 2026-07-16**: `resolveSweepRpc` (pure, unit-tested) — production requires an explicit RPC URL (no devnet fallback) and enforces PLATFORM_SOLANA_CLUSTER (default mainnet in prod) against the URL's recognizable cluster.
 
 Reference: `apps/web/app/api/ops/sweep-irys/route.ts:85`
 Reference: `apps/web/app/api/ops/sweep-irys/route.ts:122`
@@ -138,6 +150,8 @@ Remediation:
 - Add tests for production missing RPC and cluster mismatch.
 
 ### Low 1: Platform-funded JSON uploads are content-type constrained but schema-unconstrained
+
+**FIXED 2026-07-16**: `application/json` uploads are capped at 16KB and validated against a strict token-metadata schema (`validateTokenMetadataJson` — required name/symbol, bounded optional description/image/external_url/attributes, https-only URLs, unknown keys rejected). Unit tests added.
 
 Reference: `apps/web/app/api/upload/metadata/route.ts:107`
 

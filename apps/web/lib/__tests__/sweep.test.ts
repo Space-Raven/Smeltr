@@ -48,3 +48,65 @@ describe("computeSweepLamports (Irys hot-wallet sweeper)", () => {
     expect(p.lamports).toBe(0.05 * SOL);
   });
 });
+
+// --- resolveSweepRpc (Audit-2 Medium-3) --------------------------------------
+
+import { resolveSweepRpc } from "../sweep";
+
+describe("resolveSweepRpc", () => {
+  const prodEnv = { NODE_ENV: "production" };
+
+  it("refuses to run in production with no RPC configured (no devnet fallback)", () => {
+    expect(resolveSweepRpc({ ...prodEnv })).toMatchObject({ ok: false });
+    expect(resolveSweepRpc({ VERCEL: "1" })).toMatchObject({ ok: false });
+  });
+
+  it("falls back to public devnet in development only", () => {
+    expect(resolveSweepRpc({})).toEqual({
+      ok: true,
+      url: "https://api.devnet.solana.com",
+    });
+  });
+
+  it("prefers PLATFORM_RPC_URL over the public client URL", () => {
+    const r = resolveSweepRpc({
+      PLATFORM_RPC_URL: "https://mainnet.helius-rpc.com/?api-key=x",
+      NEXT_PUBLIC_SOLANA_RPC_URL: "https://api.devnet.solana.com",
+      ...prodEnv,
+    });
+    expect(r).toEqual({ ok: true, url: "https://mainnet.helius-rpc.com/?api-key=x" });
+  });
+
+  it("rejects a devnet URL in production by default (expected mainnet)", () => {
+    const r = resolveSweepRpc({
+      PLATFORM_RPC_URL: "https://api.devnet.solana.com",
+      ...prodEnv,
+    });
+    expect(r).toMatchObject({ ok: false });
+  });
+
+  it("allows a devnet URL in production when PLATFORM_SOLANA_CLUSTER says devnet", () => {
+    const r = resolveSweepRpc({
+      PLATFORM_RPC_URL: "https://api.devnet.solana.com",
+      PLATFORM_SOLANA_CLUSTER: "devnet",
+      ...prodEnv,
+    });
+    expect(r).toEqual({ ok: true, url: "https://api.devnet.solana.com" });
+  });
+
+  it("rejects a mainnet URL when PLATFORM_SOLANA_CLUSTER expects devnet", () => {
+    const r = resolveSweepRpc({
+      PLATFORM_RPC_URL: "https://mainnet.helius-rpc.com/?api-key=x",
+      PLATFORM_SOLANA_CLUSTER: "devnet",
+    });
+    expect(r).toMatchObject({ ok: false });
+  });
+
+  it("passes an unrecognizable custom hostname (cluster unknown = no signal)", () => {
+    const r = resolveSweepRpc({
+      PLATFORM_RPC_URL: "https://my-private-node.example.com",
+      ...prodEnv,
+    });
+    expect(r).toEqual({ ok: true, url: "https://my-private-node.example.com" });
+  });
+});

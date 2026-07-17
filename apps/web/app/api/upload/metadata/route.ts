@@ -5,6 +5,10 @@ import { getSessionWallet } from "../../../../lib/session";
 import { isPremium } from "../../../../lib/subscription";
 import { reserveQuota, refundQuota } from "../../../../lib/uploadQuota";
 import { resolveIrysNetwork } from "../../../../lib/irysNetwork";
+import {
+  MAX_METADATA_JSON_BYTES,
+  validateTokenMetadataJson,
+} from "../../../../lib/tokenMetadataJson";
 
 // The Irys Node SDK pulls native/CJS deps that must run in the Node runtime,
 // never Edge.
@@ -121,6 +125,21 @@ export async function POST(req: Request) {
       { error: `File exceeds ${MAX_FILE_BYTES / 1024 / 1024}MB limit` },
       { status: 413 }
     );
+  }
+
+  // Audit-2 Low-1: JSON uploads must BE token metadata, with tight size and
+  // field bounds — the platform pays to publish this permanently.
+  if (contentType === "application/json") {
+    if (file.size > MAX_METADATA_JSON_BYTES) {
+      return NextResponse.json(
+        { error: `Metadata JSON exceeds ${MAX_METADATA_JSON_BYTES / 1024}KB limit` },
+        { status: 413 }
+      );
+    }
+    const verdict = validateTokenMetadataJson(await file.text());
+    if (verdict.ok === false) {
+      return NextResponse.json({ error: verdict.reason }, { status: 422 });
+    }
   }
 
   // --- Abuse control: per-wallet daily quota (TOB-04) -----------------------

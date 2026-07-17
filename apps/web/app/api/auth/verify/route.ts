@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
+import { z } from "zod";
 import type { SolanaSignInInput } from "@solana/wallet-standard-features";
 import { verifySignIn } from "@solana/wallet-standard-util";
 import { prisma } from "../../../../lib/prisma";
@@ -7,19 +8,42 @@ import { fromWireOutput, SiwsOutputWire } from "../../../../lib/siws";
 
 const SESSION_TTL_SECONDS = 60 * 60 * 24; // 24 hours
 
-interface VerifyRequestBody {
-  input: SolanaSignInInput;
-  output: SiwsOutputWire;
-}
+// Audit-2 Medium-2: bounded body validation on a public auth endpoint — a
+// malformed or oversized body must be a controlled 400, never an unhandled
+// 500. Byte arrays are the wire form of Uint8Array (lib/siws.ts).
+const byteArray = (max: number) =>
+  z.array(z.number().int().min(0).max(255)).min(1).max(max);
+
+const VerifyBodySchema = z.object({
+  // Only the nonce is read from the client's input — the signature is checked
+  // against the server's stored canonical copy (TOB-07).
+  input: z.object({ nonce: z.string().min(1).max(256) }).passthrough(),
+  output: z.object({
+    account: z
+      .object({
+        address: z.string().min(32).max(44),
+        publicKey: byteArray(64),
+      })
+      .passthrough(),
+    signature: byteArray(256),
+    signedMessage: byteArray(16384),
+  }),
+});
 
 export async function POST(req: Request) {
-  const { input, output }: VerifyRequestBody = await req.json();
-
-  // The client's `input` is used ONLY to look up the nonce. Everything the
-  // signature is checked against comes from the server's stored copy below.
-  if (!input?.nonce) {
-    return NextResponse.json({ error: "Missing nonce" }, { status: 400 });
+  let rawBody: unknown;
+  try {
+    rawBody = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
+
+  const parsed = VerifyBodySchema.safeParse(rawBody);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid sign-in payload" }, { status: 400 });
+  }
+  const input = parsed.data.input as SolanaSignInInput & { nonce: string };
+  const output = parsed.data.output as SiwsOutputWire;
 
   // --- 1. Nonce must exist, be unused, and not expired ---------------------
   const nonceRecord = await prisma.authNonce.findUnique({ where: { nonce: input.nonce } });
