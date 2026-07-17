@@ -194,6 +194,12 @@ export default async function TokenPage({ params }: Props) {
           <span className="inline-flex items-center gap-2 text-sm text-gray-600">
             Share this page <CopyButton value={pageUrl} label="Copy link" />
           </span>
+          <Link
+            href={`/manage/${facts.mintAddress}`}
+            className="text-sm text-amber-700 underline"
+          >
+            Are you the creator? Manage this token
+          </Link>
         </div>
 
         {/* ── Cross-links ────────────────────────────────────────────── */}
